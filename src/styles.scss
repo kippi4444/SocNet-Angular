@@ -1,0 +1,138 @@
+.avatar{
+  max-width: 150px;
+}
+
+button {
+  background-color: #607D8B;
+  border: none;
+  margin: 5px 5px;
+
+  left: 130px;
+  top: 5px;
+  padding: 10px 20px;
+  color: #fff;
+  border-radius: 5px;
+  transition: .2s ease-in-out;
+
+  &:hover {
+    background-color: #0f1b29;
+    color: #fff;
+  }
+
+  &:disabled{
+    color: #fff;
+    background-color: #666;
+  }
+}
+
+input{
+  border: none;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 10px 15px;
+  margin: 2px 0px;
+  border-radius: 7px;
+  font-size: 16px;
+}
+
+body {
+  outline: 0 !important;
+
+  margin: 2em;
+  font-family: Arial, Helvetica, sans-serif;
+  button:focus { outline: none; }
+}
+
+a {
+  text-decoration: none;
+}
+
+h1 {
+  color: #369;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.2em;
+  margin-bottom: 0;
+}
+h2, h3 {
+  color: #444;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: lighter;
+  font-size: 2em;
+}
+
+
+[class*='col-'] {
+  float: left;
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+[class*='col-']:last-of-type {
+  padding-right: 0;
+}
+.grid {
+  margin: 0;
+
+}
+.col-1-4 {
+
+  width: 23%;
+}
+.module {
+  padding: 20px;
+  text-align: center;
+  color: #eee;
+  max-height: 120px;
+  min-width: 120px;
+  background-color: #3f525c;
+  border-radius: 5px;
+  transition: .2s ease-in-out;
+  position: relative;
+
+}
+
+.module:hover {
+  background-color: #eee;
+  cursor: pointer;
+  color: #607d8b;
+}
+.grid-pad {
+  padding: 10px 0;
+}
+.grid-pad > [class*='col-']:last-of-type {
+  padding-right: 20px;
+}
+@media (max-width: 600px) {
+  .module {
+    font-size: 10px;
+    max-height: 75px; }
+}
+@media (max-width: 1024px) {
+  .grid {
+    margin: 0;
+  }
+  .module {
+    min-width: 60px;
+  }
+}
+/* Application-wide Styles */
+
+
+
+nav a {
+  padding: 5px 10px;
+  text-decoration: none;
+  margin-top: 10px;
+  display: inline-block;
+  background-color: #eee;
+  border-radius: 4px;
+}
+nav a:visited, a:link {
+  color: #334953;
+}
+nav a:hover {
+  color: #039be5;
+  background-color: #cfd8dc;
+}
+nav a.active {
+  color: #039be5;
+}
+

@@ -1,0 +1,24 @@
+
+<div *ngIf="!logined && !user">
+  <div *ngIf="!visible; else reg ">
+  <form  [formGroup]="form" (ngSubmit)="login()">
+    <h2>Login</h2>
+    <div>
+      <input type="text" formControlName="login" placeholder="Login">
+
+    </div>
+    <div>
+      <input type="password" placeholder="Password" formControlName="password">
+
+    </div>
+    <button class="btn" type="submit" [disabled]="form.invalid">Send</button>
+
+  </form>
+  </div>
+
+
+<ng-template #reg>
+<app-add-user></app-add-user>
+</ng-template>
+<button class="btn" type="submit" (click)="visible = !visible; title = visible? 'Login': 'Registration'" >{{title}}</button>
+</div>

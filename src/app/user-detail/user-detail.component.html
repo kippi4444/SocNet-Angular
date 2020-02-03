@@ -1,0 +1,24 @@
+<div *ngIf="(person | async); else loading">
+  <div  *ngFor="let user of (person | async)">
+
+    <h2>{{user.login | uppercase}} Details</h2>
+    <div class="user">
+    <div><img *ngIf="user.avatar; else noAvatar" class="avatar" src="{{user.avatar}}" alt="">
+    <ng-template #noAvatar> <div class="noavatar"> No Avatar </div></ng-template>
+    </div>
+
+    <div><span>id: </span>{{user._id }}</div>
+    <div><span>name: </span>{{user.name | titlecase}}</div>
+    <div><span>surname: </span>{{user.surname | titlecase}}</div>
+    <div><span>number: </span>{{user.number}}</div>
+    <div><span>email: </span>{{user.email | lowercase}}</div>
+
+    </div>
+    <hr>
+  </div>
+</div>
+<ng-template #loading>
+  <h1>loading...</h1>
+</ng-template>
+
+<button (click)="goBack()">go back</button>

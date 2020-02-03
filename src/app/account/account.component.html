@@ -1,0 +1,30 @@
+
+<div *ngIf="userPerson">
+  <div *ngIf="!visible; else edit">
+    <h2>{{userPerson.login }}</h2>
+    <img class="avatar" *ngIf="userPerson.avatar" src="{{userPerson.avatar}}" alt="{{userPerson.login}}">
+    <div>
+     <h1>Name:</h1> {{userPerson.name | titlecase}}
+    </div>
+    <div>
+      <h1>Surname:</h1> {{userPerson.surname | titlecase}}
+    </div>
+    <div>
+      <h1>Email:</h1> {{userPerson.email | lowercase}}
+    </div>
+    <div>
+      <h1>Number:</h1> {{userPerson.number}}
+    </div>
+
+
+  </div>
+  <button routerLink="/login/" class="btn" type="submit" (click)="LogoutUser()" >Exit</button>
+  <button (click)="reload()" >Edit</button>
+  <ng-template #edit>
+
+      <app-add-user [userPerson] = "userPerson"></app-add-user>
+
+  </ng-template>
+</div>
+
+

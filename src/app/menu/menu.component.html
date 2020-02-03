@@ -1,0 +1,6 @@
+<nav>
+  <a *ngIf="!accessToken" routerLink="/login">Login</a>
+  <a *ngIf="accessToken" routerLink="/account">Account</a>
+  <a routerLink="/dashboard">Dashboard</a>
+  <a routerLink="/users">Users</a>
+</nav>
