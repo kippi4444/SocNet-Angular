@@ -1,5 +1,4 @@
 import {Component,  OnInit} from '@angular/core';
-import {UserService} from '../user.service';
 
 
 @Component({
@@ -8,6 +7,6 @@ import {UserService} from '../user.service';
   styleUrls: ['./add-user.component.scss']
 })
 export class AddUserContainerComponent implements OnInit {
-  constructor(private userService: UserService) { }
+  constructor() { }
   ngOnInit() {}
 }

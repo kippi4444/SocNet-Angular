@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Injectable, Output} from '@angular/core';
-import {UserService} from '../user.service';
+import {UserService} from '../services/user.service';
 import {Observable} from 'rxjs';
 import {User} from '../user';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-account-container',
@@ -11,11 +12,14 @@ import {User} from '../user';
 
 export class AccountContainerComponent {
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService,
+              private route: ActivatedRoute) { }
   private userPerson: Observable<User[]>;
 
   getThisPerson() {
-    this.userPerson = this.userService.getMe();
+    // this.userPerson = this.userService.getMe();
+    const id = this.route.snapshot.paramMap.get('id') ? this.route.snapshot.paramMap.get('id') : localStorage.getItem('user');
+    this.userPerson = this.userService.getUser(id);
   }
 
 }

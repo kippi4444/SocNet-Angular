@@ -1,16 +1,12 @@
-<h3>Top Heroes</h3>
-<div class="grid grid-pad">
 
+<div class="grid grid-pad">
+  <h2>All Users</h2>
   <a *ngFor="let user of (users | async)" class="col-1-4"
      routerLink="/users/{{user.login}}">
 
     <div class="module hero">
       <h4>{{user.login}}</h4>
-
     </div>
-
-
-
   </a>
 
 </div>

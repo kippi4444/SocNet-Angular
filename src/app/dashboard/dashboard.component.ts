@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../user';
-import { UserService } from '../user.service';
+import { UserService } from '../services/user.service';
 import {Observable} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,7 +11,6 @@ import {Observable} from 'rxjs';
 })
 export class DashboardComponent implements OnInit {
   users: Observable<User[]>;
-  show = false;
 
   constructor(private userService: UserService) {
   }
@@ -22,7 +22,6 @@ export class DashboardComponent implements OnInit {
   getUsers(): void {
     this.users = this.userService.getUsers();
 
-      // .subscribe(users => this.users = users);
   }
 
 

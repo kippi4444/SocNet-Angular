@@ -1,0 +1,58 @@
+a{
+  color: #fcf7f6;
+  padding: 5px;
+  background-color: #607D8B;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 3px;
+  &:hover{
+    background-color: #334953;
+    color: #eeeeee;
+  }
+}
+
+.pets {
+  border: 1px dashed #cfd8dc;
+  background-color: #eeeeee;
+  border-radius: 5px;
+  position: relative;
+  width: 10em;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-around;
+  padding: 5px;
+  margin-top: 15px;
+}
+
+
+.btns {
+  position: absolute;
+  top:5px;
+  padding: 5px;
+  right: 10px;
+}
+
+hr{
+  margin-top: 20px;
+}
+.editAccount{
+  display: flex;
+  justify-content: flex-start;
+
+  .editMenu{
+    margin-right: .5em;
+    display: flex;
+    flex-flow: column;
+    border-right: 1px solid rgba(139, 193, 216, 0.39);
+  }
+}
+
+.account{
+  width: 30em;
+  margin-top: 1em;
+  background-color: rgba(96, 125, 139, 0.16);
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+}

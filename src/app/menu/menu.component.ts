@@ -1,25 +1,18 @@
-import { Component, DoCheck, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {User} from '../user';
+import { Component, OnInit} from '@angular/core';
+import {AuthService} from '../services/auth.service';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
-export class MenuComponent implements OnInit, DoCheck {
-  @Input() isAuth: User[];
-  @Output() checkReg: EventEmitter<void> = new EventEmitter<void>();
+export class MenuComponent implements OnInit {
+  isAuth: boolean;
   accessToken: string;
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
-
-    // this.checkReg.emit();
-  }
-
-  ngDoCheck() {
-    this.accessToken =  localStorage.getItem('accessToken') || null;
-    // this.checkReg.emit();
+    this.authService.isAuth.subscribe(state => { this.isAuth = state});
   }
 
 }

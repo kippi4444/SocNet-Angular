@@ -1,28 +1,19 @@
-<form  [formGroup]="form" (ngSubmit)="addUser()">
-  <h2>Add User</h2>
-  <div>
-    <input type="text" formControlName="login" placeholder="Login">
 
-  </div>
-  <div>
-    <input type="password" placeholder="Password" formControlName="password">
 
-  </div>
-  <div>
-    <input type="text" placeholder="Email" formControlName="email">
-  </div>
-  <div>
-    <input type="text" formControlName="name" placeholder="Name">
-  </div>
-  <div>
-    <input type="text" formControlName="surname" placeholder="Surname">
-  </div>
-  <div>
-    <input type="text" formControlName="number" placeholder="Number">
-  </div>
-  <div>
-    <input type="text"  formControlName="avatar" placeholder="Avatar url">
-  </div>
-  <button class="btn" type="submit" [disabled]="form.invalid">Save</button>
+  <form  [formGroup]="form" (ngSubmit)="addPet()">
+    <h2>Add Pet</h2>
+    <div>
+      <h1>Pet Name</h1>
+      <input type="text" formControlName="name" placeholder="Name">
+    </div>
+    <div>
+      <h1>Pet Species</h1>
+      <input type="text"  formControlName="species" placeholder="Species">
+    </div>
+    <div>
+      <input type="text"  formControlName="owner" placeholder="Owner" hidden>
+    </div>
+    <button class="btn" type="submit" [disabled]="form.invalid">Add</button>
 
-</form>
+  </form>
+

@@ -11,13 +11,14 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 import {AuthInterceptor} from './interceptor';
 import {LoginContainerComponent} from './login/login.container';
-import {UserDetailGuard} from './user-detail/user-detail.guard';
 import { AccountComponent } from './account/account.component';
 import {AccountContainerComponent} from './account/account.container';
 import {AddUserContainerComponent} from './add-user/add-user.container';
 import {AddUserGuard} from './add-user/add-user.guard';
 import { MenuComponent } from './menu/menu.component';
 import { AddPetsComponent } from './add-pets/add-pets.component';
+import {LoginGuard} from './login/login.guard';
+import { MainComponent } from './main/main.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { AddPetsComponent } from './add-pets/add-pets.component';
     AccountContainerComponent,
     AddUserContainerComponent,
     MenuComponent,
-    AddPetsComponent
+    AddPetsComponent,
+    MainComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,8 +49,8 @@ import { AddPetsComponent } from './add-pets/add-pets.component';
     useClass: AuthInterceptor,
     multi: true
   },
-    UserDetailGuard,
-    AddUserGuard],
+    AddUserGuard,
+  LoginGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

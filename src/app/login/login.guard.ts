@@ -5,18 +5,18 @@ import {Injectable} from '@angular/core';
 import {AuthService} from '../services/auth.service';
 
 @Injectable()
-export class AddUserGuard implements CanActivate {
+export class LoginGuard implements CanActivate {
   isAuth: string;
   constructor(private router: Router) {}
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
     this.isAuth = localStorage.getItem('accessToken');
     if (this.isAuth) {
-      return true;
-    } else {
-      this.router.navigate(['/login']);
-      return false;
-    }
 
+      return false;
+    } else {
+      this.router.navigate(['/account']);
+      return true;
+    }
   }
 }
 

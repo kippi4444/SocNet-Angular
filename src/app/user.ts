@@ -7,4 +7,5 @@ export class User {
   number: string;
   email: string;
   avatar: string;
+  pets?: object[];
 }

@@ -2,7 +2,7 @@ import {Component,  Input, OnInit} from '@angular/core';
 import {User} from '../user';
 import {ActivatedRoute, Router} from '@angular/router';
 import { Location } from '@angular/common';
-import {UserService} from '../user.service';
+import {UserService} from '../services/user.service';
 import {Observable} from 'rxjs';
 
 @Component({
@@ -17,8 +17,7 @@ export class UserDetailComponent implements OnInit {
 
   constructor(  private route: ActivatedRoute,
                 private userService: UserService,
-                private location: Location,
-                private router: Router) { }
+                private location: Location) { }
 
   ngOnInit(): void {
     this.getUser();
@@ -28,6 +27,7 @@ export class UserDetailComponent implements OnInit {
   getUser(): void {
     const id = this.route.snapshot.paramMap.get('id');
     this.person = this.userService.getUser(id);
+
   }
 
   goBack(): void {

@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {User} from '../user';
-import {UserService} from '../user.service';
+import {UserService} from '../services/user.service';
+import {PetService} from '../services/pet.service';
+import {Pet} from '../pet';
 
 
 
@@ -12,13 +14,19 @@ import {UserService} from '../user.service';
 export class AccountComponent implements OnInit {
   @Output() getThisUser: EventEmitter<User> = new EventEmitter<User>();
   @Input()
-  userPerson: User;
+  userPerson: User[];
   visible = false;
   user: User;
-  constructor(private userService: UserService) {
+  show = false;
+  showEdit = true;
+  myAccount: string;
+
+  constructor(private userService: UserService,
+              private petService: PetService) {
   }
 
   ngOnInit() {
+    this.myAccount = localStorage.getItem('user');
     this.getThisUser.emit();
   }
 
@@ -31,4 +39,19 @@ export class AccountComponent implements OnInit {
     this.userService.logout();
     this.user = null;
   }
+
+  delete(user: User) {
+    this.userService.del(user.login);
+    this.userService.logout();
+  }
+
+  delPet(pet: Pet) {
+    this.userPerson[0].pets = this.userPerson[0].pets.filter( el => el.name !== pet.name);
+    this.petService.delPet(pet._id);
+  }
+
+  // updPet(pet: Pet) {
+  //   this.showPet = !this.showPet;
+  //   // this.petService.updPet(pet);
+  // }
 }

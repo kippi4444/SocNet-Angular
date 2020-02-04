@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {UserService} from '../user.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {UserService} from '../services/user.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {User} from '../user';
 
@@ -14,19 +14,20 @@ export class AddUserComponent implements OnInit {
   form: FormGroup;
   userToken: string;
   info: string;
+  changePass = true;
+  file: File = null;
   constructor(private userService: UserService) { }
 
 
   ngOnInit() {
-    this.userToken =  localStorage.getItem('accessToken') || null;
+    this.userToken =  localStorage.getItem('accessToken');
     // this.userToken = this.userService.getAuthUser() || null;
     this.form = new FormGroup({
       email: new FormControl(this.userToken ? this.userPerson.email : '', [
         Validators.email,
         Validators.required,
       ]),
-      password: new FormControl(this.userToken ? this.userPerson.password : '', [
-        Validators.required,
+      password: new FormControl('', [
         Validators.minLength(3)
       ]),
       surname:  new FormControl(this.userToken ? this.userPerson.surname : '', [
@@ -43,7 +44,6 @@ export class AddUserComponent implements OnInit {
       number:  new FormControl(this.userToken ? this.userPerson.number : '', [
         Validators.minLength(3)
       ]),
-      avatar:  new FormControl(this.userToken ? this.userPerson.avatar : '', []),
     });
   }
 
@@ -56,17 +56,25 @@ export class AddUserComponent implements OnInit {
     }
   }
 
-  delete(user: User) {
-    this.userService.del(user.login);
-    this.userService.logout();
-  }
+
 
   update() {
     if (this.form.valid) {
       const formData = this.form.value;
-      this.form.reset();
       this.userService.update(formData);
-      this.info = 'User Updated';
+      this.info = `${this.form.value.name}, you account was updated`;
     }
+  }
+
+  onFileChange(event) {
+    if (event.target.files.length > 0) {
+      this.file = event.target.files[0];
+    }
+  }
+
+  onSubmit() {
+    const formData = new FormData();
+    formData.append('filedata', this.file, this.file.name);
+    this.userService.setAvatar(formData);
   }
 }

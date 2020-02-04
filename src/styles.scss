@@ -1,12 +1,11 @@
 .avatar{
-  max-width: 150px;
+  max-width: 120px;
 }
 
 button {
   background-color: #607D8B;
   border: none;
-  margin: 5px 5px;
-
+  margin: 15px 5px;
   left: 130px;
   top: 5px;
   padding: 10px 20px;
@@ -25,6 +24,13 @@ button {
   }
 }
 
+.delete{
+  background-color: #ca0001;
+
+  &:hover{
+    background-color: #6d0004;
+  }
+}
 input{
   border: none;
   background-color: rgba(0, 0, 0, 0.1);
@@ -50,6 +56,7 @@ h1 {
   color: #369;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1.2em;
+
   margin-bottom: 0;
 }
 h2, h3 {
@@ -57,6 +64,8 @@ h2, h3 {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: lighter;
   font-size: 2em;
+  margin-top: 0px;
+
 }
 
 
@@ -136,3 +145,14 @@ nav a.active {
   color: #039be5;
 }
 
+
+.noavatar{
+  width: 120px;
+  height: 120px;
+  background-color: #473868;
+  color: #cfd8dc;
+  margin: 10px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

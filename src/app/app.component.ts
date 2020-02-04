@@ -1,7 +1,6 @@
-import {Component} from '@angular/core';
-import {UserService} from './user.service';
-import {Observable} from 'rxjs';
-import {User} from './user';
+import {Component, OnInit} from '@angular/core';
+import {UserService} from './services/user.service';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -10,18 +9,20 @@ import {User} from './user';
   styleUrls: ['./app.component.scss'],
 
 })
-export class AppComponent {
+
+export class AppComponent implements OnInit{
   accessToken: string;
-  title = 'Tour of Heroes';
-  checkAuth$: Observable<User[]>;
-  constructor(private userService: UserService) { }
 
-
-  getRegUser() {
+  constructor(private userService: UserService,
+              private router: Router) { }
+  ngOnInit() {
     this.accessToken = localStorage.getItem('accessToken');
-    if (this.accessToken) {
-      this.checkAuth$ = this.userService.getMe();
+    if (this.accessToken){
+      this.userService.getAuthUser();
+    } else {
+      this.router.navigate(['/login']);
     }
-
   }
+
+
 }
