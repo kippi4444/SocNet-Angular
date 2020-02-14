@@ -1,0 +1,19 @@
+<div  class="content">
+    <form  [formGroup]="form" (ngSubmit)="login()">
+      <h2>Войти</h2>
+      <div>
+        <input type="text" formControlName="login" placeholder="Логин">
+
+      </div>
+      <div>
+        <input type="password" placeholder="Пароль" formControlName="password">
+
+      </div>
+      <button class="btn btn_margin" type="submit" [disabled]="form.invalid">Отправить</button>
+
+    </form>
+      <button class="btn btn_margin" [routerLink]="link" >{{regBtn}}</button>
+
+  <router-outlet> </router-outlet>
+
+</div>

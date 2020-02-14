@@ -1,0 +1,14 @@
+<div *ngIf="show" class="photo_modal-overlay" [routerLink]="" [queryParams]="{}" (click)="show = !show"></div>
+<div  *ngIf="show" class="photo_modal" >
+  <div class="lister">
+    <div class="left no-select" [routerLink]="" [queryParams]="{ photo: prev }">&lt;</div>
+    <img class="photo no-select" src="http://localhost:8000/{{targetPhoto[0].url}}" >
+    <div class="right no-select" [routerLink]=" " [queryParams]="{ photo: next }">&gt;</div>
+  </div>
+
+  <div class="info">
+      <a [routerLink]="['/album/']+targetPhoto[0].album._id">{{targetPhoto[0].album.title}}</a>
+      {{idx+1}} из {{photos.length}}
+  </div>
+
+</div>

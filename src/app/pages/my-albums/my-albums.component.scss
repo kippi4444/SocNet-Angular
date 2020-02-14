@@ -1,0 +1,63 @@
+.albums{
+  margin: 1em;
+  justify-content: center;
+  flex-flow: column;
+  width: auto;
+  min-width: 50%;
+}
+.albums_block{
+  display: flex;
+  flex-flow: wrap;
+  justify-content: flex-start;
+
+  .album {
+    width: 130px;
+    height: 100px;
+
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    color: #1f1f1f;
+    opacity: 0.9;
+
+    &:hover{
+      opacity: 1;
+    }
+    h1 {
+      margin: 0;
+    }
+
+    .main-photo {
+      position: relative;
+      background-color: rgba(0, 0, 0, 0.09);
+      width: 95%;
+      height: 95%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      overflow: hidden;
+
+      img{
+        min-width: 100%;
+      }
+
+    }
+    .title{
+      color: #fffffa;
+      text-shadow: 0 0px 1px black;
+      position: absolute;
+      bottom: 0;
+      max-width: 100px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+  }
+}
+
+
+
+
+

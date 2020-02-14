@@ -1,0 +1,11 @@
+
+<div class="content">
+  <ul class="heroes">
+    <h2>Users List</h2>
+    <li *ngFor="let user of (users | async)">
+      <a routerLink="/users/{{user.login}}">
+        <span class="badge">{{user.login}}</span> {{user.name}}
+      </a>
+    </li>
+  </ul>
+</div>

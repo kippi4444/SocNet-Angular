@@ -1,0 +1,92 @@
+<div class="main">
+
+  <div class="page" *ngIf="userPerson">
+
+    <div class="container account"  *ngIf="!visible; else edit">
+
+      <div class="firstColumnAccount">
+        <h2>{{userPerson.name | titlecase}} {{userPerson.surname | titlecase}}</h2>
+        <a routerLink="/album/{{userPerson.avatar}}">
+          <img class="avatar"  src="{{newAvatar || 'http://localhost:8000/' + userPerson.photos[userPerson.photos.length-1].url}}" alt="{{userPerson.login}}">
+        </a>
+        <div  class="underAvatar">
+            <button *ngIf="!accountChecker() && isAuth">
+              Отправить сообщение
+            </button>
+            <button *ngIf="!accountChecker() && isAuth">
+              Добавить в друзья
+            </button>
+
+
+          <button (click)="openModal()" *ngIf="accountChecker() && isAuth">Поменять аватар</button>
+          <button *ngIf="accountChecker() && isAuth" class="btn_margin" (click)="visible = !visible;" >Редактировать</button>
+
+        </div>
+      </div>
+      <div *ngIf="showModal" class="avatar_modal_overlay"></div>
+      <div class="avatar_modal" *ngIf="showModal">
+        <h1>Загрузка аватара</h1>
+        <hr>
+        <div class="block_avatar">
+          <img *ngIf="userPerson.photos.length" class="avatar" src="{{preview || 'http://localhost:8000/' + userPerson.photos[userPerson.photos.length-1].url}}" alt="">
+        </div>
+        <hr>
+        <div class="block_btn" >
+          <input  type="file" name="file" id="file" class="inputfile"  (change)="onFileChange($event)" />
+          <label  *ngIf="accountChecker() && isAuth && !preview" for="file">Загрузить</label>
+          <button *ngIf="preview" class="btn_margin" (click)="uploadAvatar()">Сохранить</button>
+          <button class="btn_margin" (click)="openModal()">Отмена</button>
+        </div>
+      </div>
+      <div class="secondColumnAccount">
+        <div class="user-info">
+
+            <div>День Рождения:</div>
+            <div>{{userPerson.birthday | date: 'dd.MM.yyyy'}}</div>
+            <div>Email:</div>
+            <div>{{userPerson.email | lowercase}}</div>
+            <div *ngIf="userPerson.number">Номер:</div>
+            <div> {{userPerson.number}}</div>
+
+
+          <div class="pet-info" *ngIf="userPerson.pets.length>0">
+            <div>Питомцы:</div>
+            <div>
+              <a class="btn_show" (click)="show = !show">{{!show ? "Показать" : "Скрыть"}}</a>
+            </div>
+            <div *ngIf="show">
+                <div class="pets" *ngFor="let pet of userPerson.pets">
+                  <strong> {{pet.species | titlecase}}</strong>
+                  {{pet.name | titlecase}}
+                  <button *ngIf="accountChecker()" class="btns btn_margin" (click)="deletePet(pet)">Удалить</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div>
+      <app-my-albums-container  *ngIf="!visible"></app-my-albums-container>
+
+    </div>
+
+    <ng-template #edit>
+      <div *ngIf="isAuth" class="editAccount" >
+        <div class="editMenu">
+          <button *ngIf="accountChecker()" class="btn_margin btn_back" (click)="reload()" >Вернутся в профиль</button>
+          <button class="btn_margin" (click)="showEdit = true">Редактировать профиль</button>
+          <button class="btn_margin" (click)="showEdit = false">Добавить питомца</button>
+          <button class="delete btn_margin" routerLink="/login/"  (click)="deleteUser(userPerson)" > Удалить профиль</button>
+        </div>
+        <div>
+
+            <app-add-user  [userPerson] = "userPerson" (submitForm)="changeUser($event)"></app-add-user>
+            <app-add-pets  *ngIf="!showEdit" [owner] = "userPerson" ></app-add-pets>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+

@@ -1,11 +1,11 @@
-import {EventEmitter, Injectable, OnInit, Output} from '@angular/core';
-import {Observable, of, Subscription, throwError} from 'rxjs';
-import { User } from '../user';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {catchError, map, tap} from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Observable,  throwError} from 'rxjs';
+import { User } from '../interfaces/user';
+import {HttpClient} from '@angular/common/http';
+import {catchError, map} from 'rxjs/operators';
 import {Router} from '@angular/router';
-import { Pet } from '../pet';
 import {AuthService} from './auth.service';
+
 
 export class Data {
   user?: User;
@@ -19,55 +19,53 @@ export class Data {
 export class UserService {
   accessToken: string;
   user: User[];
+  userLogin: string;
   private usersUrl = 'http://localhost:8000/users/';
-
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private authService: AuthService) { }
 
+  getAuthUser() {
+
+    this.http.get<User[]>(this.usersUrl + 'me')
+      .pipe(
+        map(user => {
+          this.user = user;
+          this.authService.changeAuth(true);
+          this.authService.changeId(this.user[0]._id);
+          this.authService.changeLogin(this.user[0].login);
+        }),
+        catchError(err => {
+          this.logout();
+          return throwError(err.error.error);
+        })
+      ).subscribe();
+  }
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.usersUrl);
   }
 
-  getUser(id: string): Observable<User[]> {
-    return this.http.get<User[]>(this.usersUrl + id + '/pets')
+  getUser(id: string): Observable<User> {
+    return this.http.get<User>(this.usersUrl + id + '/all')
       .pipe(
+        map( user => { return user[0]; } ),
         catchError(err => {
-          localStorage.removeItem('accessToken');
-          this.authService.changeAuth(false);
-          this.router.navigate(['login']);
-          return throwError(err.error.error);
-        })
-      );
-  }
-
-  getMe(): Observable<User[]> {
-    return this.http.get<User[]>(this.usersUrl + 'me')
-      .pipe(
-        map(user => {
-          this.authService.changeAuth(true);
-          return user; }),
-        catchError(err => {
-          localStorage.removeItem('accessToken');
-          this.authService.changeAuth(false);
           return throwError(err.error.error);
         })
       );
   }
 
   add(user: User) {
-   this.http.post<Data>(this.usersUrl, user).subscribe();
-  }
-
-  update(user: User) {
-    this.http.put<Data>(this.usersUrl + user.login, user).subscribe();
-  }
-
-  setAvatar(url: object) {
-    this.http.put<Data>(this.usersUrl + 'setavatar', url).subscribe();
+   this.http.post<Data>(this.usersUrl, user)
+     .pipe(
+       map((data: Data) => {
+         this.writeLocalStorage(data);
+         this.router.navigate(['/users/' + data.user.login]);
+       })
+     ).subscribe();
   }
 
   login(loginData: User) {
@@ -75,42 +73,51 @@ export class UserService {
     return this.http.post<Data>(this.usersUrl + 'login', body)
       .pipe(
         map((data: Data) => {
-          this.authService.changeAuth(true);
-          localStorage.setItem('accessToken', data.token);
-          localStorage.setItem('user', data.user.login);
-          this.router.navigate(['/account']);
+          this.writeLocalStorage(data);
+          this.router.navigate(['/users/' + data.user.login]);
           return data.user;
         })
       );
   }
 
   logout() {
-    this.http.get(this.usersUrl + 'logout');
-    this.authService.changeAuth(false);
-    localStorage.removeItem('accessToken');
+    this.http.get(this.usersUrl + 'logout').subscribe();
+    this.clearLocalStorage();
   }
 
   del(id: string) {
     this.http.delete<User[]>(this.usersUrl + id).subscribe();
+    this.clearLocalStorage();
   }
 
-  getAuthUser() {
-    this.http.get<User[]>(this.usersUrl + 'me')
-      .pipe(
-          map(user => {
-            this.user = user;
-            this.authService.changeAuth(true);
-            this.accessToken = localStorage.getItem('accessToken');
-
-          }),
-        catchError(err => {
-          localStorage.removeItem('accessToken');
-          this.authService.changeAuth(false);
-          return throwError(err.error.error);
-        })
-      ).subscribe();
+  update(user: User) {
+    this.http.put<Data>(this.usersUrl + user.login, user).subscribe();
   }
 
+  setAvatar(img: object) {
+    this.http.put<Data>('http://localhost:8000/photos/' + 'avatar', img).subscribe();
+  }
+
+
+
+   clearLocalStorage(){
+    this.authService.changeAuth(false);
+    this.authService.changeId('');
+    this.authService.changeLogin('');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
+    localStorage.removeItem('login');
+    this.user = null;
+  }
+
+   writeLocalStorage(data: Data) {
+    localStorage.setItem('accessToken', data.token);
+    localStorage.setItem('user', data.user._id);
+    localStorage.setItem('login', data.user.login);
+    this.authService.changeAuth(true);
+    this.authService.changeId(data.user._id);
+    this.authService.changeLogin(data.user.login);
+  }
   // updateOther(user: User) {
   //   this.http.put<Data>(this.usersUrl + 'update/' + user.login, user).subscribe();
   // }

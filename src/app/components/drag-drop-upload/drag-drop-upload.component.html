@@ -1,0 +1,18 @@
+<div class="center ">
+  <div class="uploadField">
+    <ngx-file-drop dropZoneClassName="uploadField" dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)">
+      <ng-template  ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+        <span class="field">Перетащите файлы</span>
+        <button class="btn_margin" *ngIf="files.length" type="submit" (click)="onSubmit()">Загрузить</button>
+        <button class="btn_margin" type="button" (click)="openFileSelector()">Добавить фото</button>
+      </ng-template>
+    </ngx-file-drop>
+  </div>
+    <div class="upload-table" *ngFor="let blob of src; let i = index">
+      <a (click)="deleteAttachment(i)">
+        <img class="smallAvatar" [src]="imgPreview(blob)" alt="">
+        <strong>delete</strong>
+      </a>
+    </div>
+
+<!--<button *ngIf="files.length" type="submit" (click)="onSubmit()">Загрузить</button>-->

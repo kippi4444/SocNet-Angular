@@ -19,8 +19,6 @@ export class AppComponent implements OnInit{
     this.accessToken = localStorage.getItem('accessToken');
     if (this.accessToken){
       this.userService.getAuthUser();
-    } else {
-      this.router.navigate(['/login']);
     }
   }
 

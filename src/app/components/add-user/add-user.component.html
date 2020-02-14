@@ -1,0 +1,46 @@
+<div>
+  <form  [formGroup]="form" (ngSubmit)="checkPageSend()">
+    <h2>{{showPage()? "Редактирование профиля": "Регистрация"}}</h2>
+    <p>{{info}}</p>
+
+    <div [hidden]="showPage()">
+      <h1>Логин</h1>
+      <input type="text" formControlName="login" placeholder="Логин" >
+    </div>
+    <div class="error"
+         *ngIf="form.get('login').getError('invalidLogin') && form.get('login').touched">
+      {{form.get('login').getError('invalidLogin')}}
+    </div>
+    <div *ngIf="!showPage() || !changePass ">
+      <h1>Пароль</h1>
+      <input type="password" placeholder="Пароль" formControlName="password">
+    </div>
+    <div *ngIf="!showPage() || !changePass">
+      <input type="password" placeholder="Повторите Пароль" formControlName="confirmPassword">
+    </div>
+    <div *ngIf="changePass">
+      <h1>Email</h1>
+      <input type="text" placeholder="Email" formControlName="email" >
+    </div>
+    <div *ngIf="changePass">
+      <h1>Имя</h1>
+      <input type="text" formControlName="name" placeholder="Имя" >
+    </div>
+    <div *ngIf="changePass">
+      <h1>Фамилия</h1>
+      <input type="text" formControlName="surname" placeholder="Фамилия">
+    </div>
+    <div *ngIf="changePass">
+      <h1>Дата рождения</h1>
+      <input type="date" #evtDate required name="evtDate" placeholder="{{userToken? (userPerson.birthday | date: 'dd.MM.yyyy') : 'dd/mm/yyyy'}}" id="evtDate" formControlName="birthday">
+    </div>
+
+    <div *ngIf="changePass">
+      <h1>Номер телефона</h1>
+      <input type="text" formControlName="number" placeholder="Номер телефона" >
+    </div>
+    <button class="btn btn_margin" type="submit" [disabled]="form.invalid">{{showPage()?"Сохранить изменения":"Отправить"}}</button>
+  </form>
+
+  <button *ngIf="showPage()" class="btn btn_margin" type="submit" (click)="changePass = !changePass">{{changePass? 'Изменить пароль' : 'Редактирование профиля'}}</button>
+</div>

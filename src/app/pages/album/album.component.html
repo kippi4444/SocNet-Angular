@@ -1,0 +1,47 @@
+<div class="content page" >
+  <div class="album_page" *ngIf="album">
+    <div *ngIf="!editMode; else edit">
+
+      <h1 class="edit-album_container">
+        <a routerLink="/users/{{album.owner.login}}">{{album.owner.name | titlecase}}{{album.owner.surname | titlecase}}</a> >>
+        <a routerLink="/users/{{album.owner.login}}/albums">Альбомы</a> >> {{album.title}}
+      </h1>
+      <h6>Дата создания: {{album.created_at | date: 'hh:mm:ss dd.MM.yyyy'}}</h6>
+      <a *ngIf="accountChecker() && isAuth" class="btn_show edit-album_button-block" (click)="editMode = !editMode">Редактировать</a>
+
+      <hr>
+
+      <div *ngIf="album.description" class="description">
+
+        {{album.description}}
+      </div>
+    </div>
+
+    <div class="photos" *ngIf="album.photos">
+      <div  *ngFor="let photo of  album.photos; let i = index">
+        <a>
+          <span *ngIf="accountChecker()" (click)="delPhoto(i)" >&#10006;</span>
+          <img class="photo" src="http://localhost:8000/{{photo.url}}" [routerLink]=""
+               [queryParams]="{ photo: photo._id }">
+        </a>
+      </div>
+      <img class="photo" src="{{preview}}" alt="">
+    </div>
+    <hr>
+    <app-drag-drop-upload *ngIf="accountChecker()" (upload)="uploadAvatar($event)"></app-drag-drop-upload>
+
+  </div>
+</div>
+<ng-template #edit>
+    <h1 class="edit-album_container">
+      <input type="text" [(ngModel)]="album.title">
+    </h1>
+    <a class="btn_show edit-album_button-block" (click)="save()">Сохранить</a>
+    <a class="btn_show edit-album_button-block"  (click)="delete()">Удалить</a>
+    <a class="btn_show edit-album_button-block" (click)="editMode = !editMode">Назад</a>
+  <hr>
+  <div >
+    <textarea  class="description" cols="30" rows="10" [(ngModel)]="album.description" ></textarea>
+  </div>
+</ng-template>
+<app-photo-viewer></app-photo-viewer>

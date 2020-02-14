@@ -1,26 +1,101 @@
-.avatar{
-  max-width: 120px;
+*{
+  box-sizing: border-box;
+}
+body {
+  outline: 0 !important;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: rgba(97, 102, 92, 0.14);
+  button:focus { outline: none; }
 }
 
+a {
+  text-decoration: none;
+  color: #444;
+  &:hover {
+    text-decoration: underline;
+    color: #444;
+  }
+}
+
+h1 {
+  color: rgb(72, 72, 72);
+  font-size: 1.2em;
+  //font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+h2 {
+  color: #444;
+  font-weight: lighter;
+  font-size: 2em;
+  margin-top: 0px;
+
+}
+
+h3 {
+  color: #2e2e2e;
+  font-weight: lighter;
+  font-size: 1em;
+
+}
+
+strong {
+  color: #2e2e2e;
+}
+
+h4 {
+  color: #2e2e2e;
+  font-weight: lighter;
+  font-size: 1em;
+  margin: 0 0 5px 5px;
+}
+//Buttons
 button {
-  background-color: #607D8B;
+  background-color: rgba(21, 132, 20, 0.77);
+  font-family: 'Roboto', sans-serif;
   border: none;
-  margin: 15px 5px;
-  left: 130px;
   top: 5px;
-  padding: 10px 20px;
+  padding: 8px 15px;
   color: #fff;
   border-radius: 5px;
   transition: .2s ease-in-out;
 
   &:hover {
-    background-color: #0f1b29;
+    background-color: rgb(21, 132, 20);
     color: #fff;
   }
 
   &:disabled{
     color: #fff;
     background-color: #666;
+  }
+}
+
+.btn_margin{
+  margin: 5px 5px 5px 15px;
+}
+
+.btn_show {
+  color: #126e04;
+  padding-top: 2px;
+  font-size: 0.9em;
+  cursor: pointer;
+  border-radius: 3px;
+
+
+  &:hover {
+    color: #126e04;
+    text-decoration: underline;
+  }
+}
+
+.btn_back {
+  background-color: #3d8b59;
+
+  &:hover {
+    background-color: #1b533b;
   }
 }
 
@@ -31,6 +106,7 @@ button {
     background-color: #6d0004;
   }
 }
+
 input{
   border: none;
   background-color: rgba(0, 0, 0, 0.1);
@@ -39,120 +115,49 @@ input{
   border-radius: 7px;
   font-size: 16px;
 }
-
-body {
-  outline: 0 !important;
-
-  margin: 2em;
-  font-family: Arial, Helvetica, sans-serif;
-  button:focus { outline: none; }
+hr{
+  width: 99%;
+  margin-left: 0;
+  border: none;
+  height: 1px;
+  background-color: rgba(116, 171, 112, 0.38);
+}
+.avatar{
+  max-width: 120px;
 }
 
-a {
-  text-decoration: none;
+.smallAvatar{
+  max-width: 80px;
 }
 
-h1 {
-  color: #369;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1.2em;
-
-  margin-bottom: 0;
-}
-h2, h3 {
-  color: #444;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: lighter;
-  font-size: 2em;
-  margin-top: 0px;
-
-}
-
-
-[class*='col-'] {
-  float: left;
-  padding-right: 20px;
-  padding-bottom: 20px;
-}
-[class*='col-']:last-of-type {
-  padding-right: 0;
-}
-.grid {
-  margin: 0;
-
-}
-.col-1-4 {
-
-  width: 23%;
-}
-.module {
-  padding: 20px;
-  text-align: center;
-  color: #eee;
-  max-height: 120px;
-  min-width: 120px;
-  background-color: #3f525c;
+.container{
+  margin-top: 1em;
+  background-color: rgb(255, 255, 255);
   border-radius: 5px;
-  transition: .2s ease-in-out;
-  position: relative;
-
-}
-
-.module:hover {
-  background-color: #eee;
-  cursor: pointer;
-  color: #607d8b;
-}
-.grid-pad {
-  padding: 10px 0;
-}
-.grid-pad > [class*='col-']:last-of-type {
-  padding-right: 20px;
-}
-@media (max-width: 600px) {
-  .module {
-    font-size: 10px;
-    max-height: 75px; }
-}
-@media (max-width: 1024px) {
-  .grid {
-    margin: 0;
-  }
-  .module {
-    min-width: 60px;
-  }
-}
-/* Application-wide Styles */
-
-
-
-nav a {
-  padding: 5px 10px;
-  text-decoration: none;
-  margin-top: 10px;
-  display: inline-block;
-  background-color: #eee;
-  border-radius: 4px;
-}
-nav a:visited, a:link {
-  color: #334953;
-}
-nav a:hover {
-  color: #039be5;
-  background-color: #cfd8dc;
-}
-nav a.active {
-  color: #039be5;
-}
-
-
-.noavatar{
-  width: 120px;
-  height: 120px;
-  background-color: #473868;
-  color: #cfd8dc;
-  margin: 10px 0px;
+  padding: 10px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  box-shadow: 0 0 2px rgba(46, 46, 46, 0.39);
+}
+
+.main{
+  margin: 0 10%;
+}
+
+.content{
+  //display: flex;
+  //flex-flow: wrap;
+  padding-top: 15px;
+  margin: 0 10%;
+}
+
+.page{
+  display: flex;
+  flex-flow: row;
+}
+
+.no-select {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

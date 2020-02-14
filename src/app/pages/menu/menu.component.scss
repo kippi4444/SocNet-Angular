@@ -1,0 +1,32 @@
+nav {
+  border-bottom: 1px solid rgba(96, 125, 139, 0.26);
+  background-color: rgba(21, 132, 20, 0.77);
+  margin: 0;
+  padding: 0 10%;
+  box-shadow: 0 0 2px rgba(46, 46, 46, 0.39);
+}
+
+nav a {
+  padding: 13px 15px;
+  text-decoration: none;
+  display: inline-block;
+  color: #eeeeee;
+  border-right: 1px solid  rgba(21, 132, 20, 0.5);
+  cursor: pointer;
+  user-select: none;
+
+  &:last-child{
+    border-right: none;
+  }
+
+}
+nav a:visited, a:link {
+  color: #eeeeee;
+}
+nav a:hover {
+  color: #f6ffff;
+  background-color: rgb(116, 171, 112);
+}
+nav a.active {
+  color: #000000;
+}

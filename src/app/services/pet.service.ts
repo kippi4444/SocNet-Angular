@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {Pet} from '../pet';
+import {Pet} from '../interfaces/pet';
 import {catchError, map} from 'rxjs/operators';
 import {throwError} from 'rxjs';
 import {Data} from './user.service';

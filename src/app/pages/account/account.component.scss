@@ -1,0 +1,159 @@
+a{
+  cursor: pointer;
+}
+
+.pets {
+  border: 1px dashed #cfd8dc;
+  background-color: #eeeeee;
+  border-radius: 5px;
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-around;
+  width: 100%;
+  padding: 5px;
+  margin: 10px 0 10px 0;
+
+  .btns {
+    position: absolute;
+    font-size: .7em;
+    top:5px;
+    padding: 5px;
+    left: 60%;
+    margin: 0;
+  }
+}
+
+.avatar_modal_overlay{
+  position: absolute;
+  background-color: rgba(46, 46, 46, 0.08);
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+.avatar_modal{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+  height: 300px;
+  z-index: 1;
+  box-shadow: rgba(0,0,0,0.5) 0px 0px 20px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgba(15, 27, 41, 0.33);
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.title{
+  margin-left: 10px;
+}
+.block_btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  height: 65px;
+}
+
+.block_avatar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+hr{
+  margin-top: 20px;
+}
+
+.editAccount{
+  display: flex;
+  justify-content: flex-start;
+
+  .editMenu{
+    margin-right: .5em;
+    display: flex;
+    flex-flow: column;
+    border-right: 1px solid rgba(139, 193, 216, 0.39);
+  }
+}
+
+.account{
+  justify-content: center;
+  white-space: nowrap;
+
+  .inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+
+  }
+
+  .inputfile + label {
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    background-color: rgba(21, 132, 20, 0.77);
+    top: 5px;
+    padding: 8px 15px;
+    margin-left: 5px;
+    color: #fff;
+    border-radius: 5px;
+    transition: .2s ease-in-out;
+
+    &:hover {
+      background-color: rgb(21, 132, 20);
+      color: #fff;
+    }
+
+
+  }
+
+  .firstColumnAccount{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    padding-right: 10px;
+    border-right: 1px solid  rgba(75, 218, 40, 0.21);
+
+  }
+
+  .secondColumnAccount{
+
+    padding-top: 0.5em;
+    padding-left: 10px;
+    overflow: hidden;
+    color: rgb(72, 72, 72);
+
+  }
+
+  .user-info{
+      font-size: 1em;
+      display: grid;
+      grid-template-columns: auto auto ;
+      grid-gap: 5px;
+
+  }
+
+
+  .underAvatar{
+    display: flex;
+    flex-flow: column;
+
+    button {
+      margin: 5px 0;
+    }
+  }
+}
+
+

@@ -1,0 +1,32 @@
+
+<div  class="container albums" *ngIf="albums">
+  <h1 *ngIf="!limit ; else mainPageRoute">
+    <a  [routerLink]="link">{{albums[0].owner.name}} {{albums[0].owner.surname}} </a>
+    >> Альбомы
+  </h1>
+  <ng-template #mainPageRoute>
+    <h1 >
+      <a [routerLink]="link">Альбомы</a>
+    </h1>
+  </ng-template>
+  <hr>
+  <div class="albums_block">
+    <div *ngFor="let album of albums ">
+
+      <a routerLink="/album/{{album._id}}">
+        <div class="album">
+          <div class="main-photo">
+            <div class="title">{{album.title}}</div>
+            <img *ngIf="album.photos[0]" class="smallAvatar"  src="http://localhost:8000/{{album.photos[0].url}}" alt="">
+          </div>
+      </div>
+      </a>
+
+    </div>
+  </div>
+  <div>
+    <button *ngIf="accountChecker() && isAuth && !limit" class="btn_margin" (click)="showModal = !showModal" >Добавить Альбом</button>
+  </div>
+</div>
+<app-user-photos-container [link] = 'link' [limit] = 'limit'></app-user-photos-container>
+<app-album-modal *ngIf="showModal" [id] ="myAccount" [albums] = "albums" [showModal] = "showModal" (uploadAlbum)="uploadAlbum($event)"></app-album-modal>
