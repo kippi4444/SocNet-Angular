@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Photo} from '../../interfaces/photo';
 import {AuthService} from '../../services/auth.service';
 import {ActivatedRoute} from '@angular/router';
@@ -8,13 +8,17 @@ import {ActivatedRoute} from '@angular/router';
   templateUrl: './user-photos.component.html',
   styleUrls: ['./user-photos.component.scss']
 })
-export class UserPhotosComponent implements OnInit {
+export class UserPhotosComponent implements OnInit, OnDestroy {
   @Output() deletePhoto: EventEmitter<object> = new EventEmitter<object>();
+  @Output() upldPhoto: EventEmitter<object> = new EventEmitter<object>();
+  @Output() updComponent: EventEmitter<object> = new EventEmitter<object>();
   @Input() photos: Photo[];
+  @Input() limit: boolean;
   @Input() link: string;
   isAuth = false;
   myAccount: string;
-
+  sub = [];
+  showModal = false;
   constructor(private authService: AuthService,
               private route: ActivatedRoute) { }
 
@@ -33,7 +37,16 @@ export class UserPhotosComponent implements OnInit {
     return (this.myAccount === login);
   }
 
-  viewPhoto(id: string) {
-    console.log(id);
+  ngOnDestroy(): void {
+    this.sub.forEach(sub => sub.unsubscribe());
+  }
+
+
+  uploadPhoto(photo: FormData) {
+    this.upldPhoto.emit(photo);
+  }
+
+  reload() {
+    this.updComponent.emit();
   }
 }

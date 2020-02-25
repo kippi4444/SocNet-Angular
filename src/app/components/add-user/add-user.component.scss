@@ -4,3 +4,31 @@ input[type="date"]::before {
 }
 input[type="date"]:focus::before,
 input[type="date"]:valid::before { display: none }
+
+
+.editAccount{
+  display: flex;
+  justify-content: flex-start;
+
+  .editMenu{
+    margin-right: .5em;
+    display: flex;
+    flex-flow: row;
+  }
+}
+
+input.ng-touched.ng-invalid {border:solid red 2px;}
+input.ng-touched.ng-valid {border:solid green 2px;}
+
+.validation{
+  color: red;
+  background-color: rgba(109, 0, 4, 0.16);
+  border-radius: 5px;
+  padding: 5px 10px;
+  width: 300px;
+  display: flex;
+  align-items: center;
+  small{
+    display: inline-block;
+  }
+}

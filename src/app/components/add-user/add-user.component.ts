@@ -1,39 +1,59 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {UserService} from '../../services/user.service';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {User} from '../../interfaces/user';
 import {AuthService} from '../../services/auth.service';
+import {UserService} from '../../services/user.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
   styleUrls: ['./add-user.component.scss']
 })
-export class AddUserComponent implements OnInit {
+export class AddUserComponent implements OnInit, OnDestroy {
   @Input()
   userPerson: User;
   @Output()
   submitForm: EventEmitter<any> = new EventEmitter<any>();
-
+  @Output()
+  state: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  getUpdUser: EventEmitter<void> = new EventEmitter<void>();
   form: FormGroup;
   userToken: string;
   isAuth = false;
   info: string;
   changePass = true;
   file: File = null;
+  myAccount: string;
+  sub = [];
+  showEdit = true;
+  btn = 'Регистрация';
+  registration: boolean;
+  edit: boolean;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+              private userService: UserService,
+              private route: ActivatedRoute) {
+  }
 
   checkPasswords(group: FormGroup) {
     const pass = group.get('password').value;
     const confirmPass = group.get('confirmPassword').value;
 
-    return pass === confirmPass ? null : { notSame: true };
+    return pass === confirmPass ? null : {notSame: true};
   }
 
   ngOnInit() {
-    this.authService.isAuth.subscribe(state => { this.isAuth = state});
+    this.routing();
+    this.sub.push(this.authService.isId.subscribe(id => {
+      this.myAccount = id
+    }));
+    this.sub.push(this.authService.isAuth.subscribe(state => {
+      this.isAuth = state
+    }));
     this.userToken = localStorage.getItem('accessToken');
+
     this.form = new FormGroup({
       email: new FormControl(this.userToken ? this.userPerson.email : '', [
         Validators.email,
@@ -45,25 +65,53 @@ export class AddUserComponent implements OnInit {
       confirmPassword: new FormControl('', [
         Validators.minLength(3)
       ]),
-      surname:  new FormControl(this.userToken ? this.userPerson.surname : '', [
-        Validators.minLength(3)
+      surname: new FormControl(this.userToken ? this.userPerson.surname : '', [
+        Validators.minLength(3),
+        Validators.required,
       ]),
-      name:  new FormControl(this.userToken ? this.userPerson.name : '', [
+      name: new FormControl(this.userToken ? this.userPerson.name : '', [
         Validators.required,
         Validators.minLength(3)
       ]),
-      birthday:  new FormControl(this.userToken ? this.userPerson.birthday : '', [
+      birthday: new FormControl(this.userToken ? this.userPerson.birthday : '', [
+        Validators.required,
+        Validators.minLength(8)
+      ]),
+      login: new FormControl(this.userToken ? this.userPerson.login : '', [
         Validators.required,
         Validators.minLength(3)
       ]),
-      login:  new FormControl(this.userToken ? this.userPerson.login : '', [
-        Validators.required,
-        Validators.minLength(3)
+      number: new FormControl(this.userToken ? this.userPerson.number : '', [
+        Validators.minLength(12),
+        Validators.pattern('^(375|\\+375|80)(?:\\s(44|29|25|33)\\s|\\((44|29|25|33)\\)|(44|29|25|33))[1-9]{1}([0-9]{6}|[0-9]{2}-[0-9]{2}-[0-9]{2})$')
       ]),
-      number:  new FormControl(this.userToken ? this.userPerson.number : '', [
-        Validators.minLength(3)
-      ]),
-   }, [this.checkPasswords]);
+    }, [this.checkPasswords]);
+  }
+
+  routing() {
+    this.route.queryParams
+      .subscribe(params => {
+        this.route.url.subscribe(next => {
+        this.determinePage(next[0].path, params);
+      });
+    });
+  }
+
+  determinePage(path: string, params) {
+    const setParams = path === 'login' ? this.registration = params.registration : this.edit = params.edit;
+    if (setParams) {
+      this.state.emit(true);
+      return;
+    } else {
+      this.edit = false;
+      this.registration = false;
+      this.state.emit(false);
+      return;
+    }
+  }
+
+  deleteUser(user: User) {
+    this.userService.del(user.login);
   }
 
   checkPageSend() {
@@ -78,6 +126,20 @@ export class AddUserComponent implements OnInit {
 
   showPage() {
     return !!(this.isAuth && this.userToken);
+  }
+
+  accountChecker() {
+    return (this.myAccount === this.userPerson._id);
+  }
+
+  updateUser() {
+    this.getUpdUser.emit();
+  }
+
+  ngOnDestroy(): void {
+    this.sub.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 
 }

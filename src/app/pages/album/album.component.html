@@ -44,4 +44,4 @@
     <textarea  class="description" cols="30" rows="10" [(ngModel)]="album.description" ></textarea>
   </div>
 </ng-template>
-<app-photo-viewer></app-photo-viewer>
+<app-photo-viewer (reload)="reload()"></app-photo-viewer>

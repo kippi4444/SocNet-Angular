@@ -3,49 +3,42 @@ import {User} from '../../interfaces/user';
 
 import {Pet} from '../../interfaces/pet';
 import {AuthService} from '../../services/auth.service';
-import {UserService} from '../../services/user.service';
-import {Album} from '../../interfaces/album';
+import {Friend} from '../../interfaces/friend';
 
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss']
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent implements OnInit, OnDestroy {
   @Output() getThisUser: EventEmitter<User> = new EventEmitter<User>();
   @Output() changeProfile: EventEmitter<User> = new EventEmitter<User>();
-  @Output() delUser: EventEmitter<User> = new EventEmitter<User>();
   @Output() delPet: EventEmitter<Pet> = new EventEmitter<Pet>();
   @Output() updAvatar: EventEmitter<object> = new EventEmitter<object>();
-  @Input()
-  userPerson: User;
-  visible = false;
+  @Output() addFriends: EventEmitter<string> = new EventEmitter<string>();
+  @Output() delMyFriend: EventEmitter<string> = new EventEmitter<string>();
+  @Output() delMyRequest: EventEmitter<string> = new EventEmitter<string>();
+
+  @Input() userPerson: User;
+
   show = false;
-  showEdit = true;
-  myAccount: string;
+  myId: string;
   isAuth = false;
   file: object;
+  sub = [];
+  edit: boolean;
+
   private newAvatar: string | ArrayBuffer;
   private preview: string | ArrayBuffer;
   private showModal = false;
-  constructor(private authService: AuthService)  {
-  }
+  constructor(private authService: AuthService)  {}
 
   ngOnInit() {
     this.getThisUser.emit();
-    this.authService.isAuth.subscribe(state => { this.isAuth = state});
-    this.authService.isId.subscribe(id => { this.myAccount = id });
-    // this.myAccount = localStorage.getItem('user');
+    this.sub.push(this.authService.isAuth.subscribe(state => { this.isAuth = state;}));
+    this.sub.push(this.authService.isId.subscribe(id => { this.myId = id; }));
   }
 
-  reload() {
-    this.visible = !this.visible;
-    this.getThisUser.emit();
-  }
-
-  deleteUser(user: User) {
-    this.delUser.emit(user);
-  }
 
   deletePet(pet: Pet) {
     // @ts-ignore
@@ -60,7 +53,7 @@ export class AccountComponent implements OnInit {
   onFileChange(event) {
     const reader  = new FileReader();
     this.file = event.target.files[0];
-    reader.readAsDataURL( <Blob> this.file);
+    reader.readAsDataURL( this.file as Blob);
     reader.onloadend = () => {
       this.preview = reader.result;
     };
@@ -79,6 +72,53 @@ export class AccountComponent implements OnInit {
   }
 
   accountChecker() {
-    return (this.myAccount === this.userPerson._id);
+
+    return (this.myId === this.userPerson._id);
+  }
+
+  ngOnDestroy(): void {
+    this.sub.forEach(sub => {
+      sub.unsubscribe();
+    })
+  }
+
+  changeState(state: boolean) {
+    this.edit = state;
+  }
+
+  addFriend(id: string) {
+    const body  = {
+      friend: this.myId ,
+      owner: id
+    };
+    this.addFriends.emit(body);
+  }
+
+  itFriend(friends) {
+    let state = false;
+    if (friends < 1) {
+      return  state;
+    }
+    friends.forEach( f => {
+      if (f.friend === this.myId){
+        state = true;
+      }
+    });
+    return state;
+  }
+
+  delFriend(id: string) {
+    this.userPerson.friends = [];
+    this.delMyFriend.emit(id);
+  }
+
+  delRequest(requests) {
+    let reqId;
+    requests.forEach( f => {
+      if (f.friend === this.myId){
+        reqId = f._id;
+      }
+    });
+    this.delMyRequest.emit(reqId);
   }
 }

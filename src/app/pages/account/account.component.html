@@ -1,8 +1,8 @@
-<div class="main">
+<div class="main" *ngIf="userPerson">
 
-  <div class="page" *ngIf="userPerson">
-
-    <div class="container account"  *ngIf="!visible; else edit">
+  <div class="page" *ngIf="!edit" >
+    <app-my-albums-container></app-my-albums-container>
+    <div class="container account"  >
 
       <div class="firstColumnAccount">
         <h2>{{userPerson.name | titlecase}} {{userPerson.surname | titlecase}}</h2>
@@ -13,13 +13,20 @@
             <button *ngIf="!accountChecker() && isAuth">
               Отправить сообщение
             </button>
-            <button *ngIf="!accountChecker() && isAuth">
+            <button *ngIf="!accountChecker() && isAuth && !itFriend(userPerson.friends) && !itFriend(userPerson.requests)" (click)="addFriend(userPerson._id)">
               Добавить в друзья
             </button>
+            <button *ngIf="itFriend(userPerson.friends)" (click)="delFriend(userPerson._id)">
+              Убрать из друзей
+            </button>
+          <button *ngIf="itFriend(userPerson.requests)" (click)="delRequest(userPerson.requests)">
+            Отменить заявку
+          </button>
 
 
           <button (click)="openModal()" *ngIf="accountChecker() && isAuth">Поменять аватар</button>
-          <button *ngIf="accountChecker() && isAuth" class="btn_margin" (click)="visible = !visible;" >Редактировать</button>
+          <button *ngIf="accountChecker() && isAuth" class="btn_margin" [routerLink]=""
+                  [queryParams]="{ edit: true }"  >Редактировать</button>
 
         </div>
       </div>
@@ -48,7 +55,6 @@
             <div *ngIf="userPerson.number">Номер:</div>
             <div> {{userPerson.number}}</div>
 
-
           <div class="pet-info" *ngIf="userPerson.pets.length>0">
             <div>Питомцы:</div>
             <div>
@@ -66,27 +72,17 @@
       </div>
 
     </div>
+
     <div>
-      <app-my-albums-container  *ngIf="!visible"></app-my-albums-container>
+
 
     </div>
 
-    <ng-template #edit>
-      <div *ngIf="isAuth" class="editAccount" >
-        <div class="editMenu">
-          <button *ngIf="accountChecker()" class="btn_margin btn_back" (click)="reload()" >Вернутся в профиль</button>
-          <button class="btn_margin" (click)="showEdit = true">Редактировать профиль</button>
-          <button class="btn_margin" (click)="showEdit = false">Добавить питомца</button>
-          <button class="delete btn_margin" routerLink="/login/"  (click)="deleteUser(userPerson)" > Удалить профиль</button>
-        </div>
-        <div>
-
-            <app-add-user  [userPerson] = "userPerson" (submitForm)="changeUser($event)"></app-add-user>
-            <app-add-pets  *ngIf="!showEdit" [owner] = "userPerson" ></app-add-pets>
-        </div>
-      </div>
-    </ng-template>
-  </div>
+   </div>
+  <app-add-user *ngIf="accountChecker()" [userPerson]="userPerson"
+                (submitForm)="changeUser($event)"
+                (state)="changeState($event)" (getUpdUser)="this.getThisUser.emit()"></app-add-user>
+  <app-wall></app-wall>
 </div>
 
 

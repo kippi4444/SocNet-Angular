@@ -87,6 +87,7 @@ button {
 
   &:hover {
     color: #126e04;
+    cursor: pointer;
     text-decoration: underline;
   }
 }
@@ -114,7 +115,9 @@ input{
   margin: 2px 0px;
   border-radius: 7px;
   font-size: 16px;
+  outline: none;
 }
+
 hr{
   width: 99%;
   margin-left: 0;

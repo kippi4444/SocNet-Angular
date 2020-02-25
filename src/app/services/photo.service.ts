@@ -20,6 +20,10 @@ export class PhotoService {
     return this.http.post<Album>(this.photosUrl + id, formData);
   }
 
+  setWallPhoto(formData: object): Observable<Photo[]> {
+   return this.http.post<Photo[]>(this.photosUrl + 'wall', formData);
+  }
+
   deleteAlbumPhoto(photo: Photo) {
     this.http.delete<Album>(this.photosUrl + photo._id).subscribe();
   }
@@ -28,4 +32,7 @@ export class PhotoService {
     return this.http.get<Photo[]>(this.photosUrl + 'all/' + login);
   }
 
+  movePhoto(albumId: string, photoId: string) {
+   return  this.http.put(this.photosUrl + 'upd', {id: photoId, album: albumId});
+  }
 }

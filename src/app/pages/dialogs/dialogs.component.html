@@ -1,0 +1,25 @@
+<div class="content friends">
+  <div class="first-column">
+    <h1>Диалоги</h1>
+    <hr>
+    <div  *ngFor="let dialog of dialogs " >
+      <div class="module " [ngClass]="{active: dialog._id == activeDialog}" (click)="goToDialog(dialog.persons)">
+          <div class="column-block " >
+            <a  routerLink="/users/{{dialog.persons.login}}">
+              <div class="module-avatar">
+                <img class="dialog_avatar" src="http://localhost:8000/{{dialog.photos[dialog.photos.length-1].url}}" alt="">
+              </div>
+            </a>
+          </div>
+          <a  [ngClass]="{active: dialog._id == activeDialog}">
+            <div class="column-block">
+                <h4>{{dialog.persons.name | titlecase}} {{dialog.persons.surname | titlecase}} </h4>
+            </div>
+          </a>
+      </div>
+    </div>
+  </div>
+  <div class="mes-column">
+    <router-outlet></router-outlet>
+  </div>
+</div>

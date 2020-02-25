@@ -8,6 +8,7 @@
   right: 0;
   bottom: 0;
 }
+
 .photo_modal{
   position: fixed;
   width: 720px;
@@ -51,7 +52,7 @@
   color: rgba(255, 255, 255, 0.71);
   box-shadow: 0 0 1px #1f1f1f;
   &:hover{
-    opacity: 0.1;
+    opacity: 0.2;
   }
 }
 
@@ -69,7 +70,7 @@
   color: rgba(255, 255, 255, 0.71);
   box-shadow: 0 0 1px #1f1f1f;
   &:hover{
-    opacity: 0.1;
+    opacity: 0.2;
   }
 }
 .info{
@@ -89,4 +90,27 @@ a{
   }
 }
 
+.move_modal-overlay{
+  background-color: rgba(0, 0, 0, 0.31);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
 
+.move{
+  position: fixed;
+  bottom: 5px;
+  padding: 5px;
+  background-color: rgba(255, 255, 255, 0.57);
+  border-radius: 5px;
+  ul{
+    list-style: none;
+    li{
+      color: #1f1f1f;
+    }
+  }
+}

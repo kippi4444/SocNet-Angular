@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { UsersComponent } from './pages/users/users.component';
+import { FriendsComponent } from './pages/friends/friends.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
@@ -25,16 +25,19 @@ import {AlbumContainerComponent} from './pages/album/album.container';
 import { AlbumModalComponent } from './components/album-modal/album-modal.component';
 import { UserPhotosComponent } from './components/user-photos/user-photos.component';
 import {UserPhotosContainerComponent} from './components/user-photos/user-photos.container';
-import {AddUserContainerComponent} from './components/add-user/add-user.container';
 import { HtmlSafePipe } from './html-safe.pipe';
 import { PhotoViewerComponent } from './components/photo-viewer/photo-viewer.component';
+import { WallComponent } from './components/wall/wall.component';
+import { MessagesComponent } from './components/messages/messages.component';
+import {WebsocketService} from './services/websocket.service';
+import { DialogsComponent } from './pages/dialogs/dialogs.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    UsersComponent,
+    FriendsComponent,
     AddUserComponent,
-    AddUserContainerComponent,
     DashboardComponent,
     LoginComponent,
     LoginContainerComponent,
@@ -51,7 +54,10 @@ import { PhotoViewerComponent } from './components/photo-viewer/photo-viewer.com
     UserPhotosComponent,
     UserPhotosContainerComponent,
     HtmlSafePipe,
-    PhotoViewerComponent
+    PhotoViewerComponent,
+    WallComponent,
+    MessagesComponent,
+    DialogsComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +74,8 @@ import { PhotoViewerComponent } from './components/photo-viewer/photo-viewer.com
     multi: true
   },
     AddUserGuard,
-  LoginGuard],
+  LoginGuard,
+  WebsocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

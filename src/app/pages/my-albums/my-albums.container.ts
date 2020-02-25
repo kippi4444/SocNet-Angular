@@ -8,7 +8,11 @@ import {AlbumService} from '../../services/album.service';
 
 @Component({
   selector: 'app-my-albums-container',
-  template: '<app-my-albums [link]="link" [limit]="limit" [albums] = "userAlbums" (uploadNewAlbum) = "createAlbum($event)"></app-my-albums>',
+  template: `<app-my-albums [link]="link"
+                            [limit]="limit"
+                            [albums] = "userAlbums"
+                            (rldComponent)="getUsersAlbums($event)"
+                            (uploadNewAlbum) = "createAlbum($event)"></app-my-albums>`,
   styleUrls: ['./my-albums.component.scss']
 })
 export class MyAlbumsContainerComponent implements OnInit , OnDestroy {
@@ -32,14 +36,17 @@ export class MyAlbumsContainerComponent implements OnInit , OnDestroy {
         this.limit = true;
         this.link = `albums`;
       }
-      this.sub = this.albumService.getUserAlbums(id).subscribe(
-        allAlbums => {
-          this.userAlbums = this.limit ? allAlbums.splice(1 , 3) : allAlbums
-        });
+      this.getUsersAlbums(id);
     });
-
-
   }
+
+  getUsersAlbums(id: string){
+    this.sub = this.albumService.getUserAlbums(id).subscribe(
+      allAlbums => {
+        this.userAlbums = this.limit ? allAlbums.splice(1 , 3) : allAlbums
+      });
+  }
+
 
   createAlbum(album: Album) {
     this.newAlbum$ = this.albumService.createAlbum(album);

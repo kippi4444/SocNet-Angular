@@ -13,6 +13,7 @@ import {PhotoService} from '../../services/photo.service';
                          (deleteAlbum)="deleteAlbum($event)"
                          (uploadPhoto)="uploadPhoto($event)"
                          (deletePhoto)="deletePhoto($event)"
+                         (updPhoto)="reload()"
                          (updateAlbum)="updateAlbum($event)"></app-album>`,
   styleUrls: ['./album.component.scss']
 })
@@ -56,5 +57,10 @@ export class AlbumContainerComponent implements OnInit, OnDestroy {
 
   deleteAlbum(album: Album) {
     this.albumService.deleteAlbum(album._id);
+  }
+
+  reload() {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.getUserAlbum(id);
   }
 }

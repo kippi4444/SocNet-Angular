@@ -10,7 +10,8 @@ export class AlbumModalComponent implements OnInit {
   @Output() uploadAlbum: EventEmitter<object> = new EventEmitter<object>();
   @Input() showModal: boolean;
   @Input() albums: Album[];
-  @Input() id:string;
+  @Input() id: string;
+
   album: Album = {
     title: '',
     description: '',

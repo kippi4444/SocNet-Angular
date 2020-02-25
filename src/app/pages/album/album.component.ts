@@ -1,10 +1,8 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Album} from '../../interfaces/album';
-import {UserService} from '../../services/user.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
-import {PhotoService} from '../../services/photo.service';
-import {Subscription} from 'rxjs';
+
 
 @Component({
   selector: 'app-album',
@@ -12,19 +10,19 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./album.component.scss']
 })
 export class AlbumComponent implements OnInit, OnDestroy {
-  @Input() album: Album;
+  @Input() album: Album | any;
   @Output() uploadPhoto: EventEmitter<object> = new EventEmitter<object>();
   @Output() deletePhoto: EventEmitter<object> = new EventEmitter<object>();
   @Output() updateAlbum: EventEmitter<object> = new EventEmitter<object>();
   @Output() deleteAlbum: EventEmitter<object> = new EventEmitter<object>();
+  @Output() updPhoto: EventEmitter<void> = new EventEmitter<void>();
   myAccount: string;
   isAuth = false;
   sub = [];
-  private preview: string | ArrayBuffer;
+  preview: string | ArrayBuffer;
   editMode = false;
   constructor(private router: Router,
-              private authService: AuthService,
-              private photoService: PhotoService) { }
+              private authService: AuthService) { }
 
   ngOnInit() {
     this.sub.push(this.authService.isAuth.subscribe(state => { this.isAuth = state; }));
@@ -47,7 +45,7 @@ export class AlbumComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    this.router.navigate(['users/' + this.album.owner.login + '/albums']);
+    this.router.navigate(['friends/' + this.album.owner.login + '/albums']);
     this.deleteAlbum.emit(this.album);
   }
 
@@ -58,6 +56,10 @@ export class AlbumComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
       this.sub.forEach(el => {
         el.unsubscribe();
-      })
+      });
+  }
+
+  reload() {
+    this.updPhoto.emit();
   }
 }

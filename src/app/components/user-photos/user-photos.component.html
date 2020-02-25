@@ -1,8 +1,10 @@
 
 <div  class="container photos" *ngIf="photos" >
   <h1><a [routerLink]="link">Мои фотографии</a></h1>
+  <button *ngIf="!limit" (click)="showModal = !showModal">Добавить фотографии</button>
   <hr>
   <div class="photos_block">
+
     <div *ngFor="let photo of photos; let i = index ">
         <div class="photo">
           <div class="main-photo">
@@ -15,7 +17,14 @@
   </div>
 </div>
 
-<app-photo-viewer></app-photo-viewer>
+<div class="album_modal_overlay" *ngIf="showModal" (click)="showModal = !showModal"></div>
+<div class="album_modal" *ngIf="showModal">
+
+  <app-drag-drop-upload (upload)=uploadPhoto($event)></app-drag-drop-upload>
+
+</div>
+
+<app-photo-viewer (reload)="reload()"></app-photo-viewer>
 
 
 

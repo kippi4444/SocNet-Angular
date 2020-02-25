@@ -1,4 +1,4 @@
-<div class="album_modal_overlay" *ngIf="showModal"></div>
+<div class="album_modal_overlay" *ngIf="showModal" (click)="closeModal()"></div>
 <div class="album_modal" *ngIf="showModal">
   <div class="myAlbumFelds">
     <input type="text"  placeholder="Название Альбома" [(ngModel)]="album.title">

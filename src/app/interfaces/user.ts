@@ -13,4 +13,8 @@ export class User {
   pets?: object[];
   albums?: object[];
   photos?: object[];
+  friends?: object[];
+  requests?: object[];
+  isFriend?: object[];
+  isRequest?: object[];
 }

@@ -17,7 +17,7 @@ export class MenuComponent implements OnInit, OnDestroy {
               private userService: UserService) { }
 
   ngOnInit() {
-    this.login = localStorage.getItem('login');
+    this.login = this.userService.userLogin;
     this.sub.push(this.authService.isAuth.subscribe(state => { this.isAuth = state;}));
     this.sub.push(this.authService.isLogin.subscribe(state => { this.login = state;}));
   }

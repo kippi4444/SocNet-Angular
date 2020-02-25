@@ -1,46 +1,132 @@
-<div>
-  <form  [formGroup]="form" (ngSubmit)="checkPageSend()">
+
+<div *ngIf=" registration || edit" >
+  <div *ngIf="isAuth && showPage()" class="container editAccount" >
+
+      <div   class=" editMenu">
+
+        <button *ngIf="accountChecker()" class="btn_margin btn_back" [routerLink]=""
+                [queryParams]="{}" (click)="updateUser()" >
+          Вернутся в профиль
+        </button>
+
+        <button class="btn_margin" (click)="showEdit = !showEdit">
+          Добавить питомца
+        </button>
+
+        <button *ngIf="showPage()" class="btn btn_margin" type="submit" (click)="changePass = !changePass; showEdit = true">
+          {{changePass? 'Изменить пароль' : 'Редактирование профиля'}}
+        </button>
+        <button class="delete btn_margin" routerLink="/login/"  (click)="deleteUser(userPerson)" >
+          Удалить профиль
+        </button>
+
+      </div>
+
+  </div>
+
+  <button *ngIf="!isAuth" class="btn btn_margin" [routerLink]=""
+          [queryParams]="{}" >
+    Назад
+  </button>
+
+    <div class="container" >
+      <app-add-pets  *ngIf="!showEdit && showPage()" [owner] = "userPerson" ></app-add-pets>
+
+<!--  FORM-->
+  <form *ngIf="showEdit"  [formGroup]="form" (ngSubmit)="checkPageSend()">
     <h2>{{showPage()? "Редактирование профиля": "Регистрация"}}</h2>
     <p>{{info}}</p>
-
     <div [hidden]="showPage()">
       <h1>Логин</h1>
       <input type="text" formControlName="login" placeholder="Логин" >
     </div>
-    <div class="error"
-         *ngIf="form.get('login').getError('invalidLogin') && form.get('login').touched">
-      {{form.get('login').getError('invalidLogin')}}
+
+    <div class="validation" *ngIf="form.get('login').invalid && form.get('login').touched" >
+      <small *ngIf="form.get('login').errors.required">Поле не может быть пустым</small>
+      <small *ngIf="form.get('login').errors.minlength.requiredLength">Миним {{form.get('login').errors.minlength.requiredLength}} символа</small>
     </div>
+
     <div *ngIf="!showPage() || !changePass ">
       <h1>Пароль</h1>
       <input type="password" placeholder="Пароль" formControlName="password">
     </div>
+
+    <div class="validation" *ngIf="form.get('password').invalid && form.get('password').touched" >
+      <small *ngIf="form.get('password').errors.required">Пароль не может быть пустым</small>
+      <small *ngIf="form.get('password').errors.minlength">
+        Длина должна быть не менее {{form.get('password').errors.minlength.requiredLength}}.
+        Необходимо еще символов: {{form.get('password').errors.minlength.requiredLength - form.get('password').errors.minlength.actualLength}}
+      </small>
+    </div>
+
     <div *ngIf="!showPage() || !changePass">
       <input type="password" placeholder="Повторите Пароль" formControlName="confirmPassword">
     </div>
+
+    <div class="validation" *ngIf="form.get('confirmPassword').invalid &&  form.get('confirmPassword').touched" >
+      <small *ngIf="form.get('password').value !== form.get('confirmPassword').value ">Пароли должны совпадать</small>
+    </div>
+
     <div *ngIf="changePass">
       <h1>Email</h1>
       <input type="text" placeholder="Email" formControlName="email" >
     </div>
+
+    <div class="validation" *ngIf="form.get('email').invalid && form.get('email').touched" >
+      <small *ngIf="form.get('email').errors.required">Поле не может быть пустым</small>
+      <small *ngIf="form.get('email').errors.email">Введите корректный email</small>
+    </div>
+
     <div *ngIf="changePass">
       <h1>Имя</h1>
       <input type="text" formControlName="name" placeholder="Имя" >
     </div>
+
+    <div class="validation" *ngIf="form.get('name').invalid && form.get('name').touched" >
+      <small *ngIf="form.get('name').errors.required">Поле не может быть пустым</small>
+      <small *ngIf="form.get('name').errors.minlength">
+        Длина должна быть не менее {{form.get('name').errors.minlength.requiredLength}}.
+        Необходимо еще символов: {{form.get('name').errors.minlength.requiredLength - form.get('name').errors.minlength.actualLength}}
+      </small>
+    </div>
+
     <div *ngIf="changePass">
       <h1>Фамилия</h1>
       <input type="text" formControlName="surname" placeholder="Фамилия">
     </div>
+
+    <div class="validation" *ngIf="form.get('surname').invalid && form.get('surname').touched" >
+      <small *ngIf="form.get('surname').errors.required">Поле не может быть пустым</small>
+      <small *ngIf="form.get('surname').errors.minlength">
+        Длина должна быть не менее {{form.get('surname').errors.minlength.requiredLength}}.
+        Необходимо еще символов: {{form.get('surname').errors.minlength.requiredLength - form.get('surname').errors.minlength.actualLength}}
+      </small>
+    </div>
+
     <div *ngIf="changePass">
       <h1>Дата рождения</h1>
       <input type="date" #evtDate required name="evtDate" placeholder="{{userToken? (userPerson.birthday | date: 'dd.MM.yyyy') : 'dd/mm/yyyy'}}" id="evtDate" formControlName="birthday">
+    </div>
+
+    <div class="validation" *ngIf="form.get('birthday').invalid && form.get('birthday').touched" >
+      <small *ngIf="form.get('birthday').errors.required">Поле обязательно для заполнения</small>
     </div>
 
     <div *ngIf="changePass">
       <h1>Номер телефона</h1>
       <input type="text" formControlName="number" placeholder="Номер телефона" >
     </div>
+
+    <div class="validation" *ngIf="form.get('number').invalid && form.get('number').touched" >
+      <small *ngIf="form.get('number').errors.pattern">
+        Некорректный номер!
+        Номер должен начинатся на +375 (29|33|44|25)
+        Необходимо ввести символов: {{form.get('number').errors.minlength.requiredLength}}
+      </small>
+    </div>
+
     <button class="btn btn_margin" type="submit" [disabled]="form.invalid">{{showPage()?"Сохранить изменения":"Отправить"}}</button>
   </form>
-
-  <button *ngIf="showPage()" class="btn btn_margin" type="submit" (click)="changePass = !changePass">{{changePass? 'Изменить пароль' : 'Редактирование профиля'}}</button>
+        <!--  FORM-->
+  </div>
 </div>

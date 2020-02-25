@@ -28,5 +28,5 @@
     <button *ngIf="accountChecker() && isAuth && !limit" class="btn_margin" (click)="showModal = !showModal" >Добавить Альбом</button>
   </div>
 </div>
-<app-user-photos-container [link] = 'link' [limit] = 'limit'></app-user-photos-container>
+<app-user-photos-container [link] = 'link' [limit] = 'limit' (reloadComponent)="reloadComponent()"></app-user-photos-container>
 <app-album-modal *ngIf="showModal" [id] ="myAccount" [albums] = "albums" [showModal] = "showModal" (uploadAlbum)="uploadAlbum($event)"></app-album-modal>

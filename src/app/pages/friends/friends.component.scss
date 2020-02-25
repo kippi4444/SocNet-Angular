@@ -1,0 +1,54 @@
+.friends{
+  margin-top: 1em;
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 0 2px rgba(46, 46, 46, 0.39);
+  display: grid;
+  grid-template-columns: 60% 40% ;
+  grid-gap: 5px;
+  min-height: 500px;
+}
+
+.first-column{
+  border-right: 1px solid rgba(145, 145, 145, 0.06);
+}
+
+.module {
+  padding: 10px;
+  color: #1f1f1f;
+  height: 130px;
+  margin: 10px;
+  display: flex;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+
+  .module-avatar{
+    color: #1f1f1f;
+    width: 120px;
+
+  }
+  .column-block{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+
+    a{
+      &:hover{
+        text-decoration: underline;
+      }
+    }
+  }
+
+  h4 {
+    padding: 0;
+    font-weight: 600;
+    margin-left: 0;
+    margin-bottom: 15px;
+    &:hover{
+      color: #2e2e2e;
+      text-decoration: underline;
+    }
+  }
+}
+

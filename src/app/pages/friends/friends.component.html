@@ -1,0 +1,39 @@
+
+<div class="content friends">
+  <div class="first-column">
+    <h1>Мои друзья</h1>
+    <hr>
+    <div class="module" *ngFor="let user of friends">
+      <div class="column-block">
+        <a class="module-avatar" routerLink="/users/{{user.friend.login}}">
+          <img class="smallAvatar" src="http://localhost:8000/{{user.photos[user.photos.length-1].url}}" alt="">
+        </a>
+      </div>
+      <div class="column-block">
+        <a routerLink="/users/{{user.friend.login}}">
+          <h4>{{user.friend.name | titlecase}} {{user.friend.surname | titlecase}} </h4>
+        </a>
+        <a class="btn_show">Написать сообщение</a>
+        <a class="btn_show" (click)="delFriend(user.friend._id)">Убрать из друзей</a>
+      </div>
+    </div>
+  </div>
+  <div>
+    <h1>Заявки в друзья</h1>
+    <hr>
+    <div class="module" *ngFor="let req of requests">
+      <div class="column-block">
+        <a class="module-avatar" routerLink="/users/{{req.friend.login}}">
+          <img class="smallAvatar" src="http://localhost:8000/{{req.photos[req.photos.length-1].url}}" alt="">
+        </a>
+      </div>
+      <div class="column-block">
+        <a routerLink="/users/{{req.friend.login}}">
+          <h4>{{req.friend.name | titlecase}} {{req.friend.surname | titlecase}} </h4>
+        </a>
+        <button class="btn_margin" (click)="addFriend(req._id)">Добавить</button>
+        <button class="btn_margin" (click)="delReq(req._id)">Отказать</button>
+      </div>
+    </div>
+  </div>
+</div>

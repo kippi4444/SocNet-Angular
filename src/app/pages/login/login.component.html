@@ -1,19 +1,23 @@
-<div  class="content">
-    <form  [formGroup]="form" (ngSubmit)="login()">
-      <h2>Войти</h2>
-      <div>
-        <input type="text" formControlName="login" placeholder="Логин">
+<div class="main">
+  <div *ngIf="!state" class="content">
+      <form  [formGroup]="form" (ngSubmit)="login()">
+        <h2>Войти</h2>
+        <div>
+          <input type="text" formControlName="login" placeholder="Логин">
 
-      </div>
-      <div>
-        <input type="password" placeholder="Пароль" formControlName="password">
+        </div>
+        <div>
+          <input type="password" placeholder="Пароль" formControlName="password">
 
-      </div>
-      <button class="btn btn_margin" type="submit" [disabled]="form.invalid">Отправить</button>
+        </div>
+        <button class="btn btn_margin" type="submit" [disabled]="form.invalid">Отправить</button>
 
-    </form>
-      <button class="btn btn_margin" [routerLink]="link" >{{regBtn}}</button>
+      </form>
 
-  <router-outlet> </router-outlet>
 
+
+    <button class="btn btn_margin" [routerLink]=""
+            [queryParams]="{registration: true}" >Регистрация</button>
+  </div>
+<app-add-user (submitForm)="reg($event)" (state)="changeState($event)"></app-add-user>
 </div>

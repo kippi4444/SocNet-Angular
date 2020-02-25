@@ -12,6 +12,7 @@ import {Subscription} from 'rxjs';
 })
 export class MyAlbumsComponent implements OnInit, OnDestroy {
   @Output() uploadNewAlbum: EventEmitter<object> = new EventEmitter<object>();
+  @Output() rldComponent: EventEmitter<string> = new EventEmitter<string>();
   @Input() limit: boolean;
   @Input() albums: Album[];
   @Input() link: string;
@@ -43,5 +44,9 @@ export class MyAlbumsComponent implements OnInit, OnDestroy {
     this.sub.forEach(el => {
       el.unsubscribe();
     })
+  }
+
+  reloadComponent() {
+    this.rldComponent.emit(this.myLogin);
   }
 }

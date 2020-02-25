@@ -16,7 +16,8 @@ export class DragDropUploadComponent {
   uploadData: any = [];
   public files: NgxFileDropEntry[] = [];
   src: string[] ;
- constructor(private sanitizer: DomSanitizer){}
+
+  constructor(private sanitizer: DomSanitizer){}
 
   public dropped(files: NgxFileDropEntry[]) {
     this.files = files;
@@ -44,7 +45,8 @@ export class DragDropUploadComponent {
 
   onSubmit() {
     this.upload.emit(this.uploadData);
-    this.files = null;
+    this.src = [];
+    this.files = [];
   }
 
   imgPreview(file) {

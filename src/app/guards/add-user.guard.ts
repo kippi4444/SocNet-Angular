@@ -12,8 +12,8 @@ export class AddUserGuard implements CanActivate {
               private authService: AuthService,
               private userService: UserService) {}
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
-    this.isAuth = localStorage.getItem('accessToken');
-    this.authService.isAuth.subscribe(state => { this.isAuth2 = state});
+    this.isAuth = this.userService.accessToken;
+    // this.authService.isAuth.subscribe(state => { this.isAuth2 = state});
 
     if (this.isAuth) {
       return true;

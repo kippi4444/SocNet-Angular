@@ -1,11 +1,12 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {filter} from 'rxjs/operators';
 import {PhotoService} from '../../services/photo.service';
-import {Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {AlbumService} from '../../services/album.service';
 import {Photo} from '../../interfaces/photo';
 import {log} from 'util';
+import {Album} from '../../interfaces/album';
 
 @Component({
   selector: 'app-photo-viewer',
@@ -13,6 +14,8 @@ import {log} from 'util';
   styleUrls: ['./photo-viewer.component.scss']
 })
 export class PhotoViewerComponent implements OnInit, OnDestroy {
+  @Output() reload: EventEmitter<void> = new EventEmitter<void>();
+
   photos: Photo[];
   targetPhoto: Photo[];
   photoId: string;
@@ -20,6 +23,8 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
   prev: string;
   next: string;
   idx: number;
+  move = false;
+  userAlbums: Observable<Album[]>;
   serv: Subscription;
   routing: Subscription;
 
@@ -29,28 +34,37 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
               private albumService: AlbumService) { }
 
   ngOnInit() {
+    this.userAlbums = this.albumService.getUserAlbums(localStorage.getItem('login'));
+    this.urlSubscriber();
+  }
+
+  urlSubscriber() {
     this.route.url.subscribe(next => {
-        if (next[0].path === 'users') {
-          const login = this.route.snapshot.paramMap.get('id');
-          this.serv = this.photoService.getAllPhotos(login).subscribe(
-            photos => {
-              this.photos = photos;
-              this.routingStart();
-            }
-          );
-        }
-
-        if (next[0].path === 'album')  {
-          const id = this.route.snapshot.paramMap.get('id');
-          this.serv = this.albumService.getUserAlbum(id).subscribe(
-            album => {
-              this.photos = album.photos as Photo[];
-              this.routingStart();
-            }
-          );
-        }
+      if (next[0].path === 'users') {
+        this.getAllUserPhotos();
+      }
+      if (next[0].path === 'album') {
+        this.getUserAlbum();
+      }
     });
+  }
 
+  getAllUserPhotos(){
+    const login = this.route.snapshot.paramMap.get('id');
+    this.serv = this.photoService.getAllPhotos(login)
+      .subscribe(photos => {
+        this.photos = photos;
+        this.routingStart();
+      });
+  }
+
+  getUserAlbum() {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.serv = this.albumService.getUserAlbum(id)
+      .subscribe(album => {
+        this.photos = album.photos as Photo[];
+        this.routingStart();
+      });
   }
 
   routingStart() {
@@ -76,4 +90,9 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
   }
 
 
+  movePhoto(albumId: string, photoId: string) {
+    this.move = !this.move;
+    this.show = false;
+    this.photoService.movePhoto(albumId, photoId).subscribe(value => this.reload.emit());
+  }
 }

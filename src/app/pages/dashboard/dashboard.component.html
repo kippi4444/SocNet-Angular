@@ -1,9 +1,10 @@
 
-<div class="dashboard content">
+<div  class="dashboard content">
   <h2>Все пользователи</h2>
   <input id="searching" type="text" placeholder="Поиск...">
   <hr>
-    <div class="module" *ngFor="let user of (users | async)">
+  <div *ngIf="users">
+    <div  class="module" *ngFor="let user of users">
       <div class="column-block">
         <a class="module-avatar" routerLink="/users/{{user.login}}">
           <img class="smallAvatar" src="http://localhost:8000/{{user.photos[user.photos.length-1].url}}" alt="">
@@ -11,11 +12,14 @@
       </div>
       <div class="column-block">
         <a routerLink="/users/{{user.login}}">
-          <h4>{{user.name | titlecase}} {{user.surname | titlecase}} </h4>
+          <h4>{{user.name | titlecase}} {{user.surname | titlecase}}  </h4>
         </a>
-        <a class="btn_show">Написать сообщение</a>
-        <a class="btn_show">Добавить в друзья</a>
+
+        <a *ngIf="id !== user._id && isAuth " class="btn_show" (click)="goToDialog(user)"  >Написать сообщение</a>
+        <a *ngIf="id !== user._id && isAuth && !itFriend(user.friends)  && !itFriend(user.requests) " class="btn_show" (click)="addFriend(user._id)">Добавить в друзья</a>
+        <a *ngIf="id !== user._id && isAuth && !itFriend(user.friends)  && itFriend(user.requests)" class="btn_show" (click)="delRequest(user.requests)">Отменить заявку</a>
+        <a *ngIf="id !== user._id && isAuth && itFriend(user.friends)" class="btn_show" (click)="delFriend(user._id)">Убрать из друзей</a>
       </div>
     </div>
-
+  </div>
 </div>

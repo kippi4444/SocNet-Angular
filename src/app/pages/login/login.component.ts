@@ -1,9 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../../services/user.service';
 import {User} from '../../interfaces/user';
-import {ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from '../../services/auth.service';
+
 
 
 
@@ -21,12 +19,10 @@ export class LoginComponent implements OnInit {
 
   @Input()
   user: User;
-  @Input()
-  link: string;
-  @Input()
-  regBtn: string;
 
+  link: string;
   form: FormGroup;
+  state: boolean;
 
   constructor() {
   }
@@ -52,6 +48,13 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  reg(user: User) {
+    this.regEvent.emit(user);
+  }
+
+  changeState(state: boolean) {
+    this.state = state;
+  }
 }
 
 

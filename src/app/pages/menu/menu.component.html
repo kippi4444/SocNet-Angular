@@ -1,6 +1,7 @@
 <nav>
-  <a *ngIf="!isAuth" routerLink="/login" routerLinkActive="active">Авторизация</a>
+  <a *ngIf="!isAuth" routerLink="/login" routerLinkActive="active">Войти</a>
   <a *ngIf="isAuth" routerLink="/users/{{login}}" routerLinkActive="active">Мой профиль</a>
+  <a *ngIf="isAuth" routerLink="/dialogs/" routerLinkActive="active">Диалоги</a>
   <a routerLink="/dashboard" routerLinkActive="active">Все пользователи</a>
   <a *ngIf="isAuth" routerLink="/friends" routerLinkActive="active">Друзья</a>
   <a *ngIf="isAuth" (click)="LogoutUser()" routerLinkActive="active">Выйти</a>
