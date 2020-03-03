@@ -32,6 +32,21 @@ import { MessagesComponent } from './components/messages/messages.component';
 import {WebsocketService} from './services/websocket.service';
 import { DialogsComponent } from './pages/dialogs/dialogs.component';
 
+import {StoreModule} from '@ngrx/store';
+import {EffectsModule} from '@ngrx/effects';
+import {UserEffects} from './store/effects/user.effects';
+import {appReducers} from './store/reducers/app.reducers';
+import {DashboardContainerComponent} from './pages/dashboard/dashboard.container';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {environment} from '../environments/environment';
+import {DialogsContainerComponent} from './pages/dialogs/dialogs.container';
+import {ExtraForUserEffects} from './store/effects/extraForUser.effects';
+import {UserFriendship} from './store/state/friendship.state';
+import {FriendshipEffects} from './store/effects/friendship.effects';
+import {UserPhotos} from './store/effects/photo.effects';
+import { MessageModalComponent } from './components/message-modal/message-modal.component';
+
+
 
 @NgModule({
   declarations: [
@@ -39,6 +54,7 @@ import { DialogsComponent } from './pages/dialogs/dialogs.component';
     FriendsComponent,
     AddUserComponent,
     DashboardComponent,
+    DashboardContainerComponent,
     LoginComponent,
     LoginContainerComponent,
     AccountComponent,
@@ -57,7 +73,9 @@ import { DialogsComponent } from './pages/dialogs/dialogs.component';
     PhotoViewerComponent,
     WallComponent,
     MessagesComponent,
-    DialogsComponent
+    DialogsComponent,
+    DialogsContainerComponent,
+    MessageModalComponent
   ],
   imports: [
     BrowserModule,
@@ -65,8 +83,10 @@ import { DialogsComponent } from './pages/dialogs/dialogs.component';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgxFileDropModule
-
+    NgxFileDropModule,
+    StoreModule.forRoot(appReducers),
+    EffectsModule.forRoot([UserEffects, ExtraForUserEffects, FriendshipEffects, UserPhotos]),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [     {
     provide: HTTP_INTERCEPTORS,

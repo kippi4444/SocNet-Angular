@@ -4,6 +4,11 @@ import {Album} from '../interfaces/album';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
+
+interface Interface {
+
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,23 +19,23 @@ export class AlbumService {
 
 
   createAlbum(formData) {
-    return  this.http.post<Album>(this.usersAlbum, formData );
+    return  this.http.post<Album>(this.usersAlbum, formData ).pipe(map(value => value));
   }
 
-  getUserAlbum(id: string): Observable<Album> {
-    return this.http.get<Album>(this.usersAlbum + id).pipe(map(value => { return value[0] }));
+  getUserAlbum(id: string) {
+    return this.http.get<Album>(this.usersAlbum + id).pipe(map(value => { return value[0]; }));
   }
 
-  updateAlbum(id: string, album: object) {
-    this.http.put<Album>(this.usersAlbum + id + '/photo', album).subscribe();
+  updateAlbum(obj: {id: string, album: object}) {
+    return this.http.put<Album>(this.usersAlbum + obj.id + '/photo', obj.album).pipe(map(value => value));
   }
 
   deleteAlbum(id: string) {
-    this.http.delete<Album>(this.usersAlbum + id).subscribe();
+    return this.http.delete<string>(this.usersAlbum + id).pipe(map(value => value));
   }
 
-  getUserAlbums(id: string): Observable<Album[]> {
-    return this.http.get<Album[]>(this.usersAlbum + 'all/' + id).pipe(map(albums => {return albums}));
+  getUserAlbums(id: string) {
+    return this.http.get<Album[]>(this.usersAlbum + 'all/' + id).pipe(map(value => value));
   }
 
 }

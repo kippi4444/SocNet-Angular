@@ -147,8 +147,6 @@ hr{
 }
 
 .content{
-  //display: flex;
-  //flex-flow: wrap;
   padding-top: 15px;
   margin: 0 10%;
 }
@@ -163,4 +161,9 @@ hr{
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.online {
+  color: green;
+  font-size: 10px;
 }

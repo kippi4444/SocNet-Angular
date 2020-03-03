@@ -7,4 +7,5 @@ export class Album {
   description: string;
   photos?: object[];
   owner: string;
+  created_at?: string;
 }

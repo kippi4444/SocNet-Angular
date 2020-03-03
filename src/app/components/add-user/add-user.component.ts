@@ -1,9 +1,12 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {User} from '../../interfaces/user';
-import {AuthService} from '../../services/auth.service';
 import {UserService} from '../../services/user.service';
 import {ActivatedRoute} from '@angular/router';
+import {AppState} from '../../store/state/app.state';
+import {Store} from '@ngrx/store';
+import {stateAuth} from '../../store/selectors/user.selector';
+import {DeleteUser} from '../../store/actions/user.actions';
 
 @Component({
   selector: 'app-add-user',
@@ -20,42 +23,34 @@ export class AddUserComponent implements OnInit, OnDestroy {
   @Output()
   getUpdUser: EventEmitter<void> = new EventEmitter<void>();
   form: FormGroup;
-  userToken: string;
+  myId: string;
   isAuth = false;
   info: string;
   changePass = true;
   file: File = null;
-  myAccount: string;
   sub = [];
   showEdit = true;
-  btn = 'Регистрация';
   registration: boolean;
   edit: boolean;
 
-  constructor(private authService: AuthService,
-              private userService: UserService,
+  constructor(private store: Store<AppState>,
               private route: ActivatedRoute) {
   }
 
   checkPasswords(group: FormGroup) {
     const pass = group.get('password').value;
     const confirmPass = group.get('confirmPassword').value;
-
     return pass === confirmPass ? null : {notSame: true};
   }
 
   ngOnInit() {
+    this.myId = localStorage.getItem('user');
+    this.sub.push(this.store.select(stateAuth).subscribe(state => {
+      this.isAuth = state;
+    }));
     this.routing();
-    this.sub.push(this.authService.isId.subscribe(id => {
-      this.myAccount = id
-    }));
-    this.sub.push(this.authService.isAuth.subscribe(state => {
-      this.isAuth = state
-    }));
-    this.userToken = localStorage.getItem('accessToken');
-
     this.form = new FormGroup({
-      email: new FormControl(this.userToken ? this.userPerson.email : '', [
+      email: new FormControl(this.isAuth ? this.userPerson.email : '', [
         Validators.email,
         Validators.required,
       ]),
@@ -65,23 +60,23 @@ export class AddUserComponent implements OnInit, OnDestroy {
       confirmPassword: new FormControl('', [
         Validators.minLength(3)
       ]),
-      surname: new FormControl(this.userToken ? this.userPerson.surname : '', [
+      surname: new FormControl(this.isAuth ? this.userPerson.surname : '', [
         Validators.minLength(3),
         Validators.required,
       ]),
-      name: new FormControl(this.userToken ? this.userPerson.name : '', [
+      name: new FormControl(this.isAuth ? this.userPerson.name : '', [
         Validators.required,
         Validators.minLength(3)
       ]),
-      birthday: new FormControl(this.userToken ? this.userPerson.birthday : '', [
+      birthday: new FormControl(this.isAuth ? this.userPerson.birthday : '', [
         Validators.required,
         Validators.minLength(8)
       ]),
-      login: new FormControl(this.userToken ? this.userPerson.login : '', [
+      login: new FormControl(this.isAuth ? this.userPerson.login : '', [
         Validators.required,
         Validators.minLength(3)
       ]),
-      number: new FormControl(this.userToken ? this.userPerson.number : '', [
+      number: new FormControl(this.isAuth ? this.userPerson.number : '', [
         Validators.minLength(12),
         Validators.pattern('^(375|\\+375|80)(?:\\s(44|29|25|33)\\s|\\((44|29|25|33)\\)|(44|29|25|33))[1-9]{1}([0-9]{6}|[0-9]{2}-[0-9]{2}-[0-9]{2})$')
       ]),
@@ -111,13 +106,13 @@ export class AddUserComponent implements OnInit, OnDestroy {
   }
 
   deleteUser(user: User) {
-    this.userService.del(user.login);
+    this.store.dispatch(new DeleteUser(user.login));
   }
 
   checkPageSend() {
-    if (this.isAuth && this.userToken && this.form.valid) {
+    if (this.isAuth && this.form.valid) {
       this.submitForm.emit(this.form.value);
-      this.info = `${this.form.value.name}, Ваш профиль был успешно обновлен!`;
+      this.info = `${this.form.value.name}, запрос на изменения Ваших данных отправлен!`;
     } else {
       this.submitForm.emit(this.form.value);
       this.form.reset();
@@ -125,11 +120,11 @@ export class AddUserComponent implements OnInit, OnDestroy {
   }
 
   showPage() {
-    return !!(this.isAuth && this.userToken);
+    return this.isAuth
   }
 
   accountChecker() {
-    return (this.myAccount === this.userPerson._id);
+    return (this.myId === this.userPerson._id);
   }
 
   updateUser() {
@@ -140,6 +135,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     this.sub.forEach(sub => {
       sub.unsubscribe();
     });
+    this.sub = [];
   }
 
 }

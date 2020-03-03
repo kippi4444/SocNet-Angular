@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
-import {Album} from '../interfaces/album';
 import {map} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {Dialog} from '../interfaces/dialog';
 import {Msg} from '../interfaces/msg';
+
+export class dialogMes {
+  dialog: Dialog;
+  mes: Msg[];
+}
 
 
 @Injectable({
@@ -20,14 +24,14 @@ export class DialogService {
   }
 
   addDialog(body: object) {
-    return this.http.post<Dialog>(this.dialogsUrl, body);
+    return this.http.post<Dialog>(this.dialogsUrl, body).pipe(map(value => value));
   }
 
   getDialog(id: string) {
-    return this.http.get<Dialog>(this.dialogsUrl + id).pipe(map(value => { return value }));
+    return this.http.get<Dialog>(this.dialogsUrl + id).pipe(map(value => value));
   }
 
   getMessages(dialogId: string) {
-    return this.http.get<Msg[]>(this.dialogsUrl + 'mes/' + dialogId);
+    return this.http.get<dialogMes>(this.dialogsUrl + 'mes/' + dialogId);
   }
 }

@@ -16,23 +16,12 @@ export class PetService {
     private router: Router) { }
 
   addPet(petData: Pet) {
-    console.log(petData);
-    this.http.post<Data>(this.petsUrl, petData)
-      .pipe(
-        catchError(err => {
-          console.log(err.error.error);
-          return throwError(err.error.error);
-        })
-      ).subscribe();
+    return this.http.post<Pet>(this.petsUrl, petData).pipe(map(value => value));
   }
 
   delPet(id: string) {
-    this.http.delete<Data>(this.petsUrl + id)
-      .pipe(catchError(err => {
-          console.log(err.error.error);
-          return throwError(err.error.error);
-        })
-      ).subscribe();
+    return this.http.delete(this.petsUrl + id)
+      .pipe(map(value => value));
   }
 
   updPet(petData: Pet) {

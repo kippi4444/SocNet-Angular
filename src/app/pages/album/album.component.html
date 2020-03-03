@@ -12,12 +12,11 @@
       <hr>
 
       <div *ngIf="album.description" class="description">
-
         {{album.description}}
       </div>
     </div>
 
-    <div class="photos" *ngIf="album.photos">
+    <div class="photos" *ngIf="album.photos.length>0">
       <div  *ngFor="let photo of  album.photos; let i = index">
         <a>
           <span *ngIf="accountChecker()" (click)="delPhoto(i)" >&#10006;</span>
@@ -44,4 +43,4 @@
     <textarea  class="description" cols="30" rows="10" [(ngModel)]="album.description" ></textarea>
   </div>
 </ng-template>
-<app-photo-viewer (reload)="reload()"></app-photo-viewer>
+<app-photo-viewer></app-photo-viewer>

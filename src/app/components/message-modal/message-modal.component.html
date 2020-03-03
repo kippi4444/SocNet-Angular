@@ -1,0 +1,12 @@
+<div class="album_modal_overlay" *ngIf="showModal" (click)="closeModal()"></div>
+<div class="album_modal" *ngIf="showModal">
+  <div class="myAlbumFelds">
+    <h4>Отправить сообщение</h4>
+    <hr>
+    <textarea  placeholder="Описания альбома" id="description" cols="50" rows="8" [(ngModel)]="message.text"></textarea>
+  </div>
+
+  <button (click)="sendMes()">Отправить</button>
+  <button (click)="closeModal()">Закрыть</button>
+</div>
+

@@ -3,5 +3,5 @@ export class Photo {
   url: string;
   album: string;
   owner: string;
-
+  created_at?: string;
 }

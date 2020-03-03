@@ -1,12 +1,15 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {Component, EventEmitter,  OnDestroy, OnInit, Output} from '@angular/core';
+import {ActivatedRoute,  Router} from '@angular/router';
 import {filter} from 'rxjs/operators';
 import {PhotoService} from '../../services/photo.service';
 import {Observable, Subscription} from 'rxjs';
-import {AlbumService} from '../../services/album.service';
 import {Photo} from '../../interfaces/photo';
-import {log} from 'util';
 import {Album} from '../../interfaces/album';
+import {AlbumService} from '../../services/album.service';
+import {AppState} from '../../store/state/app.state';
+import {Store} from '@ngrx/store';
+import {allAlbums, allPhotos, selectedAlbum, selectedAlbumPhoto} from '../../store/selectors/photo.selector';
+import {ChangePhotoAlbum, GetAllPhotos} from '../../store/actions/photo.actions';
 
 @Component({
   selector: 'app-photo-viewer',
@@ -24,17 +27,16 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
   next: string;
   idx: number;
   move = false;
-  userAlbums: Observable<Album[]>;
+  userAlbums$: Observable<Album[]>;
   serv: Subscription;
   routing: Subscription;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private photoService: PhotoService,
-              private albumService: AlbumService) { }
+              private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.userAlbums = this.albumService.getUserAlbums(localStorage.getItem('login'));
+    this.userAlbums$ = this.store.select(allAlbums);
     this.urlSubscriber();
   }
 
@@ -51,20 +53,18 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
 
   getAllUserPhotos(){
     const login = this.route.snapshot.paramMap.get('id');
-    this.serv = this.photoService.getAllPhotos(login)
-      .subscribe(photos => {
-        this.photos = photos;
-        this.routingStart();
-      });
+    this.serv = this.store.select(allPhotos).subscribe(photos => {
+      this.photos = photos;
+      this.routingStart();
+    });
   }
 
   getUserAlbum() {
     const id = this.route.snapshot.paramMap.get('id');
-    this.serv = this.albumService.getUserAlbum(id)
-      .subscribe(album => {
-        this.photos = album.photos as Photo[];
-        this.routingStart();
-      });
+    this.serv = this.store.select(selectedAlbumPhoto).subscribe(album => {
+      this.photos = album;
+      this.routingStart();
+    });
   }
 
   routingStart() {
@@ -91,8 +91,9 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
 
 
   movePhoto(albumId: string, photoId: string) {
+    const id = this.route.snapshot.paramMap.get('id');
     this.move = !this.move;
     this.show = false;
-    this.photoService.movePhoto(albumId, photoId).subscribe(value => this.reload.emit());
+    this.store.dispatch(new ChangePhotoAlbum({album: albumId, id: photoId}));
   }
 }

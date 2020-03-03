@@ -1,8 +1,7 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Album} from '../../interfaces/album';
-import {AuthService} from '../../services/auth.service';
 import {ActivatedRoute} from '@angular/router';
-import {Subscription} from 'rxjs';
+
 
 
 @Component({
@@ -10,25 +9,21 @@ import {Subscription} from 'rxjs';
   templateUrl: './my-albums.component.html',
   styleUrls: ['./my-albums.component.scss']
 })
-export class MyAlbumsComponent implements OnInit, OnDestroy {
-  @Output() uploadNewAlbum: EventEmitter<object> = new EventEmitter<object>();
+export class MyAlbumsComponent {
+  @Output() uploadNewAlbum: EventEmitter<Album> = new EventEmitter<Album>();
   @Output() rldComponent: EventEmitter<string> = new EventEmitter<string>();
+
   @Input() limit: boolean;
   @Input() albums: Album[];
   @Input() link: string;
+  @Input() myId: string;
+  @Input() isAuth = false;
+  @Input() myLogin: string;
   showModal = false;
-  myAccount: string;
-  isAuth = false;
-  myLogin: string;
-  sub = [];
-  constructor(private authService: AuthService,
-              private route: ActivatedRoute) { }
 
-  ngOnInit() {
-    this.sub.push(this.authService.isAuth.subscribe(state => { this.isAuth = state}));
-    this.sub.push(this.authService.isId.subscribe(id => { this.myAccount = id }));
-    this.sub.push(this.authService.isLogin.subscribe(login => { this.myLogin = login }));
-  }
+  sub = [];
+  constructor(private route: ActivatedRoute) { }
+
 
   uploadAlbum(album: Album) {
     this.uploadNewAlbum.emit(album);
@@ -37,13 +32,6 @@ export class MyAlbumsComponent implements OnInit, OnDestroy {
   accountChecker() {
     const login = this.route.snapshot.paramMap.get('id');
     return (this.myLogin === login);
-  }
-
-
-  ngOnDestroy(): void {
-    this.sub.forEach(el => {
-      el.unsubscribe();
-    })
   }
 
   reloadComponent() {

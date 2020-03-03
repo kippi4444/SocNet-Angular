@@ -1,6 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UserService} from './services/user.service';
-import {Router} from '@angular/router';
+import {Subject, Subscription} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {WebsocketService} from './services/websocket.service';
+import {Msg} from './interfaces/msg';
+import {select, Store} from '@ngrx/store';
+import {AppState} from './store/state/app.state';
+import {GetAuthUser} from './store/actions/user.actions';
+import {authentificatedUser, stateAuth} from './store/selectors/user.selector';
 
 
 @Component({
@@ -10,17 +17,17 @@ import {Router} from '@angular/router';
 
 })
 
-export class AppComponent implements OnInit{
-  accessToken: string;
+export class AppComponent implements OnInit {
 
-  constructor(private userService: UserService,
-              private router: Router) { }
+  accessToken: string = localStorage.getItem('accessToken');
+  sub = [];
+  isAuth: boolean;
+  mes: Msg;
+  constructor(private store: Store<AppState>) { }
   ngOnInit() {
-    this.accessToken = localStorage.getItem('accessToken');
-    if (this.accessToken){
-      this.userService.getAuthUser();
+    if (this.accessToken) {
+      this.store.dispatch(new GetAuthUser());
     }
   }
-
 
 }

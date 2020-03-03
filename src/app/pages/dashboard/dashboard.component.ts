@@ -1,123 +1,64 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import { User } from '../../interfaces/user';
-import { UserService } from '../../services/user.service';
-import {SearchService} from '../../services/search.service';
-import {FriendService} from '../../services/friend.service';
-import {fromEvent} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
-import {DialogService} from '../../services/dialog.service';
-import { Router} from '@angular/router';
-import {AuthService} from '../../services/auth.service';
+import {ActivatedRoute} from '@angular/router';
+import {Friend} from '../../interfaces/friend';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-dashboard-component',
   templateUrl: './dashboard.component.html',
   styleUrls: [ './dashboard.component.scss' ]
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent {
 
-  @Output() searching: EventEmitter<void> = new EventEmitter<void>();
   @Output() allUsers: EventEmitter<void> = new EventEmitter<void>();
-  @Output() addNewFriend: EventEmitter<string> = new EventEmitter<string>();
-  @Output() delMyFriend: EventEmitter<string> = new EventEmitter<string>();
-  @Output() delMyRequest: EventEmitter<string> = new EventEmitter<string>();
-
+  @Output() addingFriend: EventEmitter<object> = new EventEmitter<object>();
+  @Output() delettingFriend: EventEmitter<string> = new EventEmitter<string>();
+  @Output() delMyRequest: EventEmitter<object> = new EventEmitter<object>();
+  @Output() goThisDialog: EventEmitter<object> = new EventEmitter<object>();
+  @Output() changeView: EventEmitter<object> = new EventEmitter<object>();
 
   @Input() users: User[];
-  sub = [];
-  id: string;
-  usr: User;
-  isAuth: boolean;
-  constructor(private userService: UserService,
-              private searchService: SearchService,
-              private friendService: FriendService,
-              private dialogService: DialogService,
-              private authService: AuthService,
-              private router: Router) {
+  @Input() myId: string;
+  @Input() isAuth: boolean;
+  @Input() myReqFrnd: {requests: Friend[], friends: Friend[]};
+
+  constructor(private route: ActivatedRoute) {
   }
 
-  ngOnInit(): void {
-    this.sub.push(this.authService.isAuth.subscribe(state => { this.isAuth = state;}));
-    this.id = this.userService.id;
-    this.getUsers();
-    this.search();
-  }
 
-  getUsers(): void {
-    this.sub.push( this.userService.getUsers().subscribe(value => {this.users = value;
-                                                                   this.usr = this.userService.user;}));
-  }
-
-  search() {
-    const input = fromEvent(document.querySelector('#searching'), 'input');
-
-    this.sub.push( input.pipe(
-      debounceTime( 400),
-      map(event => event.target.value),
-      distinctUntilChanged(),
-    )
-      .subscribe(value => {
-        this.sub.push(this.searchService.search(value).subscribe(next => this.users = next));
-      }));
-  }
-
-  itFriend(friends) {
-    if (!friends) {
-      return;
+  itFriend(req) {
+    if (req.length < 1) {
+      return false;
     }
     let state;
-    friends.forEach( f => {
-      if (f.friend === this.id) {
+    req.forEach( f => {
+      if (f.friend === this.myId) {
         state = true;
       }
     });
     return state;
   }
 
-
-  addFriend(friend) {
-    this.sub.push(this.friendService.addFriend({friend: this.id , owner: friend}).subscribe(next =>{
-      this.getUsers();
-    } ));
+  addFriend(friend: Friend) {
+    this.addingFriend.emit({friend, id: this.myId});
   }
 
-
   delFriend(exFriend) {
-    this.sub.push(this.friendService.delFriend(exFriend).subscribe(next =>{
-      this.getUsers();
-    } ));
+    this.delettingFriend.emit(exFriend);
   }
 
   delRequest(requests) {
-    let reqId;
-    requests.forEach( f => {
-      if (f.friend === this.id){
-        reqId = f._id;
-      }
-    });
-    this.sub.push(this.friendService.delReq(reqId).subscribe(next =>{
-      this.getUsers();
-    } ));
+   this.delMyRequest.emit({requests, id: this.myId});
   }
 
-  goToDialog(user: User) {
-    const body = { person: [
-        {id: user._id},
-        {id: this.id}
-      ]
+
+  changeViewUsers() {
+    const query = {
+      page: this.route.snapshot.queryParamMap.get('page'),
+      limit: this.route.snapshot.queryParamMap.get('limit')
     };
-    this.sub.push(this.dialogService.addDialog(body).subscribe(value => {
-      this.router
-        .navigate([`/dialogs/${value._id}`], { queryParams: {to: user.login}});
-    }));
+    this.changeView.emit(query);
   }
-
-  ngOnDestroy(): void {
-    this.sub.forEach(el => {
-      el.unsubscribe();
-    });
-  }
-
 
 }
 

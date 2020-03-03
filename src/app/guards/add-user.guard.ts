@@ -1,20 +1,18 @@
 import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {UserService} from '../services/user.service';
 import {Injectable} from '@angular/core';
-import {AuthService} from '../services/auth.service';
+import { stateAuth} from '../store/selectors/user.selector';
+import {AppState} from '../store/state/app.state';
+import {Store} from '@ngrx/store';
 
 @Injectable()
 export class AddUserGuard implements CanActivate {
-  isAuth: string;
+  isAuth: boolean;
   isAuth2: boolean;
   constructor(private router: Router,
-              private authService: AuthService,
-              private userService: UserService) {}
+              private store: Store<AppState>) {}
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
-    this.isAuth = this.userService.accessToken;
-    // this.authService.isAuth.subscribe(state => { this.isAuth2 = state});
-
+    this.store.select(stateAuth).subscribe(status => this.isAuth = status );
     if (this.isAuth) {
       return true;
     } else {

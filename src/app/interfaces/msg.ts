@@ -1,7 +1,8 @@
 export class Msg {
   dialog: string;
   user: string;
-  isReading: boolean;
+  isReading?: boolean;
   text: string;
-  name: string;
+  name?: string;
+  created_at?: string;
 }

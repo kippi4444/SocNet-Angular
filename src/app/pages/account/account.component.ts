@@ -1,9 +1,9 @@
-import {Component, DoCheck, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component,  EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {User} from '../../interfaces/user';
-
 import {Pet} from '../../interfaces/pet';
-import {AuthService} from '../../services/auth.service';
 import {Friend} from '../../interfaces/friend';
+
+
 
 @Component({
   selector: 'app-account',
@@ -15,15 +15,16 @@ export class AccountComponent implements OnInit, OnDestroy {
   @Output() changeProfile: EventEmitter<User> = new EventEmitter<User>();
   @Output() delPet: EventEmitter<Pet> = new EventEmitter<Pet>();
   @Output() updAvatar: EventEmitter<object> = new EventEmitter<object>();
-  @Output() addFriends: EventEmitter<string> = new EventEmitter<string>();
+  @Output() addFriends: EventEmitter<Friend> = new EventEmitter<Friend>();
   @Output() delMyFriend: EventEmitter<string> = new EventEmitter<string>();
   @Output() delMyRequest: EventEmitter<string> = new EventEmitter<string>();
+  @Output() goDialog: EventEmitter<any> = new EventEmitter<any>();
 
   @Input() userPerson: User;
+  @Input() isAuth: boolean;
+  @Input() myId: string;
 
   show = false;
-  myId: string;
-  isAuth = false;
   file: object;
   sub = [];
   edit: boolean;
@@ -31,18 +32,15 @@ export class AccountComponent implements OnInit, OnDestroy {
   private newAvatar: string | ArrayBuffer;
   private preview: string | ArrayBuffer;
   private showModal = false;
-  constructor(private authService: AuthService)  {}
+  constructor()  {}
 
   ngOnInit() {
     this.getThisUser.emit();
-    this.sub.push(this.authService.isAuth.subscribe(state => { this.isAuth = state;}));
-    this.sub.push(this.authService.isId.subscribe(id => { this.myId = id; }));
   }
 
 
   deletePet(pet: Pet) {
-    // @ts-ignore
-    this.userPerson.pets = this.userPerson.pets.filter( el => el.name !== pet.name);
+    this.userPerson.pets = this.userPerson.pets.filter(pets  => pets.name !== pet.name);
     this.delPet.emit(pet);
   }
 
@@ -79,7 +77,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.sub.forEach(sub => {
       sub.unsubscribe();
-    })
+    });
   }
 
   changeState(state: boolean) {
@@ -100,7 +98,7 @@ export class AccountComponent implements OnInit, OnDestroy {
       return  state;
     }
     friends.forEach( f => {
-      if (f.friend === this.myId){
+      if (f.friend === this.myId) {
         state = true;
       }
     });
@@ -115,10 +113,14 @@ export class AccountComponent implements OnInit, OnDestroy {
   delRequest(requests) {
     let reqId;
     requests.forEach( f => {
-      if (f.friend === this.myId){
+      if (f.friend === this.myId) {
         reqId = f._id;
       }
     });
     this.delMyRequest.emit(reqId);
+  }
+
+  goToDialog(user: User) {
+    this.goDialog.emit(user);
   }
 }

@@ -18,50 +18,31 @@ export class FriendService {
   addFriend(friend: Friend): Observable<Friend> {
     return  this.http.post<Friend>(this.friendsUrl, friend)
       .pipe(
-        map(value => {return value;}),
-        catchError(err => {
-          console.log(err);
-          return throwError(err.error.error);
-        })
+        map(value => value)
       );
   }
 
   delReq(id: string) {
-  return   this.http.delete(this.friendsUrl + 'requests/' + id)
-      .pipe(catchError(err => {
-          console.log(err.error.error);
-          return throwError(err.error.error);
-        })
-      );
+    console.log(id);
+  return  this.http.delete(this.friendsUrl + 'requests/' + id)
+      .pipe(map(value => value));
   }
 
   delFriend(id: string) {
    return this.http.delete(this.friendsUrl + id)
-      .pipe(
-        catchError(err => {
-          console.log(err.error.error);
-          return throwError(err.error.error);
-        })
-      );
+     .pipe(
+       map(value => value)
+     );
   }
 
 
  getAllFriends(id: string): Observable<Friend[]> {
    return this.http.get<Friend[]>(this.friendsUrl + id)
-      .pipe(
-        catchError(err => {
-          return throwError(err);
-        })
-      );
+      .pipe(map(value => value));
   }
 
   getAllRequests(): Observable<Friend[]> {
    return  this.http.get<Friend[]>(this.friendsUrl + 'requests')
-      .pipe(
-        catchError(err => {
-          console.log(err);
-          return throwError(err.error.error);
-        })
-      );
+     .pipe(map(value => value));
   }
 }

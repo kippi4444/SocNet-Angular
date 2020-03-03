@@ -89,6 +89,7 @@ hr{
 
   }
 
+
   .inputfile + label {
     font-family: 'Roboto', sans-serif;
     font-size: 13px;
@@ -116,22 +117,31 @@ hr{
     padding-right: 10px;
     border-right: 1px solid  rgba(75, 218, 40, 0.21);
 
+
   }
 
   .secondColumnAccount{
-
+    position: relative;
     padding-top: 0.5em;
     padding-left: 10px;
     overflow: hidden;
     color: rgb(72, 72, 72);
 
+    .online{
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
   }
 
   .user-info{
+
       font-size: 1em;
       display: grid;
       grid-template-columns: auto auto ;
       grid-gap: 5px;
+
 
   }
 

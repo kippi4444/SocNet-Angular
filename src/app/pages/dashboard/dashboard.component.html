@@ -2,9 +2,11 @@
 <div  class="dashboard content">
   <h2>Все пользователи</h2>
   <input id="searching" type="text" placeholder="Поиск...">
+    <button [routerLink]="" [queryParams]="{page: 1, limit: 2 }" (click)="changeViewUsers()">по 2 юзера на страницу</button>
+  <button [routerLink]="" [queryParams]="{page: 2, limit: 2 }" (click)="changeViewUsers()">Следующие</button>
   <hr>
   <div *ngIf="users">
-    <div  class="module" *ngFor="let user of users">
+    <div  class="module" *ngFor="let user of users ">
       <div class="column-block">
         <a class="module-avatar" routerLink="/users/{{user.login}}">
           <img class="smallAvatar" src="http://localhost:8000/{{user.photos[user.photos.length-1].url}}" alt="">
@@ -12,14 +14,15 @@
       </div>
       <div class="column-block">
         <a routerLink="/users/{{user.login}}">
-          <h4>{{user.name | titlecase}} {{user.surname | titlecase}}  </h4>
+
+          <h4>{{user.name | titlecase}} {{user.surname | titlecase}}  <span class="online" *ngIf="user.online" >Online</span></h4>
         </a>
 
-        <a *ngIf="id !== user._id && isAuth " class="btn_show" (click)="goToDialog(user)"  >Написать сообщение</a>
-        <a *ngIf="id !== user._id && isAuth && !itFriend(user.friends)  && !itFriend(user.requests) " class="btn_show" (click)="addFriend(user._id)">Добавить в друзья</a>
-        <a *ngIf="id !== user._id && isAuth && !itFriend(user.friends)  && itFriend(user.requests)" class="btn_show" (click)="delRequest(user.requests)">Отменить заявку</a>
-        <a *ngIf="id !== user._id && isAuth && itFriend(user.friends)" class="btn_show" (click)="delFriend(user._id)">Убрать из друзей</a>
+        <a *ngIf="myId !== user._id && isAuth && !itFriend(user.friends)  && !itFriend(user.requests) " class="btn_show" (click)="addFriend(user._id)">Добавить в друзья</a>
+        <a *ngIf="myId !== user._id && isAuth && !itFriend(user.friends)  && itFriend(user.requests)" class="btn_show" (click)="delRequest(user.requests)">Отменить заявку</a>
+        <a *ngIf="myId !== user._id && isAuth && itFriend(user.friends)" class="btn_show" (click)="delFriend(user._id)">Убрать из друзей</a>
       </div>
     </div>
   </div>
 </div>
+

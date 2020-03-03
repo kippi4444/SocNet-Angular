@@ -3,7 +3,7 @@
     <h1>Диалоги</h1>
     <hr>
     <div  *ngFor="let dialog of dialogs " >
-      <div class="module " [ngClass]="{active: dialog._id == activeDialog}" (click)="goToDialog(dialog.persons)">
+      <div class="module " [ngClass]="{active: dialog._id == activeDialog}" (click)="goToDialog(dialog)">
           <div class="column-block " >
             <a  routerLink="/users/{{dialog.persons.login}}">
               <div class="module-avatar">
@@ -14,6 +14,7 @@
           <a  [ngClass]="{active: dialog._id == activeDialog}">
             <div class="column-block">
                 <h4>{{dialog.persons.name | titlecase}} {{dialog.persons.surname | titlecase}} </h4>
+              <span class="online" *ngIf="dialog.persons.online">Online</span>
             </div>
           </a>
       </div>

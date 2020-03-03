@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {Album} from '../interfaces/album';
 import {Photo} from '../interfaces/photo';
 import {Router} from '@angular/router';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,23 +17,23 @@ export class PhotoService {
 
   }
 
-  setAlbumPhoto(id: string, formData: object): Observable<Album> {
-    return this.http.post<Album>(this.photosUrl + id, formData);
+  setAlbumPhoto(photo: {id: string, file: FormData}) {
+    return this.http.post<Photo[]>(this.photosUrl + photo.id, photo.file).pipe(map(value => value));
   }
 
-  setWallPhoto(formData: object): Observable<Photo[]> {
-   return this.http.post<Photo[]>(this.photosUrl + 'wall', formData);
+  setWallPhoto(formData: object) {
+    return this.http.post<Photo[]>(this.photosUrl + 'wall', formData).pipe(map(value => value));
   }
 
   deleteAlbumPhoto(photo: Photo) {
-    this.http.delete<Album>(this.photosUrl + photo._id).subscribe();
+    return this.http.delete<string>(this.photosUrl + photo._id).pipe(map(value => value));
   }
 
-  getAllPhotos(login: string): Observable<Photo[]> {
-    return this.http.get<Photo[]>(this.photosUrl + 'all/' + login);
+  getAllPhotos(login: string) {
+    return this.http.get<Photo[]>(this.photosUrl + 'all/' + login).pipe(map(value => value));
   }
 
-  movePhoto(albumId: string, photoId: string) {
-   return  this.http.put(this.photosUrl + 'upd', {id: photoId, album: albumId});
+  movePhoto(obj) {
+   return  this.http.put(this.photosUrl + 'upd', obj).pipe(map(value => value));
   }
 }

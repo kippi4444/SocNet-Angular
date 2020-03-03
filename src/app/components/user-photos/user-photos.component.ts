@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Photo} from '../../interfaces/photo';
-import {AuthService} from '../../services/auth.service';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -9,22 +8,19 @@ import {ActivatedRoute} from '@angular/router';
   styleUrls: ['./user-photos.component.scss']
 })
 export class UserPhotosComponent implements OnInit, OnDestroy {
-  @Output() deletePhoto: EventEmitter<object> = new EventEmitter<object>();
-  @Output() upldPhoto: EventEmitter<object> = new EventEmitter<object>();
+  @Output() deletePhoto: EventEmitter<Photo> = new EventEmitter<Photo>();
+  @Output() upldPhoto: EventEmitter<FormData> = new EventEmitter<FormData>();
   @Output() updComponent: EventEmitter<object> = new EventEmitter<object>();
   @Input() photos: Photo[];
   @Input() limit: boolean;
   @Input() link: string;
-  isAuth = false;
-  myAccount: string;
+  @Input() isAuth: boolean;
+  @Input() myId: string;
   sub = [];
   showModal = false;
-  constructor(private authService: AuthService,
-              private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.authService.isAuth.subscribe(state => { this.isAuth = state});
-    this.authService.isLogin.subscribe(login => { this.myAccount = login});
   }
 
   delPhoto(idx) {
@@ -32,10 +28,6 @@ export class UserPhotosComponent implements OnInit, OnDestroy {
     this.deletePhoto.emit(photo[0]);
   }
 
-  accountChecker() {
-    const login = this.route.snapshot.paramMap.get('id');
-    return (this.myAccount === login);
-  }
 
   ngOnDestroy(): void {
     this.sub.forEach(sub => sub.unsubscribe());

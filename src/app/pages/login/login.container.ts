@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../services/user.service';
-import {User} from '../../interfaces/user';
-import {Observable} from 'rxjs';
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../../store/state/app.state';
+import {authentificatedUser} from '../../store/selectors/user.selector';
+import {GetLoginUser, NewUser} from '../../store/actions/user.actions';
 
 
 
@@ -13,8 +15,10 @@ import {Observable} from 'rxjs';
                          (regEvent)="register($event)"></app-login>`
 })
 export class LoginContainerComponent implements OnInit{
-  private user$: Observable<User>;
-  constructor(private userService: UserService) {}
+  private user$ = this.store.pipe(select(authentificatedUser));
+
+  constructor(private userService: UserService,
+              private store: Store<AppState>) {}
 
   ngOnInit(): void {
 
@@ -22,12 +26,12 @@ export class LoginContainerComponent implements OnInit{
 
 
   login(loginData) {
-    this.user$ = this.userService.login(loginData);
+    this.store.dispatch(new GetLoginUser(loginData));
    }
 
   register(userData) {
-
-    this.userService.add(userData);
+    this.store.dispatch(new NewUser(userData));
+    // this.userService.add(userData);
   }
 
 }

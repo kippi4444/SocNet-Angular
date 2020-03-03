@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Album} from '../../interfaces/album';
 import {Router} from '@angular/router';
-import {AuthService} from '../../services/auth.service';
+import {Photo} from '../../interfaces/photo';
+
 
 
 @Component({
@@ -9,25 +10,21 @@ import {AuthService} from '../../services/auth.service';
   templateUrl: './album.component.html',
   styleUrls: ['./album.component.scss']
 })
-export class AlbumComponent implements OnInit, OnDestroy {
-  @Input() album: Album | any;
-  @Output() uploadPhoto: EventEmitter<object> = new EventEmitter<object>();
-  @Output() deletePhoto: EventEmitter<object> = new EventEmitter<object>();
-  @Output() updateAlbum: EventEmitter<object> = new EventEmitter<object>();
-  @Output() deleteAlbum: EventEmitter<object> = new EventEmitter<object>();
+export class AlbumComponent implements OnDestroy {
+  @Output() uploadPhoto: EventEmitter<FormData> = new EventEmitter<FormData>();
+  @Output() deletePhoto: EventEmitter<Photo> = new EventEmitter<Photo>();
+  @Output() updateAlbum: EventEmitter<Album> = new EventEmitter<Album>();
+  @Output() deleteAlbum: EventEmitter<Album> = new EventEmitter<Album>();
   @Output() updPhoto: EventEmitter<void> = new EventEmitter<void>();
-  myAccount: string;
-  isAuth = false;
+
+  @Input() myId: string;
+  @Input() isAuth = false;
+  @Input() album: Album | any;
   sub = [];
   preview: string | ArrayBuffer;
   editMode = false;
-  constructor(private router: Router,
-              private authService: AuthService) { }
+  constructor(private router: Router) { }
 
-  ngOnInit() {
-    this.sub.push(this.authService.isAuth.subscribe(state => { this.isAuth = state; }));
-    this.sub.push(this.authService.isId.subscribe(id => { this.myAccount = id; }));
-  }
 
   uploadAvatar(photos) {
     this.preview = '';
@@ -45,12 +42,13 @@ export class AlbumComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    this.router.navigate(['friends/' + this.album.owner.login + '/albums']);
     this.deleteAlbum.emit(this.album);
+    this.router.navigate(['users/' + this.album.owner.login + '/albums']);
+
   }
 
   accountChecker() {
-    return (this.myAccount === this.album.owner._id);
+    return (this.myId === this.album.owner._id);
   }
 
   ngOnDestroy(): void {
@@ -59,7 +57,4 @@ export class AlbumComponent implements OnInit, OnDestroy {
       });
   }
 
-  reload() {
-    this.updPhoto.emit();
-  }
 }

@@ -1,6 +1,6 @@
 
 <div  class="container photos" *ngIf="photos" >
-  <h1><a [routerLink]="link">Мои фотографии</a></h1>
+  <h1><a [routerLink]="link">Фотографии</a></h1>
   <button *ngIf="!limit" (click)="showModal = !showModal">Добавить фотографии</button>
   <hr>
   <div class="photos_block">
@@ -8,7 +8,7 @@
     <div *ngFor="let photo of photos; let i = index ">
         <div class="photo">
           <div class="main-photo">
-            <div><span *ngIf="accountChecker()" (click)="delPhoto(i)" >&#10006;</span></div>
+            <div><span *ngIf="myId === photo.owner._id || myId === photo.owner" (click)="delPhoto(i)" >&#10006;</span></div>
             <img *ngIf="photo"   src="http://localhost:8000/{{photo.url}}"  [routerLink]=""
                  [queryParams]="{ photo: photo._id }">
           </div>

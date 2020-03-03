@@ -15,8 +15,10 @@ export class WebsocketService {
   constructor() { }
 
   connect(session): Rx.Subject<MessageEvent>{
-    this.socket = io(environment.ws_url + session.nameSpace);
+    // this.socket = io(environment.ws_url + session.nameSpace);
+    this.socket = io(environment.ws_url + 'private');
     this.socket.on('connection');
+    this.socket.emit('goRoom', session);
 
     const observable = new Observable(observer => {
       this.socket.on('chat message', (data) => {

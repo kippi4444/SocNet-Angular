@@ -105,7 +105,7 @@
 
     <div *ngIf="changePass">
       <h1>Дата рождения</h1>
-      <input type="date" #evtDate required name="evtDate" placeholder="{{userToken? (userPerson.birthday | date: 'dd.MM.yyyy') : 'dd/mm/yyyy'}}" id="evtDate" formControlName="birthday">
+      <input type="date" #evtDate required name="evtDate" placeholder="{{isAuth? (userPerson.birthday | date: 'dd.MM.yyyy') : 'dd/mm/yyyy'}}" id="evtDate" formControlName="birthday">
     </div>
 
     <div class="validation" *ngIf="form.get('birthday').invalid && form.get('birthday').touched" >

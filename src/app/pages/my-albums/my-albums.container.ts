@@ -1,56 +1,65 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {User} from '../../interfaces/user';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Album} from '../../interfaces/album';
-import {UserService} from '../../services/user.service';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {Observable, Subscription} from 'rxjs';
 import {AlbumService} from '../../services/album.service';
+import {AppState} from '../../store/state/app.state';
+import {Store} from '@ngrx/store';
+import {stateAuth} from '../../store/selectors/user.selector';
+import {AddAlbum, GetAllAlbums} from '../../store/actions/photo.actions';
+import {allAlbums, createAlbum, selectedAlbum} from '../../store/selectors/photo.selector';
 
 @Component({
   selector: 'app-my-albums-container',
   template: `<app-my-albums [link]="link"
-                            [limit]="limit"
-                            [albums] = "userAlbums"
-                            (rldComponent)="getUsersAlbums($event)"
-                            (uploadNewAlbum) = "createAlbum($event)"></app-my-albums>`,
+                     [limit]="limit"
+                     [albums]="userAlbums"
+                     [myId]="id"
+                     [myLogin]="Login"
+                     [isAuth]="isAuth$ | async"
+                     (rldComponent)="getUsersAlbums($event)"
+                     (uploadNewAlbum)="createAlbum($event)"></app-my-albums>`,
   styleUrls: ['./my-albums.component.scss']
 })
 export class MyAlbumsContainerComponent implements OnInit , OnDestroy {
+  id: string = localStorage.getItem('user');
+  isAuth$: Observable<boolean> = this.store.select(stateAuth);
+  Login: string = localStorage.getItem('login');
   limit: boolean;
   link: string;
   userAlbums: Album[];
-  newAlbum$: Observable<Album>;
+  newAlbum$: Observable<string> = this.store.select(createAlbum);
   routing: Subscription;
   sub: Subscription;
-  constructor(private albumService: AlbumService,
-              private route: ActivatedRoute,
+  constructor(private route: ActivatedRoute,
+              private store: Store<AppState>,
               private router: Router) { }
 
   ngOnInit() {
     this.routing = this.route.paramMap.subscribe((params: ParamMap) => {
-      const id = params.get('id') ;
+      const loginUser = params.get('id') ;
       if (this.route.routeConfig.path.indexOf('albums') !== -1) {
         this.limit = false;
-        this.link = `/users/${id}`;
+        this.link = `/users/${loginUser}`;
       } else {
         this.limit = true;
         this.link = `albums`;
       }
-      this.getUsersAlbums(id);
+      this.getUsersAlbums(loginUser);
     });
   }
 
-  getUsersAlbums(id: string){
-    this.sub = this.albumService.getUserAlbums(id).subscribe(
-      allAlbums => {
-        this.userAlbums = this.limit ? allAlbums.splice(1 , 3) : allAlbums
-      });
+  getUsersAlbums(loginUser: string) {
+    this.store.dispatch(new GetAllAlbums(loginUser));
+    this.sub = this.store.select(allAlbums).subscribe(albums => {
+      this.userAlbums = this.limit ? albums.slice(2 , 5) : albums;
+    });
+
   }
 
-
   createAlbum(album: Album) {
-    this.newAlbum$ = this.albumService.createAlbum(album);
-    this.newAlbum$.subscribe(id => {this.router.navigate(['album/' + id])});
+    this.store.dispatch(new AddAlbum(album));
+    this.newAlbum$.subscribe(newAlbum => {this.router.navigate(['album/' + newAlbum]); });
   }
 
   ngOnDestroy(): void {

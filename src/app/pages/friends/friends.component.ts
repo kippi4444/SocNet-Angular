@@ -1,9 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable} from 'rxjs';
 import {FriendService} from '../../services/friend.service';
 import {Friend} from '../../interfaces/friend';
-import {log} from 'util';
-import {UserService} from '../../services/user.service';
+import {User} from '../../interfaces/user';
+import {DialogService} from '../../services/dialog.service';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {AppState} from '../../store/state/app.state';
+import {Store} from '@ngrx/store';
+import {AddFriend, DelFriend, DelRequest, GetAllFriends, GetAllRequests} from '../../store/actions/friendship.actions';
+import {allFriends, allRequests} from '../../store/selectors/friendship.selector';
+import {AddDialog} from '../../store/actions/user.actions';
+import {addDialog} from '../../store/selectors/user.selector';
 
 
 @Component({
@@ -15,48 +21,72 @@ export class FriendsComponent implements OnInit, OnDestroy {
   friends: Friend[];
   requests: Friend[];
   sub = [];
-  id: string;
-  constructor(private friendService: FriendService,
-              private userService: UserService,) { }
+  id: string = localStorage.getItem('user');
+  userLogin: string = localStorage.getItem('login');
+  login: string;
+
+  routeMyFriends: boolean;
+  constructor(private store: Store<AppState>,
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.id = this.userService.userLogin;
-    this.getAllFriends(this.id);
-    this.getAllRequests();
+    this.routeMyFriends = this.router.url.indexOf('friends') === 1;
+    this.sub.push(this.route.paramMap.subscribe((params: ParamMap) => {
+      this.login = params.get('id');
+      this.getAllFriends(this.login);
+      if (this.login === this.userLogin && this.routeMyFriends) {
+        this.getAllRequests();
+      }
+    }));
+
   }
 
-  getAllFriends(id: string) {
-    this.sub.push(this.friendService.getAllFriends(id).subscribe(value => this.friends = value));
+  getAllFriends(login: string) {
+    this.store.dispatch(new GetAllFriends(login));
+    this.sub.push(this.store.select(allFriends).subscribe(friends => {
+        this.friends = this.routeMyFriends ? friends.splice(0 , 4) : friends;
+    }));
   }
 
   getAllRequests() {
-    this.sub.push(this.friendService.getAllRequests().subscribe(value =>  {this.requests = value;}));
+    this.store.dispatch(new GetAllRequests());
+    this.sub.push(this.store.select(allRequests).subscribe(req => {
+        this.requests = req;
+    }));
   }
 
   addFriend(id: string) {
-    const user = this.userService.id;
-    this.sub.push(this.friendService.addFriend({friend: user , owner: id}).subscribe(next => {
-      this.getAllFriends(this.id);
-      this.getAllRequests();
-    }));
+    this.store.dispatch(new AddFriend({friend: this.id , owner: id}));
   }
 
   delReq(id: string) {
-    this.sub.push(this.friendService.delReq(id).subscribe(next => {
-      this.getAllRequests();
-    }));
+    this.store.dispatch(new DelRequest(id));
   }
 
   delFriend(id: string) {
-    this.sub.push(this.friendService.delFriend(id).subscribe(next => {
-      this.getAllFriends(this.id);
-    }));
+    this.store.dispatch(new DelFriend(id));
   }
 
+  goToDialog(user: User) {
+    const body = { person: [
+        {id: user._id},
+        {id: this.id}
+      ]
+    };
+    this.store.dispatch(new AddDialog(body));
+    this.sub.push(this.store.select(addDialog).subscribe( value => {
+      if (value) {
+        this.router
+          .navigate([`/dialogs/${value._id}`], { queryParams: {to: user.login}});
+      }
+    }));
+  }
 
   ngOnDestroy(): void {
     this.sub.forEach(el => {
       el.unsubscribe();
     });
+    this.sub = [];
   }
 }

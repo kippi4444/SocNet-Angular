@@ -1,5 +1,19 @@
-
-<div  class="container albums" *ngIf="albums">
+<ng-template #noAlbums>
+  <div  class="container albums">
+    <h1 >
+      <a [routerLink]="link">Альбомы</a>
+    </h1>
+    <hr>
+    <div class="albums_block">
+      <div class="album">
+        <div class="main-photo">
+          <h3>Ooops</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<div  class="container albums" *ngIf="albums.length>0; else noAlbums">
   <h1 *ngIf="!limit ; else mainPageRoute">
     <a  [routerLink]="link">{{albums[0].owner.name}} {{albums[0].owner.surname}} </a>
     >> Альбомы
@@ -17,7 +31,7 @@
         <div class="album">
           <div class="main-photo">
             <div class="title">{{album.title}}</div>
-            <img *ngIf="album.photos[0]" class="smallAvatar"  src="http://localhost:8000/{{album.photos[0].url}}" alt="">
+            <img *ngIf="album.photos.length > 0" class="smallAvatar"  src="http://localhost:8000/{{album.photos[0].url}}" alt="">
           </div>
       </div>
       </a>
@@ -29,4 +43,4 @@
   </div>
 </div>
 <app-user-photos-container [link] = 'link' [limit] = 'limit' (reloadComponent)="reloadComponent()"></app-user-photos-container>
-<app-album-modal *ngIf="showModal" [id] ="myAccount" [albums] = "albums" [showModal] = "showModal" (uploadAlbum)="uploadAlbum($event)"></app-album-modal>
+<app-album-modal *ngIf="showModal" [id] ="myId" [albums] = "albums" [showModal] = "showModal" (uploadAlbum)="uploadAlbum($event)"></app-album-modal>

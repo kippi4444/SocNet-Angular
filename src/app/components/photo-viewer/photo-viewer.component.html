@@ -16,7 +16,7 @@
   <div *ngIf="move" class="move">
     <h1>Переместить фото</h1>
       <ul >
-        <li *ngFor="let album of userAlbums | async">
+        <li *ngFor="let album of userAlbums$ | async">
           <a [routerLink]="" [queryParams]="{}" (click)="movePhoto(album._id, targetPhoto[0]._id)">  <img *ngIf="album.photos[0]" class="smallAvatar"  src="http://localhost:8000/{{album.photos[0].url}}" alt="">
             {{album.title}}</a>
         </li>
