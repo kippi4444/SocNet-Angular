@@ -4,14 +4,16 @@ import { Router} from '@angular/router';
 import {AppState} from '../../store/state/app.state';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
-import {GetLoginUserDialogs} from '../../store/actions/user.actions';
-import {allDialogs} from '../../store/selectors/user.selector';
+import {DelDialog, GetLoginUserDialogs} from '../../store/actions/user.actions';
+import {allDialogs, selectedDialog} from '../../store/selectors/user.selector';
+import {dialogMes} from '../../services/dialog.service';
 
 @Component({
   selector: 'app-dialogs-container',
   template: `<app-dialogs-component
           [dialogs]="dialogs$ | async"
           (allDialogs)="getAllDialogs()"
+          (delThatDialog)="delDialog($event)"
           (toDialog)="goToDialog($event)"></app-dialogs-component>`,
   styleUrls: ['./dialogs.component.scss']
 })
@@ -19,10 +21,9 @@ export class DialogsContainerComponent implements OnInit {
   id: string = localStorage.getItem('user');
   login: string = localStorage.getItem('login');
   dialogs$: Observable<Dialog[]> = this.store.select(allDialogs);
+
   activeDialog: string;
   sub = [];
-
-
 
   constructor(private store: Store<AppState>,
               private router: Router) { }
@@ -41,4 +42,7 @@ export class DialogsContainerComponent implements OnInit {
       .navigate([`/dialogs/${dialog._id}`], { queryParams: {to: dialog.persons.login}});
   }
 
+  delDialog(id: string) {
+    this.store.dispatch(new DelDialog(id));
+  }
 }

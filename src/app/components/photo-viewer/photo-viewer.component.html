@@ -1,27 +1,106 @@
-<div *ngIf="show" class="photo_modal-overlay" [routerLink]="" [queryParams]="{}" (click)="show = !show"></div>
-<div  *ngIf="show" class="photo_modal" >
-
-  <div class="lister">
+<div *ngIf="show" class="photo_modal-overlay"  (click)="closeModal()"></div>
+<div  *ngIf="show && targetPhoto" class="photo_modal"  >
+  <button class="close_modal" (click)="closeModal()">&#x2716;</button>
+  <div class="lister" >
     <div class="left no-select" [routerLink]="" [queryParams]="{ photo: prev }">&lt;</div>
-    <img class="photo no-select" src="http://localhost:8000/{{targetPhoto[0].url}}" >
+    <img class="photo no-select" src="http://localhost:8000/{{targetPhoto.url}}" >
     <div class="right no-select" [routerLink]=" " [queryParams]="{ photo: next }">&gt;</div>
+    <div  *ngIf="!move" class="info">
+      {{idx+1}} из {{photos.length}}
+    </div>
   </div>
   <div *ngIf="move" class="move_modal-overlay"  (click)="move = !move" ></div>
-  <div  *ngIf="!move" class="info">
-    <div *ngIf="targetPhoto[0].created_at"> {{targetPhoto[0].created_at | date: 'hh:mm dd.MM.yyyy'}}</div>
-      <a [routerLink]="['/album/']+targetPhoto[0].album._id">{{targetPhoto[0].album.title}}</a>
-      {{idx+1}} из {{photos.length}}
-    <a class="btn_show btn_margin" (click)="move = !move">переместить фото</a>
-  </div>
-  <div *ngIf="move" class="move">
-    <h1>Переместить фото</h1>
-      <ul >
-        <li *ngFor="let album of userAlbums$ | async">
-          <a [routerLink]="" [queryParams]="{}" (click)="movePhoto(album._id, targetPhoto[0]._id)">  <img *ngIf="album.photos[0]" class="smallAvatar"  src="http://localhost:8000/{{album.photos[0].url}}" alt="">
-            {{album.title}}</a>
-        </li>
-      </ul>
-    <button (click)="move = !move">Закрыть</button>
-  </div>
 
+
+  <div class="info_photo">
+    <div class="user_info">
+      <img class="comment_avatar" src="{{'http://localhost:8000/' + targetPhoto.owner.avatar.url}}" alt="">
+      <strong>{{targetPhoto.owner.name | titlecase}} {{targetPhoto.owner.surname | titlecase}}</strong>
+    </div>
+    <div class="photo_info" >
+      <p *ngIf="targetPhoto.likes"><a class="like" >&#10084;</a> {{targetPhoto.likes.length}}</p>
+      <p *ngIf="targetPhoto.created_at">Дата: {{targetPhoto.created_at | date: 'hh:mm dd.MM.yyyy'}}</p>
+      <p>Альбом: <a [routerLink]="['/album/']+targetPhoto.album._id">{{targetPhoto.album.title}}</a></p>
+    </div>
+    <div class="settings">
+      <div *ngIf="move" class="move">
+        <h1>Переместить фото</h1>
+        <ul >
+          <li *ngFor="let album of userAlbums$ | async">
+            <a *ngIf="album.title !== 'Мои фото с профиля'" (click)="movePhoto(album._id, targetPhoto._id)">
+              <img *ngIf="album.photos[0]" class="smallAvatar"  src="http://localhost:8000/{{album.photos[0].url}}" alt="">
+              {{album.title}}</a>
+          </li>
+        </ul>
+        <button (click)="move = !move">Закрыть</button>
+      </div>
+      <a  *ngIf="targetPhoto.owner._id === (myId | async)" (click)="edit = !edit">Eще</a>
+      <div class="edit" *ngIf="edit">
+        <ul>
+          <li><a class="btn_show" (click)="move = !move">Переместить фото</a></li>
+          <li><a class="btn_show" (click)="del(targetPhoto)">Удалить фото</a></li>
+          <li><a class="btn_show" (click)="changeAvatar(targetPhoto)">Поставить на главную</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="comments">
+      <hr>
+      <div class="block_post">
+        <div class="post">
+          <div>
+            <img class="comment_avatar" src="http://localhost:8000/{{targetPhoto.owner.avatar.url}}" alt="">
+          </div>
+          <div>
+            <h4><strong>Rick Ogurchik</strong></h4>
+            <h4>Ну нормас,нормас!</h4>
+            <h5>22.05.2020 14:35</h5>
+          </div>
+        </div>
+        <hr>
+      </div>
+      <div class="block_post">
+        <div class="post">
+          <div>
+            <img class="comment_avatar" src="http://localhost:8000/{{targetPhoto.owner.avatar.url}}" alt="">
+          </div>
+          <div>
+            <h4><strong>Rick Ogurchik</strong></h4>
+            <h4>Ну нормас,нормас!</h4>
+            <h5>22.05.2020 14:35</h5>
+          </div>
+        </div>
+        <hr>
+      </div>
+      <div class="block_post">
+        <div class="post">
+          <div>
+            <img class="comment_avatar" src="http://localhost:8000/{{targetPhoto.owner.avatar.url}}" alt="">
+          </div>
+          <div>
+            <h4><strong>Rick Ogurchik</strong></h4>
+            <h4>Ну нормас,нормас!</h4>
+            <h5>22.05.2020 14:35</h5>
+          </div>
+        </div>
+        <hr>
+      </div>
+      <div class="block_post">
+        <div class="post">
+          <div>
+            <img class="comment_avatar" src="http://localhost:8000/{{targetPhoto.owner.avatar.url}}" alt="">
+          </div>
+          <div>
+            <h4><strong>Rick Ogurchik</strong></h4>
+            <h4>Ну нормас,нормас!</h4>
+            <h5>22.05.2020 14:35</h5>
+          </div>
+        </div>
+        <hr>
+      </div>
+    </div>
+    <input name="text" type="text"  placeholder="Текст сообщения">
+    <button class="btn_margin" type="submit" >Отправить</button>
+  </div>
 </div>

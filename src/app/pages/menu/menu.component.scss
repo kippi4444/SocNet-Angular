@@ -1,6 +1,6 @@
 nav {
   border-bottom: 1px solid rgba(96, 125, 139, 0.26);
-  background-color: rgba(21, 132, 20, 0.77);
+  background-color: rgba(0, 86, 132, 0.77);
   margin: 0;
   padding: 0 10%;
   box-shadow: 0 0 2px rgba(46, 46, 46, 0.39);
@@ -11,7 +11,7 @@ nav a {
   text-decoration: none;
   display: inline-block;
   color: #eeeeee;
-  border-right: 1px solid  rgba(21, 132, 20, 0.5);
+  border-right: 1px solid rgba(0, 86, 132, 0.2);
   cursor: pointer;
   user-select: none;
 
@@ -24,11 +24,12 @@ nav a:visited, a:link {
   color: #eeeeee;
 }
 nav a:hover {
-  color: #f6ffff;
-  background-color: rgb(116, 171, 112);
+  color: #f3ffff;
+  background-color: rgba(0, 86, 132, 0.2);
 }
 nav a.active {
-  color: #000000;
+  color: #ffffff;
+  background-color: rgba(0, 86, 132, 0.31);
 }
 .notification{
   padding: 5px;
@@ -42,7 +43,17 @@ nav a.active {
   color: white;
   border-radius: 5px;
 }
+.close{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #eeeeee;
+}
 .text{
   padding-top: 5px;
   color: #b4b4b4;
+}
+
+.notif_avatar{
+  border-radius: 50%;
 }

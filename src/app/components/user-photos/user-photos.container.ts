@@ -1,32 +1,34 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Photo} from '../../interfaces/photo';
-import {ActivatedRoute} from '@angular/router';
-import {PhotoService} from '../../services/photo.service';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Observable, Subscription} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../store/state/app.state';
-import {stateAuth} from '../../store/selectors/user.selector';
+import {authentificatedUser, stateAuth} from '../../store/selectors/user.selector';
 import {AddPhotoWall, DelPhoto, GetAllPhotos} from '../../store/actions/photo.actions';
 import {allPhotos} from '../../store/selectors/photo.selector';
+import {User} from '../../interfaces/user';
 
 @Component({
   selector: 'app-user-photos-container',
-  template: `<app-user-photos [link] = "link"
-                              [limit] = "limit"
-                              [photos] = "userPhotos"
-                              [isAuth]="isAuth$ | async"
-                              [myId]="id"
-                              (upldPhoto)="uploadPhoto($event)"
-                              (deletePhoto)="deletePhoto($event)"></app-user-photos>`,
+  template: `
+      <app-user-photos [link]="link"
+                       [limit]="limit"
+                       [photos]="userPhotos"
+                       [isAuth]="isAuth$ | async"
+                       [authUser]="authUser | async"
+                       (upldPhoto)="uploadPhoto($event)"
+                       (deletePhoto)="deletePhoto($event)"></app-user-photos>`,
   styleUrls: ['./user-photos.component.scss']
 })
 export class UserPhotosContainerComponent implements OnInit, OnDestroy {
   @Output() reloadComponent: EventEmitter<void> = new EventEmitter<void>();
   @Input() limit: boolean;
   @Input() link: string;
-  id: string = localStorage.getItem('user');
+  authUser: Observable<User> = this.store.select(authentificatedUser);
   isAuth$: Observable<boolean> = this.store.select(stateAuth);
   sub: Subscription;
+  routing: Subscription;
   photos: any;
   userPhotos: Photo[];
   constructor(private route: ActivatedRoute,
@@ -37,12 +39,14 @@ export class UserPhotosContainerComponent implements OnInit, OnDestroy {
   }
 
   getUserPhotos() {
-    const photoId = this.route.snapshot.paramMap.get('id');
-    this.store.dispatch(new GetAllPhotos(photoId));
-    this.sub = this.store.select(allPhotos).subscribe(
-      photos => {
-        this.userPhotos = this.limit ? photos.slice(0 , 4) : photos;
-      });
+    this.routing = this.route.paramMap.subscribe((params: ParamMap) => {
+      const login = this.route.snapshot.paramMap.get('id');
+      this.store.dispatch(new GetAllPhotos(login));
+      this.sub = this.store.select(allPhotos).subscribe(
+        photos => {
+          this.userPhotos = this.limit ? photos.slice(0, 4) : photos;
+        });
+    });
   }
 
   deletePhoto(photo: Photo) {
@@ -51,6 +55,7 @@ export class UserPhotosContainerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+    this.routing.unsubscribe();
   }
 
   uploadPhoto(photo: FormData) {

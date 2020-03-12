@@ -2,12 +2,11 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Album} from '../../interfaces/album';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {Observable, Subscription} from 'rxjs';
-import {AlbumService} from '../../services/album.service';
 import {AppState} from '../../store/state/app.state';
 import {Store} from '@ngrx/store';
 import {stateAuth} from '../../store/selectors/user.selector';
 import {AddAlbum, GetAllAlbums} from '../../store/actions/photo.actions';
-import {allAlbums, createAlbum, selectedAlbum} from '../../store/selectors/photo.selector';
+import {allAlbums, createAlbum} from '../../store/selectors/photo.selector';
 
 @Component({
   selector: 'app-my-albums-container',

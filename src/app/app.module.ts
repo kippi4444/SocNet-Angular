@@ -31,7 +31,6 @@ import { WallComponent } from './components/wall/wall.component';
 import { MessagesComponent } from './components/messages/messages.component';
 import {WebsocketService} from './services/websocket.service';
 import { DialogsComponent } from './pages/dialogs/dialogs.component';
-
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {UserEffects} from './store/effects/user.effects';
@@ -41,11 +40,11 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {environment} from '../environments/environment';
 import {DialogsContainerComponent} from './pages/dialogs/dialogs.container';
 import {ExtraForUserEffects} from './store/effects/extraForUser.effects';
-import {UserFriendship} from './store/state/friendship.state';
 import {FriendshipEffects} from './store/effects/friendship.effects';
 import {UserPhotos} from './store/effects/photo.effects';
-import { MessageModalComponent } from './components/message-modal/message-modal.component';
-
+import { PaginationComponent } from './components/pagination/pagination.component';
+import {MessageEffects} from './store/effects/message.effects';
+import {MessagesContainerComponent} from './components/messages/messages.container';
 
 
 @NgModule({
@@ -75,7 +74,8 @@ import { MessageModalComponent } from './components/message-modal/message-modal.
     MessagesComponent,
     DialogsComponent,
     DialogsContainerComponent,
-    MessageModalComponent
+    PaginationComponent,
+    MessagesContainerComponent
   ],
   imports: [
     BrowserModule,
@@ -85,8 +85,9 @@ import { MessageModalComponent } from './components/message-modal/message-modal.
     HttpClientModule,
     NgxFileDropModule,
     StoreModule.forRoot(appReducers),
-    EffectsModule.forRoot([UserEffects, ExtraForUserEffects, FriendshipEffects, UserPhotos]),
+    EffectsModule.forRoot([UserEffects, ExtraForUserEffects, FriendshipEffects, UserPhotos, MessageEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
+
   ],
   providers: [     {
     provide: HTTP_INTERCEPTORS,

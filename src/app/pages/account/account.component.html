@@ -7,9 +7,14 @@
 
       <div class="firstColumnAccount">
         <h2 >{{userPerson.name | titlecase}} {{userPerson.surname | titlecase}}</h2>
-        <a routerLink="/album/{{userPerson.avatar}}">
-          <img class="avatar"  src="{{newAvatar || 'http://localhost:8000/' + userPerson.photos[userPerson.photos.length-1].url}}" alt="{{userPerson.login}}">
+
+        <a *ngIf="preview || userPerson.avatar.url; else noAvatar"  routerLink="/album/{{userPerson.avatar.album}}"
+           [queryParams]="{ photo: userPerson.avatar._id }">
+          <img class="avatar"  src="{{newAvatar || 'http://localhost:8000/' + userPerson.avatar.url}}" alt="{{userPerson.login}}">
         </a>
+        <ng-template #noAvatar>
+          <div class="noAvatar"></div>
+        </ng-template>
         <div  class="underAvatar">
             <button *ngIf="!accountChecker() && isAuth" (click)="goToDialog(userPerson)">
               Отправить сообщение
@@ -24,32 +29,35 @@
             Отменить заявку
           </button>
 
-
           <button (click)="openModal()" *ngIf="accountChecker() && isAuth">Поменять аватар</button>
           <button *ngIf="accountChecker() && isAuth" class="btn_margin" [routerLink]=""
                   [queryParams]="{ edit: true }"  >Редактировать</button>
 
         </div>
 
-
-
       </div>
-
+<!--// ========================== modal start ==============================//-->
       <div *ngIf="showModal" class="avatar_modal_overlay"></div>
       <div class="avatar_modal" *ngIf="showModal">
+        <button class="close_modal" (click)="openModal()">&#x2716;</button>
         <h1>Загрузка аватара</h1>
         <hr>
-        <div class="block_avatar">
-          <img *ngIf="userPerson.photos.length" class="avatar" src="{{preview || 'http://localhost:8000/' + userPerson.photos[userPerson.photos.length-1].url}}" alt="">
+        <div   class="block_avatar" >
+          <img *ngIf="preview || userPerson.avatar.url ; else noAvatar" class="preview" src="{{preview || 'http://localhost:8000/' + userPerson.avatar.url}}" alt="{{userPerson.name}} {{userPerson.surname}}">
+          <ng-template #noAvatar>
+              <div class="noAvatar"></div>
+          </ng-template>
         </div>
+
         <hr>
         <div class="block_btn" >
           <input  type="file" name="file" id="file" class="inputfile"  (change)="onFileChange($event)" />
           <label  *ngIf="accountChecker() && isAuth && !preview" for="file">Загрузить</label>
-          <button *ngIf="preview" class="btn_margin" (click)="uploadAvatar()">Сохранить</button>
-          <button class="btn_margin" (click)="openModal()">Отмена</button>
+          <button *ngIf="preview"  (click)="uploadAvatar()">Сохранить</button>
+          <button  (click)="openModal()">Отмена</button>
         </div>
       </div>
+<!--// ========================== modal end ==============================//-->
       <div class="secondColumnAccount">
         <span *ngIf="userPerson.online" class="online">Online</span>
         <div class="user-info">
@@ -70,22 +78,15 @@
                 <div class="pets" *ngFor="let pet of userPerson.pets">
                   <strong> {{pet.species | titlecase}}</strong>
                   {{pet.name | titlecase}}
-                  <button *ngIf="accountChecker()" class="btns btn_margin" (click)="deletePet(pet)">Удалить</button>
+                  <a *ngIf="accountChecker()" class="btns btn_margin" (click)="deletePet(pet)">&#10006;</a>
                 </div>
             </div>
           </div>
         </div>
         <app-friends></app-friends>
       </div>
-
     </div>
-
-    <div>
-
-
-    </div>
-
-   </div>
+  </div>
   <app-add-user *ngIf="accountChecker()" [userPerson]="userPerson"
                 (submitForm)="changeUser($event)"
                 (state)="changeState($event)" (getUpdUser)="this.getThisUser.emit()"></app-add-user>

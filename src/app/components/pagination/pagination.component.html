@@ -1,0 +1,9 @@
+
+<div class="pagination" *ngIf="allPage.length > 1">
+  <button (click)="goFirst()">Первая</button>
+  <button (click)="goPrev()">Назад</button>
+  <a *ngFor="let page of part" [ngClass]="{active: query.page == page}" (click)="selectPage(page)">{{page+1}}</a>
+  <button (click)="goNext()">Вперед</button>
+
+  <button (click)="goLast()">Последняя</button>
+</div>

@@ -7,6 +7,17 @@ input {
   outline: none;
 }
 
+select{
+  border-radius: 5px;
+  padding: 2px 5px;
+  margin: 0 10px;
+  outline: none;
+}
+
+.filtration{
+  margin: 10px 0;
+}
+
 .dashboard{
   margin-top: 1em;
   background-color: rgb(255, 255, 255);
@@ -54,5 +65,29 @@ input {
   }
 }
 
+.loading{
+  .loader{
+    display: flex;
+    height: 20px;
+    width: 170px;
+    &:after{
+      content: "Поиск пользователя" ;
+      animation: loading-text 3s infinite;
+    }
+  }
+}
 
 
+@keyframes loading-text{
+  0%
+  {content: "Поиск пользователя";}
+
+  25%
+  {content: "Поиск пользователя.";}
+
+  50%
+  {content: "Поиск пользователя..";}
+
+  75%
+  {content: "Поиск пользователя...";}
+}

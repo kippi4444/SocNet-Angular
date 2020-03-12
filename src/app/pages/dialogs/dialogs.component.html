@@ -1,22 +1,27 @@
-<div class="content friends">
-  <div class="first-column">
+<div class="content friends" >
+  <div class="first-column" >
     <h1>Диалоги</h1>
     <hr>
     <div  *ngFor="let dialog of dialogs " >
-      <div class="module " [ngClass]="{active: dialog._id == activeDialog}" (click)="goToDialog(dialog)">
+
+      <div class="dialog_block" [ngClass]="{active: dialog._id == activeDialog}" >
+        <div class="module " (click)="goToDialog(dialog)" >
           <div class="column-block " >
             <a  routerLink="/users/{{dialog.persons.login}}">
               <div class="module-avatar">
-                <img class="dialog_avatar" src="http://localhost:8000/{{dialog.photos[dialog.photos.length-1].url}}" alt="">
+                <img class="dialog_avatar" src="http://localhost:8000/{{dialog.persons.avatar.url}}" alt="">
               </div>
             </a>
           </div>
           <a  [ngClass]="{active: dialog._id == activeDialog}">
             <div class="column-block">
-                <h4>{{dialog.persons.name | titlecase}} {{dialog.persons.surname | titlecase}} </h4>
+              <h4>{{dialog.persons.name | titlecase}} {{dialog.persons.surname | titlecase}} </h4>
               <span class="online" *ngIf="dialog.persons.online">Online</span>
             </div>
           </a>
+
+        </div>
+        <button  class="delete_dialog" (click)="delDialog(dialog._id)" >&#x2716;</button>
       </div>
     </div>
   </div>

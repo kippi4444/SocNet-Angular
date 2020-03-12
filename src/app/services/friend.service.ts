@@ -23,7 +23,6 @@ export class FriendService {
   }
 
   delReq(id: string) {
-    console.log(id);
   return  this.http.delete(this.friendsUrl + 'requests/' + id)
       .pipe(map(value => value));
   }

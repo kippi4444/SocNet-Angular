@@ -12,3 +12,9 @@ a{
 .field{
    color: rgba(102, 102, 102, 0.25);
  }
+
+.upload-table{
+  max-height: 200px;
+  overflow: scroll;
+  overflow-x: hidden;
+}

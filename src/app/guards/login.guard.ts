@@ -9,22 +9,19 @@ import {authentificatedUser, stateAuth} from '../store/selectors/user.selector';
 export class LoginGuard implements CanActivate {
   isAuth: boolean;
   login: string;
-  result: boolean;
-  constructor(private router: Router,
-              private store: Store<AppState>) {}
+  constructor(private router: Router) {}
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
-    this.store.select(stateAuth).subscribe(status => {
-      this.isAuth = status;
-      this.login = localStorage.getItem('login');
-      if (this.isAuth) {
-        this.router.navigate(['/users/' + this.login]);
-        this.result = false;
-      } else {
-        this.result = true;
-      }
-    });
 
-    return this.result;
+    this.isAuth = !!localStorage.getItem('accessToken');
+    this.login = localStorage.getItem('login');
+    if (this.isAuth) {
+      this.router.navigate(['/users/' + this.login]);
+
+      return  false;
+    } else {
+      return  true;
+    }
+
   }
 }
 

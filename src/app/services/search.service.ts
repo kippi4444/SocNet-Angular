@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {User} from '../interfaces/user';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {QuerySearch} from '../interfaces/querySearch';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,8 @@ export class SearchService {
   constructor(
     private http: HttpClient) { }
 
-
-  search(value: string)  {
-    return this.http.get<User[]>(this.usersUrl + value).pipe(map(users => users));
+  search(query?: QuerySearch)  {
+    return this.http.get<User[]>(this.usersUrl, {
+      params:  query}).pipe(map(users => users));
   }
 }

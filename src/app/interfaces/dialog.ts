@@ -1,4 +1,5 @@
 import {User} from './user';
+import {Msg} from './msg';
 
 export class Dialog {
   _id?: string;

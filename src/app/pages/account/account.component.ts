@@ -24,6 +24,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   @Input() isAuth: boolean;
   @Input() myId: string;
 
+  url: 'http://localhost:8000/';
   show = false;
   file: object;
   sub = [];
@@ -85,7 +86,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   addFriend(id: string) {
-    const body  = {
+    const body   = {
       friend: this.myId ,
       owner: id
     };

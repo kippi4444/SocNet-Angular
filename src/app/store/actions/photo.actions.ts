@@ -66,7 +66,7 @@ export  class GetSelectedAlbum implements  Action {
 
 export  class GetSelectedAlbumSuccess implements  Action {
   public readonly type = UserPhotosActions.GET_SELECTED_ALBUM_SUCCESS;
-  constructor(public payload: Album) {}
+  constructor(public payload: object) {}
 }
 
 export  class GetSelectedAlbumFailure implements  Action {

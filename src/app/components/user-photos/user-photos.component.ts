@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Photo} from '../../interfaces/photo';
 import {ActivatedRoute} from '@angular/router';
+import {User} from '../../interfaces/user';
 
 @Component({
   selector: 'app-user-photos',
@@ -15,7 +16,8 @@ export class UserPhotosComponent implements OnInit, OnDestroy {
   @Input() limit: boolean;
   @Input() link: string;
   @Input() isAuth: boolean;
-  @Input() myId: string;
+  @Input() authUser: User;
+
   sub = [];
   showModal = false;
   constructor(private route: ActivatedRoute) { }

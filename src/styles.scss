@@ -15,6 +15,7 @@ a {
   color: #444;
   &:hover {
     text-decoration: underline;
+    cursor: pointer;
     color: #444;
   }
 }
@@ -51,19 +52,34 @@ h4 {
   font-size: 1em;
   margin: 0 0 5px 5px;
 }
+
+h5 {
+  color: rgba(46, 46, 46, 0.43);
+  font-weight: lighter;
+  font-size: 1em;
+  margin: 0 0 5px 5px;
+}
+
+svg {
+  width: 100px;
+  height: 100px;
+  margin: 20px;
+  display:inline-block;
+}
+
 //Buttons
 button {
-  background-color: rgba(21, 132, 20, 0.77);
+  background-color: rgba(0, 86, 132, 0.8);
   font-family: 'Roboto', sans-serif;
   border: none;
   top: 5px;
-  padding: 8px 15px;
+  padding: 7px 20px;
   color: #fff;
   border-radius: 5px;
   transition: .2s ease-in-out;
 
   &:hover {
-    background-color: rgb(21, 132, 20);
+    background-color: rgba(0, 86, 132, 1);
     color: #fff;
   }
 
@@ -78,7 +94,7 @@ button {
 }
 
 .btn_show {
-  color: #126e04;
+  color: #0064ab;
   padding-top: 2px;
   font-size: 0.9em;
   cursor: pointer;
@@ -86,17 +102,17 @@ button {
 
 
   &:hover {
-    color: #126e04;
+    color: #0064ab;
     cursor: pointer;
     text-decoration: underline;
   }
 }
 
 .btn_back {
-  background-color: #3d8b59;
+  background-color: #225e84;
 
   &:hover {
-    background-color: #1b533b;
+    background-color: #00366e;
   }
 }
 
@@ -123,14 +139,16 @@ hr{
   margin-left: 0;
   border: none;
   height: 1px;
-  background-color: rgba(116, 171, 112, 0.38);
+  background-color: rgba(104, 137, 171, 0.38);
 }
 .avatar{
   max-width: 120px;
+  max-height: 120px;
 }
 
 .smallAvatar{
   max-width: 80px;
+  max-height: 120px;
 }
 
 .container{
@@ -166,4 +184,67 @@ hr{
 .online {
   color: green;
   font-size: 10px;
+}
+
+.close_modal{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  right: -20px;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  font-size: 16px;
+  color: #ffffff;
+  transition: .4s ease-in-out;
+  opacity: 0;
+}
+
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+
+}
+
+
+.inputfile + label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  background-color: rgba(0, 70, 131, 0.77);
+  top: 5px;
+  padding: 7px 20px;
+  margin-left: 5px;
+  color: #fff;
+  border-radius: 5px;
+  transition: .2s ease-in-out;
+
+  &:hover {
+    background-color: rgb(2, 78, 132);
+    color: #fff;
+  }
+}
+
+.title_add{
+  display: flex;
+  justify-content: space-between;
+}
+
+.noAvatar{
+  width: 120px;
+  height: 120px;
+  background: url("../src/app/img/NoAvatar.jpg");
+  background-size: cover;
+}
+.loading{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
 }

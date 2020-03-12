@@ -1,15 +1,15 @@
 import {Component, EventEmitter,  OnDestroy, OnInit, Output} from '@angular/core';
 import {ActivatedRoute,  Router} from '@angular/router';
 import {filter} from 'rxjs/operators';
-import {PhotoService} from '../../services/photo.service';
 import {Observable, Subscription} from 'rxjs';
 import {Photo} from '../../interfaces/photo';
 import {Album} from '../../interfaces/album';
-import {AlbumService} from '../../services/album.service';
 import {AppState} from '../../store/state/app.state';
 import {Store} from '@ngrx/store';
-import {allAlbums, allPhotos, selectedAlbum, selectedAlbumPhoto} from '../../store/selectors/photo.selector';
-import {ChangePhotoAlbum, GetAllPhotos} from '../../store/actions/photo.actions';
+import {allAlbums, allPhotos,  selectedAlbumPhoto} from '../../store/selectors/photo.selector';
+import {ChangePhotoAlbum, DelPhoto} from '../../store/actions/photo.actions';
+import {ChangeAvatar} from '../../store/actions/user.actions';
+
 
 @Component({
   selector: 'app-photo-viewer',
@@ -17,10 +17,9 @@ import {ChangePhotoAlbum, GetAllPhotos} from '../../store/actions/photo.actions'
   styleUrls: ['./photo-viewer.component.scss']
 })
 export class PhotoViewerComponent implements OnInit, OnDestroy {
-  @Output() reload: EventEmitter<void> = new EventEmitter<void>();
-
+  myId: Observable<string> = this.store.select(state => state.users.authUser._id);
   photos: Photo[];
-  targetPhoto: Photo[];
+  targetPhoto: Photo;
   photoId: string;
   show: boolean;
   prev: string;
@@ -30,6 +29,7 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
   userAlbums$: Observable<Album[]>;
   serv: Subscription;
   routing: Subscription;
+  edit = false;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -52,7 +52,6 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
   }
 
   getAllUserPhotos(){
-    const login = this.route.snapshot.paramMap.get('id');
     this.serv = this.store.select(allPhotos).subscribe(photos => {
       this.photos = photos;
       this.routingStart();
@@ -60,7 +59,6 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
   }
 
   getUserAlbum() {
-    const id = this.route.snapshot.paramMap.get('id');
     this.serv = this.store.select(selectedAlbumPhoto).subscribe(album => {
       this.photos = album;
       this.routingStart();
@@ -70,19 +68,21 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
   routingStart() {
    this.routing = this.route.queryParams.pipe(filter(params => params.photo)).subscribe(params => {
       this.photoId = params.photo;
-      this.targetPhoto = this.photos.filter(photo => photo._id === this.photoId);
+      this.targetPhoto = this.photos.filter(photo => photo._id === this.photoId)[0];
       this.show = true;
       this.photoLister();
     });
   }
 
   photoLister() {
-    const length = this.photos.length;
-    this.idx = this.photos.indexOf(this.targetPhoto[0]);
-    const prevIdx = (this.idx - 1) < 0 ? length - 1 : (this.idx - 1);
-    const nextIdx = (this.idx + 1) > length - 1 ? 0 : (this.idx + 1);
-    this.prev = this.photos[prevIdx]._id;
-    this.next = this.photos[nextIdx]._id;
+    if (this.photos.length > 0) {
+      const length = this.photos.length;
+      this.idx = this.photos.indexOf(this.targetPhoto);
+      const prevIdx = (this.idx - 1) < 0 ? length - 1 : (this.idx - 1);
+      const nextIdx = (this.idx + 1) > length - 1 ? 0 : (this.idx + 1);
+      this.prev = this.photos[prevIdx]._id;
+      this.next = this.photos[nextIdx]._id;
+    }
   }
 
   ngOnDestroy(): void {
@@ -91,9 +91,26 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
 
 
   movePhoto(albumId: string, photoId: string) {
-    const id = this.route.snapshot.paramMap.get('id');
     this.move = !this.move;
     this.show = false;
+    this.router.navigate([], { queryParams: {} });
     this.store.dispatch(new ChangePhotoAlbum({album: albumId, id: photoId}));
+
+  }
+
+  closeModal() {
+    this.show = ! this.show;
+    this.router.navigate([], { queryParams: {} });
+
+  }
+
+  del(photo: Photo) {
+    this.closeModal();
+    this.store.dispatch(new DelPhoto(photo));
+
+  }
+
+  changeAvatar(targetPhoto: Photo) {
+    this.store.dispatch(new ChangeAvatar(targetPhoto.url));
   }
 }

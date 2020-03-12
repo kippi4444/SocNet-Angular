@@ -1,15 +1,35 @@
 
 <div  class="dashboard content">
   <h2>Все пользователи</h2>
-  <input id="searching" type="text" placeholder="Поиск...">
-    <button [routerLink]="" [queryParams]="{page: 1, limit: 2 }" (click)="changeViewUsers()">по 2 юзера на страницу</button>
-  <button [routerLink]="" [queryParams]="{page: 2, limit: 2 }" (click)="changeViewUsers()">Следующие</button>
+  <input [(ngModel)]="query.search" id="searching" type="text" placeholder="Поиск..." >
+  <div class="filtration">
+    <label for="limit"> Показать: </label>
+      <select [(ngModel)]="query.limit" name="limit" id="limit" (change)="go(query)">
+        <option value="0">всех</option>
+        <option value="2">2</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+      </select>
+    <label   for="sort"> cортировать по: </label>
+    <select [(ngModel)]="query.sort" name="sort" id="sort" (change)="go(query)">
+      <option value="name">имени</option>
+      <option value="surname">фамилии</option>
+      <option value="created_at">дате добавления</option>
+    </select>
+    <label for="start"> от: </label>
+    <select [(ngModel)]="query.start"  name="sort" id="start" (change)="go(query)">
+      <option value="1">начала</option>
+      <option value="-1">конца</option>
+    </select>
+  </div>
   <hr>
-  <div *ngIf="users">
+
+  <div *ngIf="!!users.length; else loading">
     <div  class="module" *ngFor="let user of users ">
       <div class="column-block">
         <a class="module-avatar" routerLink="/users/{{user.login}}">
-          <img class="smallAvatar" src="http://localhost:8000/{{user.photos[user.photos.length-1].url}}" alt="">
+          <img class="smallAvatar" src="http://localhost:8000/{{user.avatar.url}}" alt="">
         </a>
       </div>
       <div class="column-block">
@@ -23,6 +43,37 @@
         <a *ngIf="myId !== user._id && isAuth && itFriend(user.friends)" class="btn_show" (click)="delFriend(user._id)">Убрать из друзей</a>
       </div>
     </div>
+    <app-pagination
+      [count]="users[0].totalCount"
+      (first)="go($event)"
+      (last)="go($event)"
+      (prev)="go($event)"
+      (next)="go($event)"
+      (goPage)="go($event)"
+      ></app-pagination>
   </div>
+
+<!--//============================ preloaders ===============================//-->
+
+  <ng-template #loading>
+
+    <div class="loading">
+      <div class='loader'></div>
+        <svg version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+             viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+          <path fill="#0064AB" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+            <animateTransform
+              attributeName="transform"
+              attributeType="XML"
+              type="rotate"
+              dur="1s"
+              from="0 50 50"
+              to="360 50 50"
+              repeatCount="indefinite" />
+          </path>
+        </svg>
+    </div>
+  </ng-template>
+<!--//============================ preloaders ===============================//-->
 </div>
 

@@ -7,7 +7,8 @@ import {Album} from '../../interfaces/album';
   styleUrls: ['./album-modal.component.scss']
 })
 export class AlbumModalComponent implements OnInit {
-  @Output() uploadAlbum: EventEmitter<object> = new EventEmitter<object>();
+  @Output() uploadAlbum: EventEmitter<Album> = new EventEmitter<Album>();
+  @Output() changeStateModal: EventEmitter<void> = new EventEmitter<void>();
   @Input() showModal: boolean;
   @Input() albums: Album[];
   @Input() id: string;
@@ -24,7 +25,7 @@ export class AlbumModalComponent implements OnInit {
   }
 
   createAlbum() {
-    this.showModal = !this.showModal;
+    this.changeStateModal.emit();
     this.album.owner = this.id;
     this.uploadAlbum.emit(this.album);
     this.album = {
@@ -36,7 +37,7 @@ export class AlbumModalComponent implements OnInit {
 
 
   closeModal() {
-    this.showModal = !this.showModal;
+    this.changeStateModal.emit();
     this.album = {
       title: ' ',
       description: ' ',

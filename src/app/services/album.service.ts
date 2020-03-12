@@ -23,7 +23,7 @@ export class AlbumService {
   }
 
   getUserAlbum(id: string) {
-    return this.http.get<Album>(this.usersAlbum + id).pipe(map(value => { return value[0]; }));
+    return this.http.get<object>(this.usersAlbum + id).pipe(map(value => value ));
   }
 
   updateAlbum(obj: {id: string, album: object}) {

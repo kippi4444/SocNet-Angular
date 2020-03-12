@@ -7,7 +7,7 @@ import {AppState} from '../../store/state/app.state';
 import {Store} from '@ngrx/store';
 import {stateAuth} from '../../store/selectors/user.selector';
 import {AddPhoto, DelAlbum, DelPhoto, GetSelectedAlbum, UpdAlbum, UpdAlbumSuccess} from '../../store/actions/photo.actions';
-import {selectedAlbum} from '../../store/selectors/photo.selector';
+import {selectedAlbum, selectedAlbumPhoto} from '../../store/selectors/photo.selector';
 
 
 @Component({
@@ -15,6 +15,7 @@ import {selectedAlbum} from '../../store/selectors/photo.selector';
   template: `<app-album  [album] = "userAlbum$ | async"
                          [isAuth]="isAuth$ | async"
                          [myId]="id"
+                         [photos]="albumPhoto$ | async"
                          (deleteAlbum)="deleteAlbum($event)"
                          (uploadPhoto)="uploadPhoto($event)"
                          (deletePhoto)="deletePhoto($event)"
@@ -24,6 +25,7 @@ import {selectedAlbum} from '../../store/selectors/photo.selector';
 export class AlbumContainerComponent implements OnInit, OnDestroy {
   isAuth$: Observable<boolean> = this.store.select(stateAuth);
   userAlbum$: Observable<Album> = this.store.select(selectedAlbum);
+  albumPhoto$: Observable<Photo[]> = this.store.select(selectedAlbumPhoto);
   id: string = localStorage.getItem('user');
   album: string;
   routing: Subscription;
@@ -46,7 +48,6 @@ export class AlbumContainerComponent implements OnInit, OnDestroy {
   uploadPhoto(file: FormData) {
     const id = this.route.snapshot.paramMap.get('id');
     this.store.dispatch(new AddPhoto({id, file}));
-    this.store.dispatch(new GetSelectedAlbum(id));
   }
 
   ngOnDestroy(): void {

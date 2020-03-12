@@ -17,9 +17,9 @@ a{
   .btns {
     position: absolute;
     font-size: .7em;
-    top:5px;
     padding: 5px;
-    left: 60%;
+    top: 0;
+    right: 0;
     margin: 0;
   }
 }
@@ -40,14 +40,24 @@ a{
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 30%;
-  height: 300px;
+  width: 50%;
   z-index: 1;
   box-shadow: rgba(0,0,0,0.5) 0px 0px 20px;
   background-color: rgb(255, 255, 255);
-  border: 1px solid rgba(15, 27, 41, 0.33);
+  border: 1px solid rgba(102, 102, 102, 0.21);
   border-radius: 5px;
   padding: 10px;
+
+  &:hover{
+    .close_modal{
+      opacity: 1;
+      right: -50px;
+    }
+    .block_btn{
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 }
 
 .title{
@@ -56,11 +66,19 @@ a{
 .block_btn {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.03);
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  height: 65px;
+  align-items: flex-end;
+  transform: scale(0.5);
+  color: white;
+  z-index: 0;
+  opacity: 0;
+  transition: .4s ease-in;
+}
+.preview{
+  transform: scale(1);
+  border-radius: 5px;
+  min-width: 150px;
+  max-width: 300px;
+  max-height: 300px;
 }
 
 .block_avatar{
@@ -73,42 +91,10 @@ hr{
   margin-top: 20px;
 }
 
-
-
 .account{
   justify-content: center;
   white-space: nowrap;
 
-  .inputfile {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-
-  }
-
-
-  .inputfile + label {
-    font-family: 'Roboto', sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-    background-color: rgba(21, 132, 20, 0.77);
-    top: 5px;
-    padding: 8px 15px;
-    margin-left: 5px;
-    color: #fff;
-    border-radius: 5px;
-    transition: .2s ease-in-out;
-
-    &:hover {
-      background-color: rgb(21, 132, 20);
-      color: #fff;
-    }
-
-
-  }
 
   .firstColumnAccount{
     display: flex;
@@ -136,12 +122,10 @@ hr{
   }
 
   .user-info{
-
       font-size: 1em;
       display: grid;
       grid-template-columns: auto auto ;
       grid-gap: 5px;
-
 
   }
 

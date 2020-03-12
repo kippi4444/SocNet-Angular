@@ -29,7 +29,7 @@ export const userPhotosReducers = (
     case UserPhotosActions.GET_SELECTED_ALBUM_SUCCESS: {
       return {
         ...state,
-        selectedAlbum: action.payload,
+        selectedAlbum: action.payload.album,
         albumPhotos: action.payload.photos
       };
     }
@@ -133,9 +133,8 @@ export const userPhotosReducers = (
     case UserPhotosActions.CHANGE_PHOTO_ALBUM_SUCCESS: {
       return {
         ...state,
-        selectedAlbum: {...state.selectedAlbum,
-          photos: state.albumPhotos.filter(photo => photo._id !== action.payload._id)},
-      albumPhotos: state.albumPhotos.filter(photo => photo._id !== action.payload._id)
+      albumPhotos: state.albumPhotos.filter(photo => photo._id !== action.payload._id),
+        allPhotos: state.allPhotos.filter(photo => photo._id !== action.payload._id).concat(action.payload)
       };
     }
     case UserPhotosActions.CHANGE_PHOTO_ALBUM_FAILURE: {
@@ -147,6 +146,7 @@ export const userPhotosReducers = (
     case UserPhotosActions.DEL_PHOTO_SUCCESS: {
       return {
         ...state,
+        albumPhotos: state.albumPhotos.filter(photo => photo._id !== action.payload),
         allPhotos: state.allPhotos.filter(pht => pht._id !== action.payload),
       };
     }

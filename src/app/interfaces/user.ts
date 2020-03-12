@@ -1,4 +1,7 @@
 import {Pet} from './pet';
+import {Friend} from './friend';
+import {Photo} from './photo';
+import {Album} from './album';
 
 
 export class User {
@@ -11,12 +14,11 @@ export class User {
   number: string;
   email: string;
   birthday: Date;
-  avatar: object[];
+  avatar: Photo;
+  totalCount?: number;
   pets?: Pet[];
-  albums?: object[];
-  photos?: object[];
-  friends?: object[];
-  requests?: object[];
-  isFriend?: object[];
-  isRequest?: object[];
+  albums?: Album[];
+  photos?: Photo[];
+  friends?: Friend[];
+  requests?: Friend[];
 }

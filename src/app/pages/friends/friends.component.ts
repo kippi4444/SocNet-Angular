@@ -10,6 +10,7 @@ import {AddFriend, DelFriend, DelRequest, GetAllFriends, GetAllRequests} from '.
 import {allFriends, allRequests} from '../../store/selectors/friendship.selector';
 import {AddDialog} from '../../store/actions/user.actions';
 import {addDialog} from '../../store/selectors/user.selector';
+import {SendNotification} from '../../store/actions/message.actions';
 
 
 @Component({
@@ -43,9 +44,10 @@ export class FriendsComponent implements OnInit, OnDestroy {
   }
 
   getAllFriends(login: string) {
+
     this.store.dispatch(new GetAllFriends(login));
     this.sub.push(this.store.select(allFriends).subscribe(friends => {
-        this.friends = this.routeMyFriends ? friends.splice(0 , 4) : friends;
+      this.friends = this.routeMyFriends ? friends : friends.splice(0 , 4);
     }));
   }
 
@@ -57,6 +59,7 @@ export class FriendsComponent implements OnInit, OnDestroy {
   }
 
   addFriend(id: string) {
+    this.store.dispatch(new SendNotification({event: 'newFriend', mes: {id: id}}));
     this.store.dispatch(new AddFriend({friend: this.id , owner: id}));
   }
 
@@ -65,13 +68,14 @@ export class FriendsComponent implements OnInit, OnDestroy {
   }
 
   delFriend(id: string) {
+    this.store.dispatch(new SendNotification({event: 'delFriend', mes: {id: id}}));
     this.store.dispatch(new DelFriend(id));
   }
 
   goToDialog(user: User) {
     const body = { person: [
-        {id: user._id},
-        {id: this.id}
+        user._id,
+        this.id
       ]
     };
     this.store.dispatch(new AddDialog(body));

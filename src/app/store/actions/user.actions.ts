@@ -40,9 +40,18 @@ export const UserActions = {
   ADD_DIALOG: '[Dialogs] Add Dialog',
   ADD_DIALOG_SUCCESS: '[Dialogs] Add Dialog Success',
   ADD_DIALOG_FAILURE: '[Dialogs] Add Dialog Failed',
+  DEL_DIALOG: '[Dialogs] Del Dialog',
+  DEL_DIALOG_SUCCESS: '[Dialogs] Del Dialog Success',
+  DEL_DIALOG_FAILURE: '[Dialogs] Del Dialog Failed',
+  EDIT_DIALOG: '[Dialogs] EDIT Dialog',
+  EDIT_DIALOG_SUCCESS: '[Dialogs] EDIT Dialog Success',
+  EDIT_DIALOG_FAILURE: '[Dialogs] EDIT Dialog Failed',
   SET_AVATAR: '[Avatar]  Set Avatar',
   SET_AVATAR_SUCCESS: '[Avatar] Set Avatar Success',
   SET_AVATAR_FAILURE: '[Avatar] Set Avatar Failed',
+  CHANGE_AVATAR: '[Avatar]  Change Avatar',
+  CHANGE_AVATAR_SUCCESS: '[Avatar] Change Avatar Success',
+  CHANGE_AVATAR_FAILURE: '[Avatar] Change Avatar Failed',
 };
 
 // ============================== add user ================================//
@@ -263,6 +272,41 @@ export  class SetAvatarFailure implements  Action {
   }
 }
 
+// ============================== change avatar ================================//
+export  class ChangeAvatar implements  Action {
+  public readonly type = UserActions.CHANGE_AVATAR;
+  constructor(public payload: string) {}
+}
+
+export  class ChangeAvatarSuccess implements  Action {
+  public readonly type = UserActions.CHANGE_AVATAR_SUCCESS;
+  constructor(public payload: Photo) {}
+}
+
+export  class ChangeAvatarFailure implements  Action {
+  public readonly type = UserActions.CHANGE_AVATAR_FAILURE;
+  constructor(public payload?: any) {
+  }
+}
+
+// ============================== Del Dialog ================================//
+export  class DelDialog implements  Action {
+  public readonly type = UserActions.DEL_DIALOG;
+  constructor(public payload: string) {}
+}
+
+export  class DelDialogSuccess implements  Action {
+  public readonly type = UserActions.DEL_DIALOG_SUCCESS;
+  constructor(public payload: string) {}
+}
+
+export  class DelDialogFailure implements  Action {
+  public readonly type = UserActions.DEL_DIALOG_FAILURE;
+  constructor(public payload?: any) {
+  }
+}
+
+
 export type UserActions =
   UpdatedUser |
   UpdatedUserSuccess |
@@ -299,4 +343,10 @@ export type UserActions =
   AddDialogFailure|
   SetAvatar |
   SetAvatarSuccess |
-  SetAvatarFailure;
+  SetAvatarFailure |
+  DelDialog |
+  DelDialogSuccess |
+  DelDialogFailure |
+  ChangeAvatar |
+  ChangeAvatarSuccess |
+  ChangeAvatarFailure;

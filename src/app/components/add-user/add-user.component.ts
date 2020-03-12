@@ -55,10 +55,10 @@ export class AddUserComponent implements OnInit, OnDestroy {
         Validators.required,
       ]),
       password: new FormControl('', [
-        Validators.minLength(3)
+        Validators.minLength(7)
       ]),
       confirmPassword: new FormControl('', [
-        Validators.minLength(3)
+        Validators.minLength(7)
       ]),
       surname: new FormControl(this.isAuth ? this.userPerson.surname : '', [
         Validators.minLength(3),

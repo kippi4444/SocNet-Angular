@@ -27,3 +27,4 @@ export const addDialog = createSelector(
   selectUser,
   (state: UserState) => state.lastDialog
 );
+

@@ -9,8 +9,10 @@
         <div  [ngClass]="{column_block: routeMyFriends}">
           <a routerLink="/users/{{user.friend.login}}"
              [ngClass]="{module_avatar: routeMyFriends, module_smallAvatar: !routeMyFriends}">
-            <img src="http://localhost:8000/{{user.photos[user.photos.length-1].url}}"
+
+            <img src="http://localhost:8000/{{user.friend.avatar.url}}"
                  [ngClass]="{smallAvatar: routeMyFriends, smallerAvatar: !routeMyFriends}">
+
             <h5 *ngIf="!routeMyFriends">
               {{user.friend.name | titlecase}}
             </h5>
@@ -20,8 +22,8 @@
           <a routerLink="/users/{{user.friend.login}}">
             <h4>{{user.friend.name | titlecase}} {{user.friend.surname | titlecase}} </h4>
           </a>
-          <a class="btn_show"  (click)="goToDialog(user.friend)">Написать сообщение</a>
-          <a class="btn_show"  (click)="delFriend(user.friend._id)">Убрать из друзей</a>
+          <a class="btn_show" *ngIf="login === userLogin" (click)="goToDialog(user.friend)">Написать сообщение</a>
+          <a class="btn_show" *ngIf="login === userLogin" (click)="delFriend(user.friend._id)">Убрать из друзей</a>
         </div>
       </div>
     </div>
@@ -35,7 +37,7 @@
           <h4>{{req.friend.name | titlecase}} {{req.friend.surname | titlecase}} </h4>
         </a>
         <a  routerLink="/users/{{req.friend.login}}">
-          <img class="smallAvatar" src="http://localhost:8000/{{req.photos[req.photos.length-1].url}}" alt="">
+          <img class="smallAvatar" src="http://localhost:8000/{{req.friend.avatar.url}}" alt="">
         </a>
       </div>
       <div class="column_req">

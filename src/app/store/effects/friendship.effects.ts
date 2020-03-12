@@ -21,10 +21,10 @@ import {
   GetAllRequests, GetAllRequestsFailure,
   GetAllRequestsSuccess
 } from '../actions/friendship.actions';
-import {Friend} from '../../interfaces/friend';
 import {FriendService} from '../../services/friend.service';
-import {allRequests} from '../selectors/friendship.selector';
-import {AddFriendsUser, ExtraForUserActions, GetSelectedUser} from '../actions/extraForUser.actions';
+import {allUsers} from '../selectors/extraForUser.selector';
+import {AddFriendsUserListSuccess, DelFriendsFromUserListSuccess, DelRequestFromUserListSuccess} from '../actions/extraForUser.actions';
+import {Friend} from '../../interfaces/friend';
 
 
 @Injectable()
@@ -50,7 +50,7 @@ export class FriendshipEffects {
   addFriend$ = this.actions$.pipe(
     ofType<AddFriend>(FriendshipUserActions.ADD_FRIEND),
     switchMap((action: AddFriend) => this.friendService.addFriend(action.payload)),
-    map((friend: Friend ) => new AddFriendSuccess(friend)),
+    switchMap((friend: Friend ) => [new AddFriendSuccess(friend), new AddFriendsUserListSuccess(friend) ]),
     catchError((err) => of(new AddFriendFailure(err)))
   );
 
@@ -58,7 +58,7 @@ export class FriendshipEffects {
   delFriend$ = this.actions$.pipe(
     ofType<DelFriend>(FriendshipUserActions.DEL_FRIEND),
     switchMap((action: DelFriend) => this.friendService.delFriend(action.payload)),
-    map((friend: string ) => new DelFriendSuccess(friend)),
+    switchMap((req: {friend: string, auth: string} ) => [new DelFriendSuccess(req.friend), new DelFriendsFromUserListSuccess(req)]),
     catchError((err) => of(new DelFriendFailure(err)))
   );
 
@@ -66,11 +66,11 @@ export class FriendshipEffects {
   delReq$ = this.actions$.pipe(
     ofType<DelRequest>(FriendshipUserActions.DEL_REQUEST),
     switchMap((action: DelRequest) => this.friendService.delReq(action.payload)),
-    map((friend: string ) => new DelRequestSuccess(friend)),
-    catchError((err) => of(new DelRequestFailure(err)))
+    switchMap((friend: string ) => [new DelRequestSuccess(friend), new DelRequestFromUserListSuccess(friend)]),
+    catchError((err) => of(new DelRequestFailure(err))),
   );
 
   constructor(private actions$: Actions,
               private friendService: FriendService,
-              private store: Store<AppState>){}
+              private store: Store<AppState>) {}
 }

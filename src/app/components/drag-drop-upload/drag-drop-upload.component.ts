@@ -11,11 +11,11 @@ import {DomSanitizer} from '@angular/platform-browser';
   styleUrls: ['./drag-drop-upload.component.scss']
 })
 export class DragDropUploadComponent {
-  @Output()  upload: EventEmitter<object> = new EventEmitter<object>();
+  @Output()  upload: EventEmitter<FormData> = new EventEmitter<FormData>();
 
   uploadData: any = [];
   public files: NgxFileDropEntry[] = [];
-  src: string[] ;
+  src = [] ;
 
   constructor(private sanitizer: DomSanitizer){}
 

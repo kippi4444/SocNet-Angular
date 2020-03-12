@@ -11,21 +11,28 @@
 
 .photo_modal{
   position: fixed;
-  width: 720px;
+  width: 1020px;
   height: 510px;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
-  color: #858585;
+  color: #ffffff;
   box-shadow: rgba(0,0,0,0.5) 0px 0px 20px;
   background-color: rgb(38, 40, 40);
   border: 1px solid rgba(15, 27, 41, 0.33);
   border-radius: 5px;
   padding: 10px;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+
+  &:hover {
+    .close_modal{
+      opacity: 1;
+      right: -50px;
+    }
+  }
 }
 
 .lister{
@@ -82,11 +89,11 @@ a{
 }
 
 .photo{
-  max-width: 700px;
+  max-width: 690px;
   max-height: 500px;
 
   img{
-    max-width: 60%;
+    max-width: 50%;
   }
 }
 
@@ -99,13 +106,17 @@ a{
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 2;
 }
 
 .move{
   position: fixed;
   bottom: 5px;
+  left: 50%;
+  transform: translateX(-50% );
+  z-index: 3;
   padding: 5px;
-  background-color: rgba(255, 255, 255, 0.57);
+  background-color: rgb(255, 255, 255);
   border-radius: 5px;
   ul{
     list-style: none;
@@ -114,3 +125,89 @@ a{
     }
   }
 }
+
+.info_photo{
+  position: relative;
+  width: 300px;
+  height: 100%;
+  color: #444444;
+  font-size: 14px;
+  border-radius: 5px;
+  background-color: white;
+  padding: 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  a{
+    color: #1f1f1f;
+  }
+
+  p{
+    color: #2e2e2e;
+  }
+
+  .btn_show {
+    font-size: 14px;
+  }
+
+  .user_info{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  .comments {
+    overflow: scroll;
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+  }
+
+  .settings{
+    position: relative;
+  }
+
+  .comment_avatar {
+    width: 50px;
+    border-radius: 5px;
+  }
+  .block_post{
+    margin: 5px 2px 5px 10px;
+  }
+  .post{
+    background-color: white;
+    display: flex;
+
+  }
+
+  .like{
+    font-size: 24px;
+    cursor: pointer;
+    text-decoration: none;
+    &:hover{
+      color: #ff0004;
+    }
+    &:active{
+      color: #d50004;
+    }
+  }
+
+  .edit{
+    ul{
+      list-style: none;
+      li{
+        padding: 3px;
+        a{
+          &:hover{
+            color: #004683;
+          }
+        }
+      }
+    }
+
+  }
+
+
+}
+

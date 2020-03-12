@@ -1,13 +1,8 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {UserService} from './services/user.service';
-import {Subject, Subscription} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {WebsocketService} from './services/websocket.service';
+import {Component, OnInit} from '@angular/core';
 import {Msg} from './interfaces/msg';
-import {select, Store} from '@ngrx/store';
+import {Store} from '@ngrx/store';
 import {AppState} from './store/state/app.state';
 import {GetAuthUser} from './store/actions/user.actions';
-import {authentificatedUser, stateAuth} from './store/selectors/user.selector';
 
 
 @Component({

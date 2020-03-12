@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Album} from '../../interfaces/album';
 import {ActivatedRoute} from '@angular/router';
 
@@ -12,6 +12,7 @@ import {ActivatedRoute} from '@angular/router';
 export class MyAlbumsComponent {
   @Output() uploadNewAlbum: EventEmitter<Album> = new EventEmitter<Album>();
   @Output() rldComponent: EventEmitter<string> = new EventEmitter<string>();
+
 
   @Input() limit: boolean;
   @Input() albums: Album[];
@@ -36,5 +37,9 @@ export class MyAlbumsComponent {
 
   reloadComponent() {
     this.rldComponent.emit(this.myLogin);
+  }
+
+  changeModal() {
+   this.showModal = !this.showModal;
   }
 }

@@ -20,6 +20,7 @@ export class AlbumComponent implements OnDestroy {
   @Input() myId: string;
   @Input() isAuth = false;
   @Input() album: Album | any;
+  @Input() photos: Photo[];
   sub = [];
   preview: string | ArrayBuffer;
   editMode = false;
@@ -32,7 +33,7 @@ export class AlbumComponent implements OnDestroy {
   }
 
   delPhoto(idx) {
-    const photo  = this.album.photos.splice(idx , 1);
+    const photo  = this.photos.splice(idx , 1);
     this.deletePhoto.emit(photo[0]);
   }
 
@@ -44,7 +45,6 @@ export class AlbumComponent implements OnDestroy {
   delete() {
     this.deleteAlbum.emit(this.album);
     this.router.navigate(['users/' + this.album.owner.login + '/albums']);
-
   }
 
   accountChecker() {

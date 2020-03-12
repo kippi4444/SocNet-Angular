@@ -8,17 +8,16 @@ import {AddUserGuard} from './guards/add-user.guard';
 import {LoginGuard} from './guards/login.guard';
 import {AlbumContainerComponent} from './pages/album/album.container';
 import {MyAlbumsContainerComponent} from './pages/my-albums/my-albums.container';
-import {MessagesComponent} from './components/messages/messages.component';
-import {DialogsComponent} from './pages/dialogs/dialogs.component';
 import {DashboardContainerComponent} from './pages/dashboard/dashboard.container';
 import {DialogsContainerComponent} from './pages/dialogs/dialogs.container';
+import {MessagesContainerComponent} from './components/messages/messages.container';
 
 
 const routes: Routes = [
   { path: 'friends/:id', component: FriendsComponent, canActivate: [AddUserGuard]},
   { path: 'dashboard', component: DashboardContainerComponent },
   { path: 'dialogs', component: DialogsContainerComponent, canActivate: [AddUserGuard], children: [
-      { path: ':id', component: MessagesComponent, canActivate: [AddUserGuard]  }
+      { path: ':id', component: MessagesContainerComponent, canActivate: [AddUserGuard]  }
     ] },
   { path: 'users/:id', component: AccountContainerComponent, canActivate: [AddUserGuard]},
   { path: 'users/:id/albums', component: MyAlbumsContainerComponent, canActivate: [AddUserGuard]},

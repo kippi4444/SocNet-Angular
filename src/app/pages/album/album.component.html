@@ -16,8 +16,8 @@
       </div>
     </div>
 
-    <div class="photos" *ngIf="album.photos.length>0">
-      <div  *ngFor="let photo of  album.photos; let i = index">
+    <div class="photos" *ngIf="photos.length>0; else noPhoto">
+      <div  *ngFor="let photo of  photos; let i = index">
         <a>
           <span *ngIf="accountChecker()" (click)="delPhoto(i)" >&#10006;</span>
           <img class="photo" src="http://localhost:8000/{{photo.url}}" [routerLink]=""
@@ -31,6 +31,12 @@
 
   </div>
 </div>
+
+<ng-template #noPhoto>
+  <div class="photos">
+    <p>В этом альбоме еще нет фотографий</p>
+  </div>
+</ng-template>
 <ng-template #edit>
     <h1 class="edit-album_container">
       <input type="text" [(ngModel)]="album.title">

@@ -1,12 +1,14 @@
 <div class="album_modal_overlay" *ngIf="showModal" (click)="closeModal()"></div>
 <div class="album_modal" *ngIf="showModal">
+  <button (click)="closeModal()" class="close_modal" >&#x2716;</button>
   <div class="myAlbumFelds">
     <input type="text"  placeholder="Название Альбома" [(ngModel)]="album.title">
     <hr>
     <textarea  placeholder="Описания альбома" id="description" cols="50" rows="8" [(ngModel)]="album.description"></textarea>
   </div>
-
-  <button (click)="createAlbum()">Создать</button>
-  <button (click)="closeModal()">Закрыть</button>
+  <div class="block_btn">
+    <button (click)="createAlbum()">Создать</button>
+    <button (click)="closeModal()">Закрыть</button>
+  </div>
 </div>
 

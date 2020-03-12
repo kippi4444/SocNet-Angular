@@ -5,11 +5,40 @@
   padding: 10px;
   box-shadow: 0 0 2px rgba(46, 46, 46, 0.39);
   display: grid;
-  grid-template-columns: 30% 70% ;
+  grid-template-columns: 40% 60% ;
   grid-gap: 5px;
   min-height: 500px;
 }
+.dialog_block{
+  position: relative;
+  overflow: hidden;
+  opacity: 0.5;
+  transition: .2s ease;
+  &:hover{
+    opacity: 1;
 
+    .delete_dialog{
+      right: 0;
+      cursor: pointer;
+      opacity: 1;
+    }
+  }
+
+  .delete_dialog{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    right: -50px;
+    position: absolute;
+    width: 50px;
+    height: 70px;
+    color: #ffffff;
+    background-color: rgba(190, 0, 4, 0.79);
+    transition: .3s ease;
+    opacity: .5;
+  }
+}
 .first-column{
   border-right: 1px solid rgba(145, 145, 145, 0.06);
 }
@@ -17,6 +46,8 @@
  padding: 5px;
 }
 .module {
+  position: relative;
+  overflow: hidden;
   padding: 10px;
   color: #1f1f1f;
   height: 80px;
@@ -25,12 +56,6 @@
   white-space: nowrap;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-  opacity: 0.5;
-
-  &:hover{
-    cursor: pointer;
-    opacity: 1;
-  }
 
   .module-avatar{
     color: #1f1f1f;
@@ -46,28 +71,26 @@
     background-color: rgba(31, 31, 31, 0.08);
   }
 
- .dialog_avatar{
-   max-width: 100%;
-   max-height: 100%;
- }
-
-
+   .dialog_avatar{
+     max-width: 100%;
+     max-height: 100%;
+   }
 
   .column-block{
     display: flex;
     flex-flow: column;
     justify-content: center;
     align-items: center;
-
-
   }
+
   a{
 
     &:hover{
       cursor: pointer;
-      text-decoration: underline;
+      text-decoration: none;
     }
   }
+
   h4 {
     padding: 0;
     font-weight: 500;
@@ -83,8 +106,9 @@
 
 .active {
   &:first-child{
-    margin-left: 10px;
+    transform: translateX(10px) ;
   }
-
   opacity: 1;
 }
+
+

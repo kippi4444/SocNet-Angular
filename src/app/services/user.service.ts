@@ -45,15 +45,8 @@ export class UserService {
   }
 
   getUsers(query?): Observable<User[]> {
-    if (query) {
       return this.http.get<User[]>(this.usersUrl, {
-        params: query}).pipe(map(users => {
-          return users;
-        }));
-    }
-    return this.http.get<User[]>(this.usersUrl).pipe(map(user => {
-      return user;
-    }));
+        params: query}).pipe(map(users => users));
   }
 
   getUser(id: string): Observable<User> {
@@ -93,4 +86,8 @@ export class UserService {
   //   this.http.put<Data>(this.usersUrl + 'update/' + user.login, user).subscribe();
   // }
 
+  changeAvatar(url: string) {
+    return this.http.put<Photo>('http://localhost:8000/photos/' + 'change', {url}).pipe(map(value => value));
+
+  }
 }

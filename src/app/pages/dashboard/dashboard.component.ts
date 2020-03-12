@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import { User } from '../../interfaces/user';
-import {ActivatedRoute} from '@angular/router';
 import {Friend} from '../../interfaces/friend';
+import {Router} from '@angular/router';
+import {QuerySearch} from '../../interfaces/querySearch';
 
 @Component({
   selector: 'app-dashboard-component',
@@ -16,14 +17,19 @@ export class DashboardComponent {
   @Output() delMyRequest: EventEmitter<object> = new EventEmitter<object>();
   @Output() goThisDialog: EventEmitter<object> = new EventEmitter<object>();
   @Output() changeView: EventEmitter<object> = new EventEmitter<object>();
+  @Output() nextPage: EventEmitter<void> = new EventEmitter<void>();
+  @Output() prevPage: EventEmitter<void> = new EventEmitter<void>();
 
   @Input() users: User[];
   @Input() myId: string;
+  @Input() next: boolean;
+  @Input() prev: boolean;
   @Input() isAuth: boolean;
   @Input() myReqFrnd: {requests: Friend[], friends: Friend[]};
 
-  constructor(private route: ActivatedRoute) {
-  }
+  @Input() query: QuerySearch ;
+
+  constructor(private router: Router) {}
 
 
   itFriend(req) {
@@ -51,15 +57,16 @@ export class DashboardComponent {
    this.delMyRequest.emit({requests, id: this.myId});
   }
 
-
-  changeViewUsers() {
-    const query = {
-      page: this.route.snapshot.queryParamMap.get('page'),
-      limit: this.route.snapshot.queryParamMap.get('limit')
-    };
-    this.changeView.emit(query);
+  go(query) {
+    this.router
+      .navigate([], { queryParams: {
+        page: query.page ? query.page : 0,
+        limit: query.limit ? query.limit : 0 ,
+        sort: query.sort ? query.sort : 'name',
+        start: query.start ? query.start : 1,
+        search: query.search ? query.search : ''}
+      });
   }
-
 }
 
 

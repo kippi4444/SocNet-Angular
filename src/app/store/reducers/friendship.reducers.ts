@@ -1,7 +1,6 @@
 
 import {FriendshipUserActions} from '../actions/friendship.actions';
 import {initialUserFriendship, UserFriendship} from '../state/friendship.state';
-import {initialExtraForUser} from '../state/user.state';
 
 
 export const friendsReducers = (

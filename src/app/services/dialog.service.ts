@@ -34,4 +34,8 @@ export class DialogService {
   getMessages(dialogId: string) {
     return this.http.get<dialogMes>(this.dialogsUrl + 'mes/' + dialogId);
   }
+
+  delDialog(dialogId: string) {
+    return this.http.delete<string>(this.dialogsUrl + dialogId);
+  }
 }

@@ -3,8 +3,7 @@ import {UserActions} from '../actions/user.actions';
 
 export const userReducers = (
   state = initialUserState,
-  action: UserActions,
-  anotherState = initialExtraForUser
+  action: UserActions
 ): UserState => {
   switch (action.type) {
     case UserActions.NEW_USER_SUCCESS: {
@@ -130,6 +129,12 @@ export const userReducers = (
       };
     }
 
+    case UserActions.GET_SELECTED_DIALOG: {
+      return {
+        ...state,
+        selectedDialog: null,
+      };
+    }
     case UserActions.GET_SELECTED_DIALOG_SUCCESS: {
       return {
         ...state,
@@ -164,10 +169,36 @@ export const userReducers = (
       return {
         ...state,
         authUser: {...state.authUser,
-          photos: state.authUser.photos.concat(action.payload)},
+          avatar: action.payload},
       };
     }
     case UserActions.SET_AVATAR_FAILURE: {
+      return {
+        ...state,
+      };
+    }
+
+    case UserActions.CHANGE_AVATAR_SUCCESS: {
+      return {
+        ...state,
+        authUser: {...state.authUser,
+          avatar: action.payload},
+      };
+    }
+    case UserActions.CHANGE_AVATAR_FAILURE: {
+      return {
+        ...state,
+      };
+    }
+
+    case UserActions.DEL_DIALOG_SUCCESS: {
+      return {
+        ...state,
+        selectedDialog: null,
+        allDialogs: state.allDialogs.filter(dialog => dialog._id !== action.payload),
+      };
+    }
+    case UserActions.DEL_DIALOG_FAILURE: {
       return {
         ...state,
       };

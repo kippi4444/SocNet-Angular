@@ -1,18 +1,46 @@
 import {Injectable} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
 import {
-  AddDialog, AddDialogSuccess,
-  AddPet, AddPetSuccess, DeletedPet, DeletedPetSuccess,
-  DeleteUser, DeleteUserSuccess,
-  GetAuthUser, GetAuthUserFailure,
+  AddDialog,
+  AddDialogFailure,
+  AddDialogSuccess,
+  AddPet,
+  AddPetFailure,
+  AddPetSuccess,
+  ChangeAvatar, ChangeAvatarFailure, ChangeAvatarSuccess,
+  DelDialog,
+  DelDialogFailure,
+  DelDialogSuccess,
+  DeletedPet,
+  DeletedPetFailure,
+  DeletedPetSuccess,
+  DeleteUser,
+  DeleteUserFailure,
+  DeleteUserSuccess,
+  GetAuthUser,
+  GetAuthUserFailure,
   GetAuthUserSuccess,
-  GetLoginUser, GetLoginUserDialogs, GetLoginUserDialogsSuccess, GetLoginUserFailure,
+  GetLoginUser,
+  GetLoginUserDialogs,
+  GetLoginUserDialogsFailure,
+  GetLoginUserDialogsSuccess,
+  GetLoginUserFailure,
   GetLoginUserSuccess,
-  GetLogoutUser, GetLogoutUserFailure,
-  GetLogoutUserSuccess, GetSelectedDialog, GetSelectedDialogSuccess,
-  NewUser, NewUserFailure,
-  NewUserSuccess, SetAvatar, SetAvatarSuccess,
-  UpdatedUser, UpdatedUserSuccess,
+  GetLogoutUser,
+  GetLogoutUserFailure,
+  GetLogoutUserSuccess,
+  GetSelectedDialog,
+  GetSelectedDialogFailure,
+  GetSelectedDialogSuccess,
+  NewUser,
+  NewUserFailure,
+  NewUserSuccess,
+  SetAvatar,
+  SetAvatarFailure,
+  SetAvatarSuccess,
+  UpdatedUser,
+  UpdatedUserFailure,
+  UpdatedUserSuccess,
   UserActions
 } from '../actions/user.actions';
 import {catchError, map, switchMap} from 'rxjs/operators';
@@ -27,12 +55,9 @@ import {Pet} from '../../interfaces/pet';
 import {PetService} from '../../services/pet.service';
 import {Dialog} from '../../interfaces/dialog';
 import {dialogMes, DialogService} from '../../services/dialog.service';
+import {AddPhoto, AddPhotoSuccess} from '../actions/photo.actions';
 import {Photo} from '../../interfaces/photo';
-import {Msg} from '../../interfaces/msg';
-import {Friend} from '../../interfaces/friend';
-import {GetAllRequestsFailure, GetAllRequestsSuccess} from '../actions/friendship.actions';
-
-
+import {SelectedAuthUserChangeAvatar, SelectedAuthUserChangeAvatarSuccess} from '../actions/extraForUser.actions';
 
 @Injectable()
 export class UserEffects {
@@ -57,39 +82,44 @@ export class UserEffects {
   updatedUser$ = this.actions$.pipe(
     ofType<UpdatedUser>(UserActions.UPDATED_USER),
     switchMap((action: UpdatedUser) => this.userService.update(action.payload)),
-    switchMap((res) => {
+    map((res) => {
       if (res.status === 201) {
-       return of(new UpdatedUserSuccess(res.body));
+        return new UpdatedUserSuccess(res.body);
       }
-    }));
+    }),
+    catchError((err) => of(new UpdatedUserFailure(err)))
+  );
 
   @Effect()
   deletedUser$ = this.actions$.pipe(
     ofType<DeleteUser>(UserActions.DEL_USER),
     switchMap((action: DeleteUser) => this.userService.del(action.payload)),
-    switchMap((res) => {
+    map((res) => {
       if (res.status === 201) {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('user');
         localStorage.removeItem('login');
         this.router.navigate(['/login']);
-        return of(new DeleteUserSuccess());
+        return new DeleteUserSuccess();
       }
-    })
+    }),
+    catchError((err) => of(new DeleteUserFailure(err)))
   );
 
   @Effect()
   addPet$ = this.actions$.pipe(
     ofType<AddPet>(UserActions.ADD_PET),
     switchMap((action: AddPet) => this.petService.addPet(action.payload)),
-    switchMap((pet: Pet) => of(new AddPetSuccess(pet)))
+    map((pet: Pet) => new AddPetSuccess(pet)),
+    catchError((err) => of(new AddPetFailure(err)))
     );
 
   @Effect()
   delPet$ = this.actions$.pipe(
     ofType<DeletedPet>(UserActions.DEL_PET),
     switchMap((action: DeletedPet) => this.petService.delPet(action.payload)),
-    switchMap((res: string) => of(new DeletedPetSuccess(res)))
+    map((res: string) => new DeletedPetSuccess(res)),
+    catchError((err) => of(new DeletedPetFailure(err)))
     );
 
   @Effect()
@@ -134,29 +164,52 @@ export class UserEffects {
   getLoginUserDialogs$ = this.actions$.pipe(
     ofType<GetLoginUserDialogs>(UserActions.GET_LOGIN_USER_DIALOGS),
     switchMap(( ) => this.dialogService.getAllDialogs()),
-    switchMap((dialogs: Dialog[]) => of(new GetLoginUserDialogsSuccess(dialogs)))
+    map((dialogs: Dialog[]) => new GetLoginUserDialogsSuccess(dialogs)),
+    catchError((err) => of(new GetLoginUserDialogsFailure(err)))
   );
 
   @Effect()
   getSelectedDialog$ = this.actions$.pipe(
     ofType<GetSelectedDialog>(UserActions.GET_SELECTED_DIALOG),
     switchMap((action: GetSelectedDialog) => this.dialogService.getMessages(action.payload)),
-    switchMap((dialog: dialogMes) => of(new GetSelectedDialogSuccess(dialog)))
+    map((dialog: dialogMes) => new GetSelectedDialogSuccess(dialog)),
+    catchError((err) => of(new GetSelectedDialogFailure(err)))
   );
 
   @Effect()
   getAddDialog$ = this.actions$.pipe(
     ofType<AddDialog>(UserActions.ADD_DIALOG),
     switchMap((action: AddDialog) => this.dialogService.addDialog(action.payload)),
-    switchMap((dialog: Dialog) => of(new AddDialogSuccess(dialog))));
+    map((dialog: Dialog) => new AddDialogSuccess(dialog)),
+    catchError((err) => of(new AddDialogFailure(err)))
+  );
 
   @Effect()
   setAvatar$ = this.actions$.pipe(
     ofType<SetAvatar>(UserActions.SET_AVATAR),
     switchMap((action: SetAvatar) => this.userService.setAvatar(action.payload)),
-    switchMap((res) => {
-      return of(new SetAvatarSuccess(res.body));
-    }));
+    switchMap((res) => [new SetAvatarSuccess(res.body), new AddPhotoSuccess([res.body])]),
+    catchError((err) => of(new SetAvatarFailure(err)))
+  );
+
+  @Effect()
+  changeAvatar$ = this.actions$.pipe(
+    ofType<ChangeAvatar>(UserActions.CHANGE_AVATAR),
+    switchMap((action: ChangeAvatar) => this.userService.changeAvatar(action.payload)),
+    switchMap((photo: Photo) => [
+      new SelectedAuthUserChangeAvatarSuccess(photo),
+      new ChangeAvatarSuccess(photo),
+      new AddPhotoSuccess([photo])]),
+    catchError((err) => of(new ChangeAvatarFailure(err)))
+  );
+
+  @Effect()
+  delDialog$ = this.actions$.pipe(
+    ofType<DelDialog>(UserActions.DEL_DIALOG),
+    switchMap((action: DelDialog) => this.dialogService.delDialog(action.payload)),
+    map((id: string ) => new DelDialogSuccess(id)),
+    catchError((err) => of(new DelDialogFailure(err)))
+  );
 
   constructor(private userService: UserService,
               private petService: PetService,

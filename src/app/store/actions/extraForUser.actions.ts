@@ -1,5 +1,8 @@
 import { Action } from '@ngrx/store';
 import {User} from '../../interfaces/user';
+import {Friend} from '../../interfaces/friend';
+import {QuerySearch} from '../../interfaces/querySearch';
+import {Photo} from '../../interfaces/photo';
 
 
 
@@ -13,6 +16,18 @@ export const ExtraForUserActions = {
   SEARCH_USER: '[AllUsers] Search User',
   SEARCH_USER_SUCCESS: '[AllUsers] Search User Success',
   SEARCH_USER_FAILURE: '[AllUsers] Search User Failed',
+  ADD_FRIEND_LIST: '[UserFriendsList] ADD FRIEND For User List',
+  ADD_FRIEND_LIST_SUCCESS: '[UserFriendsList] ADD FRIEND For User List Success',
+  ADD_FRIEND_LIST_FAILURE: '[UserFriendsList] ADD FRIEND For User List Failed',
+  DEL_FRIEND_LIST: '[UserFriendsList] DEL FRIEND From User List',
+  DEL_FRIEND_LIST_SUCCESS: '[UserFriendsList] DEL FRIEND From User List Success',
+  DEL_FRIEND_LIST_FAILURE: '[UserFriendsList] DEL FRIEND From User List Failed',
+  DEL_REQUEST_FROM_LIST: '[UserFriendsList] DEL REQUEST From User List',
+  DEL_REQUEST_FROM_LIST_SUCCESS: '[UserFriendsList] DEL REQUEST From User List Success',
+  DEL_REQUEST_FROM_LIST_FAILURE: '[UserFriendsList] DEL REQUEST From User List Failed',
+  CHANGE_AVATAR_SELECTED_AUTH_USER: '[SelectedAuthUserChangeAvatar] Selected Auth User Change Avatar',
+  CHANGE_AVATAR_SELECTED_AUTH_USER_SUCCESS: '[SelectedAuthUserChangeAvatar] Selected Auth User Change Avatar',
+  CHANGE_AVATAR_SELECTED_AUTH_USER_FAILURE: '[SelectedAuthUserChangeAvatar] Selected Auth User Change Avatar',
 };
 
 // ==============================  all users ================================ //
@@ -55,7 +70,7 @@ export  class GetSelectedUserFailure implements  Action {
 
 export  class SearchingUsers implements  Action {
   public readonly type = ExtraForUserActions.SEARCH_USER;
-  constructor(public payload: string) {}
+  constructor(public payload?: QuerySearch) {}
 }
 
 export  class SearchingUsersSuccess implements  Action {
@@ -71,18 +86,72 @@ export  class SearchingUsersFailure implements  Action {
 
 // ==============================  add friends ================================ //
 
-export  class AddFriendsUser implements  Action {
-  public readonly type = ExtraForUserActions.SEARCH_USER;
+export  class AddFriendsUserList implements  Action {
+  public readonly type = ExtraForUserActions.ADD_FRIEND_LIST;
+  constructor(public payload?: string) {}
+}
+
+export  class AddFriendsUserListSuccess implements  Action {
+  public readonly type = ExtraForUserActions.ADD_FRIEND_LIST_SUCCESS;
+  constructor(public payload: Friend) {}
+}
+
+export  class AddFriendsUserListFailure implements  Action {
+  public readonly type = ExtraForUserActions.ADD_FRIEND_LIST_FAILURE;
+  constructor(public payload?: any) {
+  }
+}
+
+// ==============================  del friends ================================ //
+
+export  class DelFriendsFromUserList implements  Action {
+  public readonly type = ExtraForUserActions.DEL_FRIEND_LIST;
+  constructor(public payload?: string) {}
+}
+
+export  class DelFriendsFromUserListSuccess implements  Action {
+  public readonly type = ExtraForUserActions.DEL_FRIEND_LIST_SUCCESS;
+  constructor(public payload: {friend: string, auth: string}) {}
+}
+
+export  class DelFriendsFromUserListFailure implements  Action {
+  public readonly type = ExtraForUserActions.DEL_FRIEND_LIST_FAILURE;
+  constructor(public payload?: any) {
+  }
+}
+
+// ==============================  del request ================================ //
+
+export  class DelRequestFromUserList implements  Action {
+  public readonly type = ExtraForUserActions.DEL_REQUEST_FROM_LIST;
+  constructor(public payload?: string) {}
+}
+
+export  class DelRequestFromUserListSuccess implements  Action {
+  public readonly type = ExtraForUserActions.DEL_REQUEST_FROM_LIST_SUCCESS;
   constructor(public payload: string) {}
 }
 
-export  class AddFriendsUserSuccess implements  Action {
-  public readonly type = ExtraForUserActions.SEARCH_USER_SUCCESS;
-  constructor(public payload: User[]) {}
+export  class DelRequestFromUserListFailure implements  Action {
+  public readonly type = ExtraForUserActions.DEL_REQUEST_FROM_LIST_FAILURE;
+  constructor(public payload?: any) {
+  }
 }
 
-export  class AddFriendsUserFailure implements  Action {
-  public readonly type = ExtraForUserActions.SEARCH_USER_FAILURE;
+// ==============================  del request ================================ //
+
+export  class SelectedAuthUserChangeAvatar implements  Action {
+  public readonly type = ExtraForUserActions.CHANGE_AVATAR_SELECTED_AUTH_USER;
+  constructor(public payload?: string) {}
+}
+
+export  class SelectedAuthUserChangeAvatarSuccess implements  Action {
+  public readonly type = ExtraForUserActions.CHANGE_AVATAR_SELECTED_AUTH_USER_SUCCESS;
+  constructor(public payload: Photo) {}
+}
+
+export  class SelectedAuthUserChangeAvatarFailure implements  Action {
+  public readonly type = ExtraForUserActions.CHANGE_AVATAR_SELECTED_AUTH_USER_FAILURE;
   constructor(public payload?: any) {
   }
 }
@@ -96,4 +165,15 @@ export type ExtraForUserActions = GetAllUsers |
   SearchingUsers |
   SearchingUsersSuccess |
   SearchingUsersFailure |
-  AddFriendsUser;
+  AddFriendsUserList |
+  AddFriendsUserListSuccess |
+  AddFriendsUserListFailure |
+  DelFriendsFromUserList |
+  DelFriendsFromUserListSuccess |
+  DelFriendsFromUserListFailure |
+  DelRequestFromUserList |
+  DelRequestFromUserListSuccess |
+  DelRequestFromUserListFailure |
+  SelectedAuthUserChangeAvatar |
+  SelectedAuthUserChangeAvatarSuccess |
+  SelectedAuthUserChangeAvatarFailure;

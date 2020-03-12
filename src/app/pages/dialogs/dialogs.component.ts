@@ -1,13 +1,13 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input,  OnInit, Output} from '@angular/core';
 import {Dialog} from '../../interfaces/dialog';
-import {UserService} from '../../services/user.service';
-import {DialogService} from '../../services/dialog.service';
+import {dialogMes, DialogService} from '../../services/dialog.service';
 import {FriendService} from '../../services/friend.service';
-import {Friend} from '../../interfaces/friend';
 
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppState} from '../../store/state/app.state';
 import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
+import {selectedDialog} from '../../store/selectors/user.selector';
 
 @Component({
   selector: 'app-dialogs-component',
@@ -17,9 +17,9 @@ import {Store} from '@ngrx/store';
 export class DialogsComponent implements OnInit {
   @Output() allDialogs: EventEmitter<void> = new EventEmitter<void>();
   @Output() toDialog: EventEmitter<Dialog> = new EventEmitter<Dialog>();
+  @Output() delThatDialog: EventEmitter<string> = new EventEmitter<string>();
 
   @Input() dialogs: Dialog[];
-
   activeDialog: string;
   sub = [];
 
@@ -43,4 +43,12 @@ export class DialogsComponent implements OnInit {
     this.toDialog.emit(dialog);
   }
 
+  delDialog(id: string) {
+   this.goBack();
+   this.delThatDialog.emit(id);
+  }
+
+  goBack() {
+    this.router.navigate(['.'], { relativeTo: this.route, queryParams: {}});
+  }
 }
