@@ -29,6 +29,11 @@ nav a:hover {
   color: #f3ffff;
   background-color: rgba(0, 86, 132, 0.2);
 }
+
+nav a:first-child:hover {
+  color: #f3ffff;
+  background-color: rgba(0, 86, 132, 0);
+}
 nav a.active {
   color: #ffffff;
   background-color: rgba(0, 86, 132, 0.31);
@@ -62,4 +67,10 @@ nav a.active {
 }
 a{
   color: white;
+}
+.logo{
+  width: 168px;
+  height: 45px;
+  background: url("../../placeholders/logo11.png") no-repeat;
+  background-size: contain;
 }

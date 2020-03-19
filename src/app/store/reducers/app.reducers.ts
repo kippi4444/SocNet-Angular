@@ -5,6 +5,7 @@ import {extraForUserReducers} from './extraForUser.reducer';
 import {friendsReducers} from './friendship.reducers';
 import {userPhotosReducers} from './photo.reducers';
 import {mesReducers} from './message.reducers';
+import {errorsReducers} from './errors.reducers';
 
 export const appReducers: ActionReducerMap<AppState, any> = {
   users: userReducers,
@@ -12,4 +13,5 @@ export const appReducers: ActionReducerMap<AppState, any> = {
   friendship: friendsReducers,
   userAlbums: userPhotosReducers,
   message: mesReducers,
+  errors: errorsReducers,
 };

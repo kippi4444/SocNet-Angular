@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterContentChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {User} from '../../interfaces/user';
 
@@ -10,7 +10,7 @@ import {User} from '../../interfaces/user';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterContentChecked {
 
   @Output()
   loginEvent: EventEmitter<number> = new EventEmitter<number>();
@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
   form: FormGroup;
   state: boolean;
 
-  constructor() {
+  constructor(private changeDetector: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -46,6 +46,10 @@ export class LoginComponent implements OnInit {
       this.loginEvent.emit(loginData);
       this.form.reset();
     }
+  }
+
+  ngAfterContentChecked() : void {
+    this.changeDetector.detectChanges();
   }
 
   reg(user: User) {

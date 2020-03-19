@@ -74,6 +74,7 @@ export const userReducers = (
     case UserActions.GET_LOGIN_USER_FAILURE: {
       return {
         ...state,
+        state: false
       };
     }
 

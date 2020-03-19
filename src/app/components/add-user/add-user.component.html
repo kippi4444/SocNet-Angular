@@ -43,9 +43,9 @@
 
     <div class="validation" *ngIf="form.get('login').invalid && form.get('login').touched" >
       <small *ngIf="form.get('login').errors.required">Поле не может быть пустым</small>
-      <small *ngIf="form.get('login').errors.minlength.requiredLength">Миним {{form.get('login').errors.minlength.requiredLength}} символа</small>
+      <small *ngIf="form.get('login').errors.minlength">Миним {{form.get('login').errors.minlength.requiredLength}} символа</small>
+      <small *ngIf="form.get('login').errors.loginError">{{form.get('login').errors.loginError}}</small>
     </div>
-
     <div *ngIf="!showPage() || !changePass ">
       <h1>Пароль</h1>
       <input type="password" placeholder="Пароль" formControlName="password">
@@ -84,7 +84,7 @@
 
     <div class="validation" *ngIf="form.get('name').invalid && form.get('name').touched" >
       <small *ngIf="form.get('name').errors.required">Поле не может быть пустым</small>
-      <small *ngIf="form.get('name').errors.minlength">
+      <small *ngIf="form.get('name').errors.minlength.requiredLength">
         Длина должна быть не менее {{form.get('name').errors.minlength.requiredLength}}.
         Необходимо еще символов: {{form.get('name').errors.minlength.requiredLength - form.get('name').errors.minlength.actualLength}}
       </small>

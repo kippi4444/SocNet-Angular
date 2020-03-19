@@ -31,7 +31,6 @@ export class LoginContainerComponent implements OnInit{
 
   register(userData) {
     this.store.dispatch(new NewUser(userData));
-    // this.userService.add(userData);
   }
 
 }

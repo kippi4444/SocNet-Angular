@@ -2,6 +2,7 @@ import {initialUserState, initialExtraForUser, UserState, ExtraForUser} from './
 import {initialUserFriendship, UserFriendship} from './friendship.state';
 import {initialUserPhotos, UserPhotos} from './photo.state';
 import {initialMesState, MessageState} from './message.state';
+import {ErrorsState, initialErrorsState} from './errors.state';
 
 
 export  interface AppState {
@@ -10,6 +11,7 @@ export  interface AppState {
   friendship: UserFriendship;
   userAlbums: UserPhotos;
   message: MessageState;
+  errors: ErrorsState;
 }
 
 export const initialAppState: AppState = {
@@ -17,7 +19,8 @@ export const initialAppState: AppState = {
   extraForUser: initialExtraForUser,
   friendship: initialUserFriendship,
   userAlbums: initialUserPhotos,
-  message: initialMesState
+  message: initialMesState,
+  errors: initialErrorsState
 };
 
 

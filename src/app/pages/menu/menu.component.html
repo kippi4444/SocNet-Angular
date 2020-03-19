@@ -1,5 +1,6 @@
 
 <nav>
+  <a routerLink="/dashboard" class="logo"> </a>
   <a *ngIf="!isAuth" routerLink="/login" routerLinkActive="active">Войти</a>
   <a *ngIf="isAuth" routerLink="/users/{{login}}" routerLinkActive="active"
      [routerLinkActiveOptions]="{exact:true}">Мой профиль</a>

@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -7,13 +6,15 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {User} from '../../interfaces/user';
 import {ActivatedRoute} from '@angular/router';
 import {AppState} from '../../store/state/app.state';
 import {Store} from '@ngrx/store';
 import {stateAuth} from '../../store/selectors/user.selector';
 import {DeleteUser} from '../../store/actions/user.actions';
+import {Observable} from 'rxjs';
+import {ValidationService} from '../../services/validation.service';
 
 @Component({
   selector: 'app-add-user',
@@ -41,7 +42,12 @@ export class AddUserComponent implements OnInit, OnDestroy {
   edit: boolean;
 
   constructor(private store: Store<AppState>,
+              private validations: ValidationService,
               private route: ActivatedRoute) {
+  }
+
+  loginValidator(control: FormControl): Observable<ValidationErrors> {
+    return this.validations.validateLogin(control.value);
   }
 
   checkPasswords(group: FormGroup) {
@@ -82,13 +88,14 @@ export class AddUserComponent implements OnInit, OnDestroy {
       login: new FormControl(this.isAuth ? this.userPerson.login : '', [
         Validators.required,
         Validators.minLength(3)
-      ]),
+      ], [this.loginValidator.bind(this)]),
       number: new FormControl(this.isAuth ? this.userPerson.number : '', [
         Validators.minLength(12),
         Validators.pattern('^(375|\\+375|80)(?:\\s(44|29|25|33)\\s|\\((44|29|25|33)\\)|(44|29|25|33))[1-9]{1}([0-9]{6}|[0-9]{2}-[0-9]{2}-[0-9]{2})$')
       ]),
     }, [this.checkPasswords]);
   }
+
 
   routing() {
     this.route.queryParams

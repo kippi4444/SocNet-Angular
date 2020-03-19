@@ -45,8 +45,6 @@ import {
 } from '../actions/user.actions';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {Data, UserService} from '../../services/user.service';
-import {Store} from '@ngrx/store';
-import {AppState} from '../state/app.state';
 import {User} from '../../interfaces/user';
 import {of} from 'rxjs';
 import {SearchService} from '../../services/search.service';
@@ -55,10 +53,11 @@ import {Pet} from '../../interfaces/pet';
 import {PetService} from '../../services/pet.service';
 import {Dialog} from '../../interfaces/dialog';
 import {dialogMes, DialogService} from '../../services/dialog.service';
-import {AddPhoto, AddPhotoSuccess} from '../actions/photo.actions';
+import { AddPhotoSuccess} from '../actions/photo.actions';
 import {Photo} from '../../interfaces/photo';
-import {SelectedAuthUserChangeAvatar, SelectedAuthUserChangeAvatarSuccess} from '../actions/extraForUser.actions';
+import {SelectedAuthUserChangeAvatarSuccess} from '../actions/extraForUser.actions';
 import {WebsocketService} from '../../services/websocket.service';
+import {GetError} from '../actions/errors.actions';
 
 @Injectable()
 export class UserEffects {
@@ -76,7 +75,7 @@ export class UserEffects {
         return new NewUserSuccess(res.body.user);
       }
     }),
-    catchError((err) => of(new NewUserFailure(err)))
+    catchError((err) => [new NewUserFailure(err), new GetError(err)])
   );
 
   @Effect()
@@ -88,7 +87,7 @@ export class UserEffects {
         return new UpdatedUserSuccess(res.body);
       }
     }),
-    catchError((err) => of(new UpdatedUserFailure(err)))
+    catchError((err) => [new UpdatedUserFailure(err), new GetError(err)])
   );
 
   @Effect()
@@ -104,7 +103,7 @@ export class UserEffects {
         return new DeleteUserSuccess();
       }
     }),
-    catchError((err) => of(new DeleteUserFailure(err)))
+    catchError((err) => [new DeleteUserFailure(err), new GetError(err)])
   );
 
   @Effect()
@@ -120,109 +119,147 @@ export class UserEffects {
     ofType<DeletedPet>(UserActions.DEL_PET),
     switchMap((action: DeletedPet) => this.petService.delPet(action.payload)),
     map((res: string) => new DeletedPetSuccess(res)),
-    catchError((err) => of(new DeletedPetFailure(err)))
+    catchError((err) => [new DeletedPetFailure(err), new GetError(err)])
     );
 
   @Effect()
   getAuthUser$ = this.actions$.pipe(
     ofType<GetAuthUser>(UserActions.GET_AUTH_USER),
-    switchMap(() => this.userService.getAuthUser()),
-    map((user: User) => new GetAuthUserSuccess(user)),
-    catchError((err) => of(new GetAuthUserFailure(err)))
+    switchMap(() => this.userService.getAuthUser()
+      .pipe(
+        map((user: User) => new GetAuthUserSuccess(user)),
+        catchError((err) =>{
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('user');
+          localStorage.removeItem('login');
+          this.router.navigate(['/login']);
+          return [new GetAuthUserFailure(err), new GetError(err)]}
+        )
+      )
+    )
   );
+
+
 
   @Effect()
   getLoginUser$ = this.actions$.pipe(
     ofType<GetLoginUser>(UserActions.GET_LOGIN_USER),
-    switchMap((action: GetLoginUser) => this.userService.login(action.payload)),
-    map((user: Data) => {
-      localStorage.setItem('accessToken', user.token);
-      localStorage.setItem('user', user.user._id);
-      localStorage.setItem('login', user.user.login);
-      this.router.navigate(['/users/' + user.user.login]);
-      return new GetLoginUserSuccess(user.user);
-    }),
-    catchError((err) => {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('user');
-      localStorage.removeItem('login');
-      this.router.navigate(['/login']);
-      return of(new GetLoginUserFailure(err))})
+    switchMap((action: GetLoginUser) => this.userService.login(action.payload)
+      .pipe(
+        map((user: Data) => {
+          localStorage.setItem('accessToken', user.token);
+          localStorage.setItem('user', user.user._id);
+          localStorage.setItem('login', user.user.login);
+          this.router.navigate(['/users/' + user.user.login]);
+          return new GetLoginUserSuccess(user.user);
+        }),
+        catchError((err) => {
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('user');
+          localStorage.removeItem('login');
+          this.router.navigate(['/login']);
+          return [new GetLoginUserFailure(err), new GetError(err)]}
+        )
+      )
+    )
   );
 
   @Effect()
   getLogoutUser$ = this.actions$.pipe(
     ofType<GetLogoutUser>(UserActions.GET_LOGOUT_USER),
-    switchMap((action: GetLogoutUser) => this.userService.logout()),
-    map((res) => {
-      if (res.status === 200) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('user');
-        localStorage.removeItem('login');
-        this.router.navigate(['/login']);
-        return new GetLogoutUserSuccess();
-      }
-    }),
-    catchError((err) => of(new GetLogoutUserFailure(err)))
+    switchMap((action: GetLogoutUser) => this.userService.logout()
+      .pipe(
+        map((res) => {
+          if (res.status === 200) {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('user');
+            localStorage.removeItem('login');
+            this.router.navigate(['/login']);
+            return new GetLogoutUserSuccess();
+          }
+        }),
+        catchError((err) => [new GetLogoutUserFailure(err), new GetError(err)])
+      )
+    ),
   );
 
   @Effect()
   getLoginUserDialogs$ = this.actions$.pipe(
     ofType<GetLoginUserDialogs>(UserActions.GET_LOGIN_USER_DIALOGS),
-    switchMap(( ) => this.dialogService.getAllDialogs()),
-    map((dialogs: Dialog[]) => new GetLoginUserDialogsSuccess(dialogs)),
-    catchError((err) => of(new GetLoginUserDialogsFailure(err)))
+    switchMap(( ) => this.dialogService.getAllDialogs().pipe(
+      map((dialogs: Dialog[]) => new GetLoginUserDialogsSuccess(dialogs)),
+      catchError((err) => [new GetLoginUserDialogsFailure(err), new GetError(err)])
+      )
+    )
   );
 
   @Effect()
   getSelectedDialog$ = this.actions$.pipe(
     ofType<GetSelectedDialog>(UserActions.GET_SELECTED_DIALOG),
-    switchMap((action: GetSelectedDialog) => this.socketService.getAllMes(action.payload)),
-    switchMap((dialog: dialogMes) => of(new GetSelectedDialogSuccess(dialog))),
-    catchError((err) => of(new GetSelectedDialogFailure(err)))
+    switchMap((action: GetSelectedDialog) => this.socketService.getAllMes(action.payload)
+      .pipe(
+        switchMap((dialog: dialogMes) => of(new GetSelectedDialogSuccess(dialog))),
+        catchError((err) => [new GetSelectedDialogFailure(err), new GetError(err)])
+      )
+    ),
   );
 
   @Effect()
   getScrollMes$ = this.actions$.pipe(
     ofType<GetScrollMes>(UserActions.SCROLL_MES),
-    switchMap((action: GetScrollMes) => this.socketService.getScrollMes(action.payload)),
-    switchMap((dialog: dialogMes) => of(new GetScrollMesSuccess(dialog))),
-    catchError((err) => of(new GetScrollMesFailure(err)))
+    switchMap((action: GetScrollMes) => this.socketService.getScrollMes(action.payload)
+      .pipe(
+        switchMap((dialog: dialogMes) => of(new GetScrollMesSuccess(dialog))),
+        catchError((err) => [new GetScrollMesFailure(err), new GetError(err)])
+      )
+    )
   );
 
   @Effect()
   getAddDialog$ = this.actions$.pipe(
     ofType<AddDialog>(UserActions.ADD_DIALOG),
-    switchMap((action: AddDialog) => this.dialogService.addDialog(action.payload)),
-    map((dialog: Dialog) => new AddDialogSuccess(dialog)),
-    catchError((err) => of(new AddDialogFailure(err)))
+    switchMap((action: AddDialog) => this.dialogService.addDialog(action.payload)
+      .pipe(
+        map((dialog: Dialog) => new AddDialogSuccess(dialog)),
+        catchError((err) => [new AddDialogFailure(err), new GetError(err)])
+      )
+    )
   );
 
   @Effect()
   setAvatar$ = this.actions$.pipe(
     ofType<SetAvatar>(UserActions.SET_AVATAR),
-    switchMap((action: SetAvatar) => this.userService.setAvatar(action.payload)),
-    switchMap((res) => [new SetAvatarSuccess(res.body), new AddPhotoSuccess([res.body])]),
-    catchError((err) => of(new SetAvatarFailure(err)))
+    switchMap((action: SetAvatar) => this.userService.setAvatar(action.payload)
+      .pipe(
+        switchMap((res) => [new SetAvatarSuccess(res.body), new AddPhotoSuccess([res.body])]),
+        catchError((err) => [new SetAvatarFailure(err), new GetError(err)])
+      )
+    )
   );
 
   @Effect()
   changeAvatar$ = this.actions$.pipe(
     ofType<ChangeAvatar>(UserActions.CHANGE_AVATAR),
-    switchMap((action: ChangeAvatar) => this.userService.changeAvatar(action.payload)),
-    switchMap((photo: Photo) => [
-      new SelectedAuthUserChangeAvatarSuccess(photo),
-      new ChangeAvatarSuccess(photo),
-      new AddPhotoSuccess([photo])]),
-    catchError((err) => of(new ChangeAvatarFailure(err)))
+    switchMap((action: ChangeAvatar) => this.userService.changeAvatar(action.payload)
+      .pipe(
+        switchMap((photo: Photo) => [
+          new SelectedAuthUserChangeAvatarSuccess(photo),
+          new ChangeAvatarSuccess(photo),
+          new AddPhotoSuccess([photo])]),
+        catchError((err) => [new ChangeAvatarFailure(err), new GetError(err)])
+      )
+    )
   );
 
   @Effect()
   delDialog$ = this.actions$.pipe(
     ofType<DelDialog>(UserActions.DEL_DIALOG),
-    switchMap((action: DelDialog) => this.dialogService.delDialog(action.payload)),
-    map((id: string ) => new DelDialogSuccess(id)),
-    catchError((err) => of(new DelDialogFailure(err)))
+    switchMap((action: DelDialog) => this.dialogService.delDialog(action.payload)
+      .pipe(
+        map((id: string ) => new DelDialogSuccess(id)),
+        catchError((err) => [new DelDialogFailure(err), new GetError(err)])
+      )
+    )
   );
 
   constructor(private userService: UserService,
@@ -231,6 +268,6 @@ export class UserEffects {
               private searchService: SearchService,
               private socketService: WebsocketService,
               private actions$: Actions,
-              private router: Router,
-              private store: Store<AppState>) {}
+              private router: Router
+  ) {}
 }

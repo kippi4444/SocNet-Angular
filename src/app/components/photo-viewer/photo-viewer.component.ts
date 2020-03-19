@@ -131,16 +131,17 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
   }
 
   sendComment(photo: Photo) {
-    this.idSub = this.myId.subscribe(id => {
-      const comment = {
-        text: this.text,
-        user: id,
-        photo: photo._id,
-        };
-      this.store.dispatch(new AddComment(comment));
-      this.text = '';
-    });
-
+    if (this.text) {
+      this.idSub = this.myId.subscribe(id => {
+        const comment = {
+          text: this.text,
+          user: id,
+          photo: photo._id,
+          };
+        this.store.dispatch(new AddComment(comment));
+        this.text = '';
+      });
+    }
   }
 
   ngOnDestroy(): void {

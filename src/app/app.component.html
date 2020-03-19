@@ -3,6 +3,9 @@
     <app-menu></app-menu>
 
       <router-outlet></router-outlet>
+    <div *ngIf="error" class="errorHandling">{{error.error | titlecase}}
+      <strong *ngIf="error.statusText === 'Unknown Error'"> Сервер не отвечает :(</strong>
+    </div>
   </div>
     <app-footer></app-footer>
 
