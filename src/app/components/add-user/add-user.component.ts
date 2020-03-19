@@ -1,7 +1,14 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {User} from '../../interfaces/user';
-import {UserService} from '../../services/user.service';
 import {ActivatedRoute} from '@angular/router';
 import {AppState} from '../../store/state/app.state';
 import {Store} from '@ngrx/store';
@@ -130,6 +137,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
   updateUser() {
     this.getUpdUser.emit();
   }
+
+
 
   ngOnDestroy(): void {
     this.sub.forEach(sub => {

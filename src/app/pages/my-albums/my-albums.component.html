@@ -1,5 +1,5 @@
 <ng-template #noAlbums>
-  <div  class="container albums">
+  <div  class="container main_module">
     <h1 >
       <a [routerLink]="link">Альбомы</a>
     </h1>
@@ -9,36 +9,41 @@
     </div>
   </div>
 </ng-template>
-<div  class="container albums" *ngIf="albums.length>0; else noAlbums">
+<div  class="container main_module" *ngIf="albums.length>0; else noAlbums" [ngClass]="{main_module_width: !limit}">
   <div class="title_add">
     <h1 *ngIf="!limit ; else mainPageRoute">
-      <a  [routerLink]="link">{{albums[0].owner.name | titlecase}} {{albums[0].owner.surname | titlecase}} </a>
-      >> Альбомы
+      <a  routerLink="/users/{{albums[0].owner.login}}">{{albums[0].owner.name | titlecase}} {{albums[0].owner.surname | titlecase}} </a>
+      / Альбомы
     </h1>
     <button *ngIf="accountChecker() && isAuth && !limit"  (click)="changeModal()" >Добавить Альбом</button>
   </div>
   <ng-template #mainPageRoute>
-    <h1 >
-      <a [routerLink]="link">Альбомы</a>
-    </h1>
+    <div class="title_add">
+      <h1 >
+        <a routerLink="albums">Альбомы</a>
+      </h1>
+    </div>
   </ng-template>
   <hr>
-  <div class="albums_block">
+  <div class="albums_block" [ngClass]="{albums_block_center: limit}">
     <div *ngFor="let album of albums ">
-
       <a routerLink="/album/{{album._id}}">
-        <div class="album">
+        <div class="album" [ngClass]="{small_album_photo: limit, large_album_photo: !limit}">
           <div class="main-photo">
-            <div class="title">{{album.title}}</div>
-            <img *ngIf="album.photos.length > 0" class="smallAvatar"  src="http://localhost:8000/{{album.photos[0].url}}" alt="">
+            <div class="title" [ngClass]="{title_small: limit, title_large: !limit}">
+              {{album.title}}
+            </div>
+            <img *ngIf="album.photos.length > 0"  src="http://localhost:8000/{{album.photos[0].url}}" alt="">
           </div>
-      </div>
+        </div>
       </a>
 
     </div>
   </div>
 </div>
-<app-user-photos-container [link] = 'link' [limit] = 'limit' (reloadComponent)="reloadComponent()"></app-user-photos-container>
+<div *ngIf="!limit">
+  <app-user-photos-container></app-user-photos-container>
+</div>
 <app-album-modal *ngIf="showModal"
                  [id] ="myId"
                  [albums] = "albums"

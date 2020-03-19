@@ -4,10 +4,12 @@ import {ActivatedRoute} from '@angular/router';
 
 
 
+
 @Component({
   selector: 'app-my-albums',
   templateUrl: './my-albums.component.html',
-  styleUrls: ['./my-albums.component.scss']
+  styleUrls: ['./my-albums.component.scss'],
+
 })
 export class MyAlbumsComponent {
   @Output() uploadNewAlbum: EventEmitter<Album> = new EventEmitter<Album>();
@@ -35,9 +37,6 @@ export class MyAlbumsComponent {
     return (this.myLogin === login);
   }
 
-  reloadComponent() {
-    this.rldComponent.emit(this.myLogin);
-  }
 
   changeModal() {
    this.showModal = !this.showModal;

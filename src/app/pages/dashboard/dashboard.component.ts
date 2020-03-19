@@ -4,6 +4,7 @@ import {Friend} from '../../interfaces/friend';
 import {Router} from '@angular/router';
 import {QuerySearch} from '../../interfaces/querySearch';
 
+
 @Component({
   selector: 'app-dashboard-component',
   templateUrl: './dashboard.component.html',

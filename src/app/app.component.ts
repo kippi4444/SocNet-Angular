@@ -3,12 +3,15 @@ import {Msg} from './interfaces/msg';
 import {Store} from '@ngrx/store';
 import {AppState} from './store/state/app.state';
 import {GetAuthUser} from './store/actions/user.actions';
+import {animate, group, query, style, transition, trigger, useAnimation} from '@angular/animations';
+import {fadeOut} from './animations/fadeOut';
 
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+
 
 })
 
@@ -25,4 +28,7 @@ export class AppComponent implements OnInit {
     }
   }
 
+  getState(outlet) {
+    return outlet.activatedRouteData.state;
+  }
 }

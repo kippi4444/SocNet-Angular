@@ -1,5 +1,140 @@
-a{
-  cursor: pointer;
+$avatar_block_width: 230px;
+
+hr{
+  margin-top: 20px;
+}
+
+//modal
+.avatar_modal_overlay{
+  position: fixed;
+  background-color: rgba(46, 46, 46, 0.08);
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  height: 100vh;
+}
+
+.avatar_modal{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  z-index: 3;
+  box-shadow: rgba(0,0,0,0.5) 0px 0px 20px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgba(102, 102, 102, 0.21);
+  border-radius: 5px;
+  padding: 10px;
+
+  &:hover{
+    .close_modal{
+      opacity: 1;
+      right: -50px;
+    }
+    .block_btn{
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+//extra
+
+.title{
+  margin-left: 10px;
+}
+
+.preview{
+  transform: scale(1);
+  border-radius: 5px;
+  min-width: 150px;
+  max-width: 300px;
+  max-height: 300px;
+}
+
+.extra_info{
+  width: $avatar_block_width;
+  margin-right: 0.5em;
+}
+
+//blocks
+.user_info_block{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1440px;
+}
+
+.firstColumnAccount{
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding-right: 10px;
+  width: auto;
+  //border-right: 1px solid  rgba(75, 218, 40, 0.21);
+}
+
+.secondColumnAccount{
+  width: 500px;
+  position: relative;
+  padding-top: 0.5em;
+  padding-left: 10px;
+  overflow: hidden;
+  color: rgb(72, 72, 72);
+  display: flex;
+  flex-direction: column;
+
+  .online{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+
+}
+
+.user-info{
+  font-size: 1em;
+  display: grid;
+  grid-template-columns: auto auto ;
+  grid-gap: 5px;
+
+}
+
+
+.underAvatar{
+  display: flex;
+  flex-flow: column;
+
+  button {
+    margin: 5px 0;
+  }
+}
+
+.account{
+  display: flex;
+  flex-direction: row;
+  white-space: nowrap;
+}
+
+.block_avatar{
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.block_btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  transform: scale(0.5);
+  color: white;
+  z-index: 0;
+  opacity: 0;
+  transition: .4s ease-in;
 }
 
 .pets {
@@ -23,121 +158,4 @@ a{
     margin: 0;
   }
 }
-
-.avatar_modal_overlay{
-  position: absolute;
-  background-color: rgba(46, 46, 46, 0.08);
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100vh;
-}
-
-.avatar_modal{
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 50%;
-  z-index: 1;
-  box-shadow: rgba(0,0,0,0.5) 0px 0px 20px;
-  background-color: rgb(255, 255, 255);
-  border: 1px solid rgba(102, 102, 102, 0.21);
-  border-radius: 5px;
-  padding: 10px;
-
-  &:hover{
-    .close_modal{
-      opacity: 1;
-      right: -50px;
-    }
-    .block_btn{
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-}
-
-.title{
-  margin-left: 10px;
-}
-.block_btn {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  transform: scale(0.5);
-  color: white;
-  z-index: 0;
-  opacity: 0;
-  transition: .4s ease-in;
-}
-.preview{
-  transform: scale(1);
-  border-radius: 5px;
-  min-width: 150px;
-  max-width: 300px;
-  max-height: 300px;
-}
-
-.block_avatar{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-hr{
-  margin-top: 20px;
-}
-
-.account{
-  justify-content: center;
-  white-space: nowrap;
-
-
-  .firstColumnAccount{
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    padding-right: 10px;
-    border-right: 1px solid  rgba(75, 218, 40, 0.21);
-
-
-  }
-
-  .secondColumnAccount{
-    position: relative;
-    padding-top: 0.5em;
-    padding-left: 10px;
-    overflow: hidden;
-    color: rgb(72, 72, 72);
-
-    .online{
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-
-  }
-
-  .user-info{
-      font-size: 1em;
-      display: grid;
-      grid-template-columns: auto auto ;
-      grid-gap: 5px;
-
-  }
-
-
-  .underAvatar{
-    display: flex;
-    flex-flow: column;
-
-    button {
-      margin: 5px 0;
-    }
-  }
-}
-
 

@@ -47,9 +47,7 @@ export class AlbumComponent implements OnDestroy {
     this.router.navigate(['users/' + this.album.owner.login + '/albums']);
   }
 
-  accountChecker() {
-    return (this.myId === this.album.owner._id);
-  }
+
 
   ngOnDestroy(): void {
       this.sub.forEach(el => {

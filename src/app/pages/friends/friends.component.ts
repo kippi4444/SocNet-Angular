@@ -44,10 +44,9 @@ export class FriendsComponent implements OnInit, OnDestroy {
   }
 
   getAllFriends(login: string) {
-
     this.store.dispatch(new GetAllFriends(login));
     this.sub.push(this.store.select(allFriends).subscribe(friends => {
-      this.friends = this.routeMyFriends ? friends : friends.splice(0 , 4);
+      this.friends = this.routeMyFriends ? friends : friends.slice(0 , 4);
     }));
   }
 

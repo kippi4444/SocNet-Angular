@@ -14,18 +14,28 @@ select{
   outline: none;
 }
 
+//blocks
 .filtration{
   margin: 10px 0;
 }
 
-.dashboard{
-  margin-top: 1em;
-  background-color: rgb(255, 255, 255);
-  border-radius: 5px;
-  padding: 10px;
-  box-shadow: 0 0 2px rgba(46, 46, 46, 0.39);
+.container{
+  margin-top: 0.5em;
+  //margin-bottom: 0.5em;
+  display: block;
+  min-height: 500px;
+  position: relative;
+}
+.pagination{
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  position: absolute;
 }
 
+.wrapper_pagination{
+  height: 30px;
+}
 .module {
   padding: 10px;
   width: 98%;
@@ -34,12 +44,14 @@ select{
   margin: 10px;
   display: flex;
   white-space: nowrap;
+
   border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 
   .module-avatar{
     color: #1f1f1f;
     width: 120px;
-
+    display: flex;
+    justify-content: center;
   }
   .column-block{
     display: flex;
@@ -65,6 +77,7 @@ select{
   }
 }
 
+//loading
 .loading{
   .loader{
     display: flex;
@@ -76,7 +89,6 @@ select{
     }
   }
 }
-
 
 @keyframes loading-text{
   0%
@@ -90,4 +102,16 @@ select{
 
   75%
   {content: "Поиск пользователя...";}
+}
+
+
+@media (max-width: 777px) {
+  .filtration{
+    margin: 5px 0;
+  }
+
+  select{
+    padding: 2px 3px;
+    margin: 0 5px;
+  }
 }

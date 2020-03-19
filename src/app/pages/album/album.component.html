@@ -1,13 +1,13 @@
 <div class="content page" >
-  <div class="album_page" *ngIf="album">
+  <div class="container" *ngIf="album">
     <div *ngIf="!editMode; else edit">
 
       <h1 class="edit-album_container">
-        <a routerLink="/users/{{album.owner.login}}">{{album.owner.name | titlecase}}{{album.owner.surname | titlecase}}</a> >>
-        <a routerLink="/users/{{album.owner.login}}/albums">Альбомы</a> >> {{album.title}}
+        <a routerLink="/users/{{album.owner.login}}">{{album.owner.name | titlecase}}{{album.owner.surname | titlecase}}</a> /
+        <a routerLink="/users/{{album.owner.login}}/albums">Альбомы</a> / {{album.title}}
       </h1>
       <h6>Дата создания: {{album.created_at | date: 'hh:mm:ss dd.MM.yyyy'}}</h6>
-      <a *ngIf="accountChecker() && isAuth" class="btn_show edit-album_button-block" (click)="editMode = !editMode">Редактировать</a>
+      <a *ngIf="myId === album.owner._id && isAuth" class="btn_show edit-album_button-block" (click)="editMode = !editMode">Редактировать</a>
 
       <hr>
 
@@ -16,10 +16,10 @@
       </div>
     </div>
 
-    <div class="photos" *ngIf="photos.length>0; else noPhoto">
+    <div class="photos" *ngIf="photos.length; else noPhoto">
       <div  *ngFor="let photo of  photos; let i = index">
         <a>
-          <span *ngIf="accountChecker()" (click)="delPhoto(i)" >&#10006;</span>
+          <span *ngIf="myId === album.owner._id" (click)="delPhoto(i)" >&#10006;</span>
           <img class="photo" src="http://localhost:8000/{{photo.url}}" [routerLink]=""
                [queryParams]="{ photo: photo._id }">
         </a>
@@ -27,7 +27,7 @@
       <img class="photo" src="{{preview}}" alt="">
     </div>
     <hr>
-    <app-drag-drop-upload *ngIf="accountChecker()" (upload)="uploadAvatar($event)"></app-drag-drop-upload>
+    <app-drag-drop-upload *ngIf="myId === album.owner._id" (upload)="uploadAvatar($event)"></app-drag-drop-upload>
 
   </div>
 </div>

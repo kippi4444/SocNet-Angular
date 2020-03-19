@@ -1,34 +1,27 @@
 
-<div  class="container photos" *ngIf="photos.length" >
+<div  class="container main_module" *ngIf="photos.length" [ngClass]="{main_module_margin: !limit}">
   <div class="title_add">
-  <h1><a [routerLink]="link">Фотографии</a></h1>
-  <button *ngIf="!limit && authUser._id === photos[0].owner._id" (click)="showModal = !showModal">Добавить фото</button>
+    <h1><a [routerLink]="link">Фотографии</a> </h1>
+   <button *ngIf="!limit && authUser._id === photos[0].owner._id" (click)="showModal = !showModal">Добавить фото</button>
   </div>
   <hr>
   <div class="photos_block">
-
     <div *ngFor="let photo of photos; let i = index ">
-        <div class="photo">
-          <div class="main-photo">
-            <div>
-                <span *ngIf="authUser._id === photo.owner._id || authUser === photo.owner" (click)="delPhoto(i)" >&#x2716;</span>
-            </div>
-
-            <img *ngIf="photo"   src="http://localhost:8000/{{photo.url}}"  [routerLink]=""
-                 [queryParams]="{ photo: photo._id }" >
-          </div>
+      <div class="photo" [ngClass]="{large_photo: !limit, small_photo: limit }">
+        <div class="main-photo" >
+          <span *ngIf="authUser._id === photo.owner._id || authUser === photo.owner" (click)="delPhoto(i)" >&#x2716;</span>
+          <img *ngIf="photo"   src="http://localhost:8000/{{photo.url}}" [routerLink]="" [queryParams]="{ photo: photo._id }">
         </div>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="album_modal_overlay" *ngIf="showModal" (click)="showModal = !showModal"></div>
-<div class="album_modal" *ngIf="showModal">
+<div class="add-photo_modal_overlay" *ngIf="showModal" (click)="showModal = !showModal"></div>
+<div class="add-photo_modal" *ngIf="showModal">
   <button class="close_modal" (click)="showModal = !showModal">&#x2716;</button>
   <app-drag-drop-upload (upload)=uploadPhoto($event)></app-drag-drop-upload>
-
 </div>
-
 <app-photo-viewer></app-photo-viewer>
 
 

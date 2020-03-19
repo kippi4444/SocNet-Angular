@@ -1,20 +1,7 @@
-h6{
-  position: absolute;
-  z-index: 1;
-  right: 20px;
-  top: 30px;
-  margin: 3px;
-  color: rgba(0, 0, 0, 0.3);
-  font-weight: 400;
-}
 
-.album_page{
+.container{
   position: relative;
-  margin-top: 1em;
-  background-color: rgb(255, 255, 255);
-  border-radius: 5px;
-  padding: 10px;
-  box-shadow: 0 0 2px rgba(46, 46, 46, 0.39);
+  display: block;
 
   .description{
     color: #2e2e2e;
@@ -38,7 +25,7 @@ h6{
 
   div {
     position: relative;
-    max-height: 130px;
+    max-height: 200px;
     margin: 5px;
     display: flex;
     align-items: center;
@@ -67,9 +54,10 @@ h6{
   display: inline-block;
 }
 
-
 .photo {
-  max-height: 120px;
+  min-height: 200px;
+  max-height: 200px;
+  cursor: pointer;
 }
 
 

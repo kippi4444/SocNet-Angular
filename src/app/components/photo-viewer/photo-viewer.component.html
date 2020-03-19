@@ -1,5 +1,5 @@
-<div *ngIf="show" class="photo_modal-overlay"  (click)="closeModal()"></div>
-<div  *ngIf="show && targetPhoto" class="photo_modal"  >
+<div *ngIf="show && targetPhoto" class="photo_modal-overlay"  (click)="closeModal()"></div>
+<div [@viewerAnim]="show"   *ngIf="show && targetPhoto" class="photo_modal"  >
   <button class="close_modal" (click)="closeModal()">&#x2716;</button>
   <div class="lister" >
     <div class="left no-select" [routerLink]="" [queryParams]="{ photo: prev }">&lt;</div>
@@ -11,15 +11,19 @@
   </div>
   <div *ngIf="move" class="move_modal-overlay"  (click)="move = !move" ></div>
 
-
   <div class="info_photo">
     <div class="user_info">
       <img class="comment_avatar" src="{{'http://localhost:8000/' + targetPhoto.owner.avatar.url}}" alt="">
-      <strong>{{targetPhoto.owner.name | titlecase}} {{targetPhoto.owner.surname | titlecase}}</strong>
+      <div [ngStyle]="{marginLeft: '5px'}">
+        <strong>{{targetPhoto.owner.name | titlecase}} {{targetPhoto.owner.surname | titlecase}}</strong>
+        <h5 *ngIf="targetPhoto.created_at">{{targetPhoto.created_at | date: 'dd MMMM yyyy'}}</h5>
+      </div>
     </div>
     <div class="photo_info" >
-      <p *ngIf="targetPhoto.likes"><a class="like" >&#10084;</a> {{targetPhoto.likes.length}}</p>
-      <p *ngIf="targetPhoto.created_at">Дата: {{targetPhoto.created_at | date: 'hh:mm dd.MM.yyyy'}}</p>
+      <p *ngIf="targetPhoto.likes">
+        <a class="like"  (click)="addLike(targetPhoto)" [ngClass]="{active: targetPhoto.likes.includes(myId|async)}">&#10084;</a>
+        {{targetPhoto.likes.length}}
+      </p>
       <p>Альбом: <a [routerLink]="['/album/']+targetPhoto.album._id">{{targetPhoto.album.title}}</a></p>
     </div>
     <div class="settings">
@@ -47,60 +51,26 @@
 
     <div class="comments">
       <hr>
-      <div class="block_post">
+      <div class="block_post" *ngFor="let comment of targetPhoto.comments">
+
         <div class="post">
-          <div>
-            <img class="comment_avatar" src="http://localhost:8000/{{targetPhoto.owner.avatar.url}}" alt="">
+          <div [ngStyle]="{display: 'flex', alignItems: 'center'}">
+            <img class="comment_avatar" src="http://localhost:8000/{{comment.user.avatar.url}}" alt="{{comment.user.name}}">
           </div>
           <div>
-            <h4><strong>Rick Ogurchik</strong></h4>
-            <h4>Ну нормас,нормас!</h4>
-            <h5>22.05.2020 14:35</h5>
+            <h4><strong>{{comment.user.name | titlecase}} {{comment.user.surname | titlecase}}</strong></h4>
+            <h4>{{comment.text}}</h4>
+            <h5>{{comment.created_at | date: 'dd.MM.yyyy hh:mm  '}}</h5>
           </div>
+          <a class="del" *ngIf="targetPhoto.owner._id === (myId | async) || comment.user._id === (myId | async)" (click)="deleteComment(comment._id)">&#215;</a>
         </div>
         <hr>
       </div>
-      <div class="block_post">
-        <div class="post">
-          <div>
-            <img class="comment_avatar" src="http://localhost:8000/{{targetPhoto.owner.avatar.url}}" alt="">
-          </div>
-          <div>
-            <h4><strong>Rick Ogurchik</strong></h4>
-            <h4>Ну нормас,нормас!</h4>
-            <h5>22.05.2020 14:35</h5>
-          </div>
-        </div>
-        <hr>
-      </div>
-      <div class="block_post">
-        <div class="post">
-          <div>
-            <img class="comment_avatar" src="http://localhost:8000/{{targetPhoto.owner.avatar.url}}" alt="">
-          </div>
-          <div>
-            <h4><strong>Rick Ogurchik</strong></h4>
-            <h4>Ну нормас,нормас!</h4>
-            <h5>22.05.2020 14:35</h5>
-          </div>
-        </div>
-        <hr>
-      </div>
-      <div class="block_post">
-        <div class="post">
-          <div>
-            <img class="comment_avatar" src="http://localhost:8000/{{targetPhoto.owner.avatar.url}}" alt="">
-          </div>
-          <div>
-            <h4><strong>Rick Ogurchik</strong></h4>
-            <h4>Ну нормас,нормас!</h4>
-            <h5>22.05.2020 14:35</h5>
-          </div>
-        </div>
-        <hr>
-      </div>
+
     </div>
-    <input name="text" type="text"  placeholder="Текст сообщения">
-    <button class="btn_margin" type="submit" >Отправить</button>
+    <div class="comment_area">
+      <textarea [(ngModel)]="text" placeholder=" Введите комментарий" rows="20" name="comment[text]" id="comment_text" cols="40" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true"></textarea>
+      <button class="send" type="submit" (click)="sendComment(targetPhoto)">Ок</button>
+    </div>
   </div>
 </div>

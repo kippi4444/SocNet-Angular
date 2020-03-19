@@ -1,34 +1,30 @@
 import {Injectable} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
-import {catchError, map, switchMap, tap} from 'rxjs/operators';
+import {catchError, map, switchMap, withLatestFrom} from 'rxjs/operators';
 import {Store} from '@ngrx/store';
 import {AppState} from '../state/app.state';
-import {of, Subject} from 'rxjs';
+import {of} from 'rxjs';
 import {UserService} from '../../services/user.service';
-import * as io from 'socket.io-client';
-import * as Rx from 'rxjs';
-import { Observable } from 'rxjs';
 import {
   DialogConnectSocket,
   DialogConnectSocketFailure,
-  DialogConnectSocketSuccess, DialogDisconnect,
+  DialogDisconnect,
   GetMes,
   GetMesFailure,
   GetMesSuccess,
   GetNotification, GetNotificationFailure,
   GetNotificationSuccess,
   MainConnectSocket,
-  MainConnectSocketFailure,
-  MainConnectSocketSuccess,
   MessageActions,
   SendMes,
-  SendMesFailure,
-  SendMesSuccess, SendNotification
+  SendMesFailure, SendNotification
 } from '../actions/message.actions';
 import {WebsocketService} from '../../services/websocket.service';
-import {environment} from '../../../environments/environment';
-import {log} from 'util';
+import {GetSelectedDialogSuccess, MesReadSuccess, UpDialogInListSuccess} from '../actions/user.actions';
+import {authentificatedUser} from '../selectors/user.selector';
+import {LikeDislikeEventSuccess, LikeDislikePhotoSuccess} from '../actions/photo.actions';
 import {Msg} from '../../interfaces/msg';
+import {User} from '../../interfaces/user';
 
 
 @Injectable()
@@ -36,9 +32,11 @@ export class MessageEffects {
 
   @Effect()
   getMes$ = this.actions$.pipe(
-    ofType<GetMes>(MessageActions.SEND_MES),
+    ofType<GetMes>(MessageActions.GET_MES),
     switchMap(() => this.socketService.getMes()),
-    switchMap((mes: Msg ) => of(new GetMesSuccess(mes))),
+    withLatestFrom(this.store.select(authentificatedUser)),
+    switchMap(([mes, user]) => {
+      return [new GetMesSuccess(mes),  new MesReadSuccess({mes, user})]}),
     catchError((err) => of(new GetMesFailure(err)))
   );
 
@@ -60,7 +58,27 @@ export class MessageEffects {
   notification$ = this.actions$.pipe(
     ofType<GetNotification>(MessageActions.NOTIFICATIONS),
     switchMap(() => this.socketService.notification()),
-    switchMap((mes: Msg ) => of(new GetNotificationSuccess(mes))),
+    switchMap((mes: {event: string, mes: Msg, like?: User } ) => {
+      switch (mes.event) {
+        case 'joinDialog': {
+          return of(new MesReadSuccess(mes));
+        }
+        case 'newLike': {
+          return [new LikeDislikeEventSuccess(mes), new GetNotificationSuccess(mes)];
+        }
+        case 'yourLike': {
+          return of(new LikeDislikePhotoSuccess(mes));
+        }
+        case 'isRead': {
+          return of(new GetSelectedDialogSuccess(mes));
+        }
+        case 'newMes': {
+          return [new GetNotificationSuccess(mes), new UpDialogInListSuccess(mes)];
+        }
+        default:
+          return of(new GetNotificationSuccess(mes));
+      }
+    }),
     catchError((err) => of(new GetNotificationFailure(err)))
   );
 
@@ -75,7 +93,7 @@ export class MessageEffects {
   connectDialogSocket$ = this.actions$.pipe(
     ofType<DialogConnectSocket>(MessageActions.DIALOG_CONNECT_SOCKET),
     map((action: DialogConnectSocket ) => this.socketService.dialogConnect(action.payload)),
-    catchError(err => err)
+    catchError(err => of(new DialogConnectSocketFailure()))
   );
 
   @Effect({dispatch: false})
@@ -94,5 +112,5 @@ export class MessageEffects {
   constructor(private actions$: Actions,
               private userService: UserService,
               private socketService: WebsocketService,
-              private store: Store<AppState>){}
+              private store: Store<AppState>) {}
 }

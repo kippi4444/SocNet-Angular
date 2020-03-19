@@ -1,5 +1,4 @@
 import {Action} from '@ngrx/store';
-import {User} from '../../interfaces/user';
 import {Msg} from '../../interfaces/msg';
 
 
@@ -75,7 +74,7 @@ export  class GetNotification implements  Action {
 
 export  class GetNotificationSuccess implements  Action {
   public readonly type = MessageActions.NOTIFICATIONS_SUCCESS;
-  constructor(public payload: Msg) {}
+  constructor(public payload: {event: string, mes: Msg}) {}
 }
 
 export  class GetNotificationFailure implements  Action {
@@ -106,7 +105,7 @@ export  class SendMesFailure implements  Action {
 
 export  class GetMes implements  Action {
   public readonly type = MessageActions.GET_MES;
-  constructor(public payload?: string) {}
+  constructor(public payload?: number) {}
 }
 
 export  class GetMesSuccess implements  Action {

@@ -4,8 +4,10 @@ nav {
   margin: 0;
   padding: 0 10%;
   box-shadow: 0 0 2px rgba(46, 46, 46, 0.39);
+  position: fixed;
+  width: 100%;
+  z-index: 1;
 }
-
 nav a {
   padding: 13px 15px;
   text-decoration: none;
@@ -35,6 +37,7 @@ nav a.active {
   padding: 5px;
   font-size: 12px;
   position: fixed;
+  z-index: 5;
   right: 10px;
   bottom: 10px;
   width: 250px;
@@ -54,6 +57,9 @@ nav a.active {
   color: #b4b4b4;
 }
 
-.notif_avatar{
-  border-radius: 50%;
+.wrapper_menu{
+  height: 50px;
+}
+a{
+  color: white;
 }

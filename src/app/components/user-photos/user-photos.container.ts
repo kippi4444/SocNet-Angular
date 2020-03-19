@@ -22,14 +22,13 @@ import {User} from '../../interfaces/user';
   styleUrls: ['./user-photos.component.scss']
 })
 export class UserPhotosContainerComponent implements OnInit, OnDestroy {
-  @Output() reloadComponent: EventEmitter<void> = new EventEmitter<void>();
-  @Input() limit: boolean;
-  @Input() link: string;
+  limit: boolean;
   authUser: Observable<User> = this.store.select(authentificatedUser);
   isAuth$: Observable<boolean> = this.store.select(stateAuth);
   sub: Subscription;
   routing: Subscription;
   photos: any;
+  link: string;
   userPhotos: Photo[];
   constructor(private route: ActivatedRoute,
               private store: Store<AppState>) { }
@@ -42,6 +41,8 @@ export class UserPhotosContainerComponent implements OnInit, OnDestroy {
     this.routing = this.route.paramMap.subscribe((params: ParamMap) => {
       const login = this.route.snapshot.paramMap.get('id');
       this.store.dispatch(new GetAllPhotos(login));
+      this.limit = this.route.routeConfig.path.indexOf('albums') === -1;
+      this.link = this.limit ? 'albums' : `/users/${login}`;
       this.sub = this.store.select(allPhotos).subscribe(
         photos => {
           this.userPhotos = this.limit ? photos.slice(0, 4) : photos;

@@ -1,25 +1,42 @@
-<div *ngIf="msgs; else Loading">
-  <div>
-    <div class="message" #scrollMe [scrollTop]="scrollMe.scrollHeight">
-      <div class="mes_block" *ngFor="let mes of msgs.mes " [ngClass]="{myMes: mes.user._id === user._id, interlocutor: mes.user._id !== user._id}">
-        <div class="info_mes">
-          <div class="dialog-avatar">
-            <img class="mes_avatar" src="http://localhost:8000/{{mes.user.avatar.url}}" alt="{{mes.user.name}}">
-          </div>
-          <div>
-            <strong>{{mes.name | titlecase}}</strong> <small>{{mes.created_at | date: 'hh:mm  dd.MM'}}</small>
-            <p>{{mes.text}}</p>
-          </div>
-        </div>
 
+<div [@mesAnimation]="dialog" *ngIf="dialog; else Loading">
+  <a [ngStyle]="{display: 'flex', justifyContent: 'center'}" (click)="showPersons = ! showPersons" >
+   {{dialog.title?dialog.title:''}} {{dialog.persons.length}} участников</a>
+  <div *ngIf="showPersons" class="extra_info_dialog">
+    <strong>Все участники:</strong>
+    <div class="info_mes" *ngFor="let person of dialog.persons">
+      <div  routerLink="/users/{{person.login}}" class="dialog-avatar">
+        <img class="mes_avatar" src="http://localhost:8000/{{person.avatar.url}}" alt="">
+      </div>
+      <h4>{{person.name | titlecase}} {{person.surname | titlecase}}</h4>
+    </div>
+  </div>
+  <div>
+
+    <div class="message" #scrollBar (scroll)="onScroll($event)">
+      <div >
+        <div class="mes_block"  *ngFor="let mes of msgs " [ngClass]="{myMes: mes.isReading.length}">
+          <div class="info_mes">
+            <div class="dialog-avatar">
+              <img class="mes_avatar" src="http://localhost:8000/{{mes.user.avatar.url}}" alt="{{mes.user.name}}">
+            </div>
+            <div>
+              <strong>{{mes.name | titlecase}}</strong>
+              <small>{{mes.created_at | date: 'hh:mm:ss  dd.MM'}}</small>
+              <p>{{mes.text}}</p>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
   <form (ngSubmit)="sendMes(text)">
 
-  <input name="text" type="text" [(ngModel)]="text" placeholder="Текст сообщения">
-
-  <button class="btn_margin" type="submit" >Отправить</button>
+    <div class="message_text">
+      <textarea placeholder=" Текст сообщения" [(ngModel)]="text"  name="comment[text]" id="comment_text"  class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true"></textarea>
+      <button class="send_sms" type="submit" >Отправить</button>
+    </div>
   </form>
 </div>
 <ng-template #Loading>

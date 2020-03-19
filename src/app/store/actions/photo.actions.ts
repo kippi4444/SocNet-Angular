@@ -1,6 +1,9 @@
 import { Action } from '@ngrx/store';
 import {Album} from '../../interfaces/album';
 import {Photo} from '../../interfaces/photo';
+import {Msg} from '../../interfaces/msg';
+import {User} from '../../interfaces/user';
+import {Comments} from '../../interfaces/comments';
 
 
 export const UserPhotosActions = {
@@ -37,6 +40,18 @@ export const UserPhotosActions = {
   CHANGE_PHOTO_ALBUM: '[Photo] CHANGE_PHOTO_ALBUM',
   CHANGE_PHOTO_ALBUM_SUCCESS: '[Photo] CHANGE_PHOTO_ALBUM Success',
   CHANGE_PHOTO_ALBUM_FAILURE: '[Photo] CHANGE_PHOTO_ALBUM Failure',
+  LIKE_DISLIKE: '[LIKE_DISLIKE] LIKE/DISLIKE Photo',
+  LIKE_DISLIKE_SUCCESS: '[LIKE_DISLIKE] LIKE/DISLIKE Photo Success',
+  LIKE_DISLIKE_FAILURE: '[LIKE_DISLIKE] LIKE/DISLIKE Photo Failure',
+  LIKE_EVENT: '[LIKE_EVENT] LIKE/DISLIKE event',
+  LIKE_EVENT_SUCCESS: '[LIKE_EVENT] LIKE/DISLIKE event Success',
+  LIKE_EVENT_FAILURE: '[LIKE_EVENT] LIKE/DISLIKE event Failure',
+  ADD_COMMENT: '[ADD_COMMENT] Add Comment',
+  ADD_COMMENT_SUCCESS: '[ADD_COMMENT] Add Comment Success',
+  ADD_COMMENT_FAILURE: '[ADD_COMMENT] Add Comment Failure',
+  DEL_COMMENT: '[DEL_COMMENT] Del Comment',
+  DEL_COMMENT_SUCCESS: '[DEL_COMMENT] Del Comment Success',
+  DEL_COMMENT_FAILURE: '[DEL_COMMENT] Del Comment Failure',
 };
 
 // ==============================  all albums ================================ //
@@ -79,7 +94,9 @@ export  class GetSelectedAlbumFailure implements  Action {
 
 export  class AddAlbum implements  Action {
   public readonly type = UserPhotosActions.ADD_ALBUM;
-  constructor(public payload: Album) {}
+
+  constructor(public payload: Album | { album: Album, photos: Photo[]}) {
+  }
 }
 
 export  class AddAlbumSuccess implements  Action {
@@ -238,6 +255,77 @@ export  class DelPhotoFailure implements  Action {
   }
 }
 
+// ==============================  LIKE / DISLIKE ================================ //
+
+export  class LikeDislikePhoto implements  Action {
+  public readonly type = UserPhotosActions.LIKE_DISLIKE;
+  constructor(public payload: { photo: Photo; like: User } ) {}
+}
+
+export  class LikeDislikePhotoSuccess implements  Action {
+  public readonly type = UserPhotosActions.LIKE_DISLIKE_SUCCESS;
+  constructor(public payload: {event: string, mes: Msg, like?: User }) {}
+}
+
+export  class LikeDislikePhotoFailure implements  Action {
+  public readonly type = UserPhotosActions.LIKE_DISLIKE_FAILURE;
+  constructor(public payload?: any) {
+  }
+}
+
+// ==============================  LIKE / DISLIKE event================================ //
+
+export  class LikeDislikeEvent implements  Action {
+  public readonly type = UserPhotosActions.LIKE_EVENT;
+  constructor(public payload?: object) {}
+}
+
+export  class LikeDislikeEventSuccess implements  Action {
+  public readonly type = UserPhotosActions.LIKE_EVENT_SUCCESS;
+  constructor(public payload?: { event: string; mes: Msg }) {}
+}
+
+export  class LikeDislikeEventFailure implements  Action {
+  public readonly type = UserPhotosActions.LIKE_EVENT_FAILURE;
+  constructor(public payload?: any) {
+  }
+}
+
+// ==============================  add Comment ================================ //
+
+export  class AddComment implements  Action {
+  public readonly type = UserPhotosActions.ADD_COMMENT;
+  constructor(public payload: Comments) {}
+}
+
+export  class AddCommentSuccess implements  Action {
+  public readonly type = UserPhotosActions.ADD_COMMENT_SUCCESS;
+  constructor(public payload: Comments) {}
+}
+
+export  class AddCommentFailure implements  Action {
+  public readonly type = UserPhotosActions.ADD_COMMENT_FAILURE;
+  constructor(public payload?: any) {
+  }
+}
+
+// ==============================  del Comment ================================ //
+
+export  class DelComment implements  Action {
+  public readonly type = UserPhotosActions.DEL_COMMENT;
+  constructor(public payload: string) {}
+}
+
+export  class DelCommentSuccess implements  Action {
+  public readonly type = UserPhotosActions.DEL_COMMENT_SUCCESS;
+  constructor(public payload: Comments) {}
+}
+
+export  class DelCommentFailure implements  Action {
+  public readonly type = UserPhotosActions.DEL_COMMENT_FAILURE;
+  constructor(public payload?: any) {
+  }
+}
 
 export type UserPhotosActions = GetAllAlbums |
   GetAllAlbumsSuccess |
@@ -271,4 +359,16 @@ export type UserPhotosActions = GetAllAlbums |
   AddPhotoWallFailure |
   ChangePhotoAlbum |
   ChangePhotoAlbumSuccess |
-  ChangePhotoAlbumFailure;
+  ChangePhotoAlbumFailure |
+  LikeDislikePhoto |
+  LikeDislikePhotoSuccess |
+  LikeDislikePhotoFailure |
+  LikeDislikeEvent |
+  LikeDislikeEventSuccess |
+  LikeDislikeEventFailure |
+  AddComment |
+  AddCommentSuccess |
+  AddCommentFailure |
+  DelComment |
+  DelCommentSuccess |
+  DelCommentFailure;

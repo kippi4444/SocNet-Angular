@@ -4,6 +4,8 @@ import {Pet} from '../../interfaces/pet';
 import {Dialog} from '../../interfaces/dialog';
 import {dialogMes} from '../../services/dialog.service';
 import {Photo} from '../../interfaces/photo';
+import {Msg} from '../../interfaces/msg';
+import {scrollSettings} from '../../interfaces/scroll';
 
 
 export const UserActions = {
@@ -37,6 +39,9 @@ export const UserActions = {
   GET_SELECTED_DIALOG: '[Dialogs] Get Selected  Dialog',
   GET_SELECTED_DIALOG_SUCCESS: '[Dialogs] Get Selected Dialog Success',
   GET_SELECTED_DIALOG_FAILURE: '[Dialogs] Get Selected Dialog Failed',
+  MESSAGE_READ: '[Message] Message Read',
+  MESSAGE_READ_SUCCESS: '[Message] Message Read Success',
+  MESSAGE_READ_FAILURE: '[Message] Message Read Failed',
   ADD_DIALOG: '[Dialogs] Add Dialog',
   ADD_DIALOG_SUCCESS: '[Dialogs] Add Dialog Success',
   ADD_DIALOG_FAILURE: '[Dialogs] Add Dialog Failed',
@@ -52,6 +57,13 @@ export const UserActions = {
   CHANGE_AVATAR: '[Avatar]  Change Avatar',
   CHANGE_AVATAR_SUCCESS: '[Avatar] Change Avatar Success',
   CHANGE_AVATAR_FAILURE: '[Avatar] Change Avatar Failed',
+  SCROLL_MES: '[SCROLL_MES]  SCROLL MES',
+  SCROLL_MES_SUCCESS: '[SCROLL_MES] SCROLL MES Success',
+  SCROLL_MES_FAILURE: '[SCROLL_MES] SCROLL MES Failed',
+  UP_DIALOG: '[DIALOG_LIST]  UP DIALOG IN LIST',
+  UP_DIALOG_SUCCESS: '[DIALOG_LIST]  UP DIALOG IN LIST SUCCESS',
+  UP_DIALOG_FAILURE: '[DIALOG_LIST]  UP DIALOG IN LIST FAILURE',
+
 };
 
 // ============================== add user ================================//
@@ -224,12 +236,12 @@ export  class GetLoginUserDialogsFailure implements  Action {
 // ============================== selected dialog ================================//
 export  class GetSelectedDialog implements  Action {
   public readonly type = UserActions.GET_SELECTED_DIALOG;
-  constructor(public payload: string) {}
+  constructor(public payload: scrollSettings) {}
 }
 
 export  class GetSelectedDialogSuccess implements  Action {
   public readonly type = UserActions.GET_SELECTED_DIALOG_SUCCESS;
-  constructor(public payload: dialogMes) {}
+  constructor(public payload: dialogMes | {event: string, mes: Msg}) {}
 }
 
 export  class GetSelectedDialogFailure implements  Action {
@@ -238,7 +250,7 @@ export  class GetSelectedDialogFailure implements  Action {
   }
 }
 
-// ============================== selected dialog ================================//
+// ============================== add dialog ================================//
 export  class AddDialog implements  Action {
   public readonly type = UserActions.ADD_DIALOG;
   constructor(public payload: object) {}
@@ -306,6 +318,58 @@ export  class DelDialogFailure implements  Action {
   }
 }
 
+// ============================== Message Read ================================//
+export  class MesRead implements  Action {
+  public readonly type = UserActions.MESSAGE_READ;
+  constructor(public payload?: string) {}
+}
+
+export  class MesReadSuccess implements  Action {
+  public readonly type = UserActions.MESSAGE_READ_SUCCESS;
+  constructor(public payload: Msg | {event: string, mes: Msg} | {mes: any, user: User}) {}
+}
+
+export  class MesReadFailure implements  Action {
+  public readonly type = UserActions.MESSAGE_READ_FAILURE;
+  constructor(public payload?: any) {
+  }
+}
+
+// ============================== SCROLL MES ================================//
+export  class GetScrollMes implements  Action {
+  public readonly type = UserActions.SCROLL_MES;
+  constructor(public payload?: scrollSettings) {}
+}
+
+export  class GetScrollMesSuccess implements  Action {
+  public readonly type = UserActions.SCROLL_MES_SUCCESS;
+  constructor(public payload: dialogMes | {event: string, msg: Msg}) {}
+}
+
+export  class GetScrollMesFailure implements  Action {
+  public readonly type = UserActions.SCROLL_MES_FAILURE;
+  constructor(public payload?: any) {
+  }
+}
+
+
+// ============================== Up Dialog ================================//
+export  class UpDialogInList implements  Action {
+  public readonly type = UserActions.UP_DIALOG;
+  constructor(public payload?: scrollSettings) {}
+}
+
+export  class UpDialogInListSuccess implements  Action {
+  public readonly type = UserActions.UP_DIALOG_SUCCESS;
+  constructor(public payload: {event: string, mes: object}) {}
+}
+
+export  class UpDialogInListFailure implements  Action {
+  public readonly type = UserActions.UP_DIALOG_FAILURE;
+  constructor(public payload?: any) {
+  }
+}
+
 
 export type UserActions =
   UpdatedUser |
@@ -349,4 +413,13 @@ export type UserActions =
   DelDialogFailure |
   ChangeAvatar |
   ChangeAvatarSuccess |
-  ChangeAvatarFailure;
+  ChangeAvatarFailure |
+  MesRead |
+  MesReadSuccess |
+  MesReadFailure |
+  GetScrollMes |
+  GetScrollMesSuccess |
+  GetScrollMesFailure |
+  UpDialogInList |
+  UpDialogInListSuccess |
+  UpDialogInListFailure ;

@@ -1,4 +1,4 @@
-import {Component,  EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {AfterContentChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {User} from '../../interfaces/user';
 import {Pet} from '../../interfaces/pet';
 import {Friend} from '../../interfaces/friend';
@@ -10,7 +10,7 @@ import {Friend} from '../../interfaces/friend';
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss']
 })
-export class AccountComponent implements OnInit, OnDestroy {
+export class AccountComponent implements OnInit, OnDestroy, AfterContentChecked {
   @Output() getThisUser: EventEmitter<User> = new EventEmitter<User>();
   @Output() changeProfile: EventEmitter<User> = new EventEmitter<User>();
   @Output() delPet: EventEmitter<Pet> = new EventEmitter<Pet>();
@@ -33,7 +33,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   private newAvatar: string | ArrayBuffer;
   private preview: string | ArrayBuffer;
   private showModal = false;
-  constructor()  {}
+  constructor(private changeDetector: ChangeDetectorRef)  {}
 
   ngOnInit() {
     this.getThisUser.emit();
@@ -71,7 +71,6 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   accountChecker() {
-
     return (this.myId === this.userPerson._id);
   }
 
@@ -104,6 +103,10 @@ export class AccountComponent implements OnInit, OnDestroy {
       }
     });
     return state;
+  }
+
+  ngAfterContentChecked() : void {
+    this.changeDetector.detectChanges();
   }
 
   delFriend(id: string) {

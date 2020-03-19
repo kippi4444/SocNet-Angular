@@ -1,21 +1,19 @@
 <div class="main" *ngIf="userPerson">
 
-  <div class="page" *ngIf="!edit" >
+  <div class="page" *ngIf="!edit">
+    <div class="user_info_block">
 
-    <app-my-albums-container></app-my-albums-container>
-    <div class="container account"  >
-
-      <div class="firstColumnAccount">
-        <h2 >{{userPerson.name | titlecase}} {{userPerson.surname | titlecase}}</h2>
-
-        <a *ngIf="preview || userPerson.avatar.url; else noAvatar"  routerLink="/album/{{userPerson.avatar.album}}"
-           [queryParams]="{ photo: userPerson.avatar._id }">
-          <img class="avatar"  src="{{newAvatar || 'http://localhost:8000/' + userPerson.avatar.url}}" alt="{{userPerson.login}}">
-        </a>
-        <ng-template #noAvatar>
-          <div class="noAvatar"></div>
-        </ng-template>
-        <div  class="underAvatar">
+      <div class="account"  >
+        <div class="extra_info">
+         <div class="firstColumnAccount container">
+          <a *ngIf="preview || userPerson.avatar.url; else noAvatar"  routerLink="/album/{{userPerson.avatar.album}}"
+             [queryParams]="{ photo: userPerson.avatar._id }">
+            <img class="avatar"  src="{{newAvatar || 'http://localhost:8000/' + userPerson.avatar.url}}" alt="{{userPerson.login}}">
+          </a>
+          <ng-template #noAvatar>
+            <div class="noAvatar"></div>
+          </ng-template>
+          <div  class="underAvatar">
             <button *ngIf="!accountChecker() && isAuth" (click)="goToDialog(userPerson)">
               Отправить сообщение
             </button>
@@ -25,66 +23,54 @@
             <button *ngIf="itFriend(userPerson.friends)" (click)="delFriend(userPerson._id)">
               Убрать из друзей
             </button>
-          <button *ngIf="itFriend(userPerson.requests)" (click)="delRequest(userPerson.requests)">
-            Отменить заявку
-          </button>
+            <button *ngIf="itFriend(userPerson.requests)" (click)="delRequest(userPerson.requests)">
+              Отменить заявку
+            </button>
 
-          <button (click)="openModal()" *ngIf="accountChecker() && isAuth">Поменять аватар</button>
-          <button *ngIf="accountChecker() && isAuth" class="btn_margin" [routerLink]=""
-                  [queryParams]="{ edit: true }"  >Редактировать</button>
+            <button (click)="openModal()" *ngIf="accountChecker() && isAuth">Поменять аватар</button>
+            <button *ngIf="accountChecker() && isAuth" class="btn_margin" [routerLink]=""
+                    [queryParams]="{ edit: true }"  >Редактировать</button>
+
+          </div>
 
         </div>
-
-      </div>
-<!--// ========================== modal start ==============================//-->
-      <div *ngIf="showModal" class="avatar_modal_overlay"></div>
-      <div class="avatar_modal" *ngIf="showModal">
-        <button class="close_modal" (click)="openModal()">&#x2716;</button>
-        <h1>Загрузка аватара</h1>
-        <hr>
-        <div   class="block_avatar" >
-          <img *ngIf="preview || userPerson.avatar.url ; else noAvatar" class="preview" src="{{preview || 'http://localhost:8000/' + userPerson.avatar.url}}" alt="{{userPerson.name}} {{userPerson.surname}}">
-          <ng-template #noAvatar>
-              <div class="noAvatar"></div>
-          </ng-template>
+          <app-friends></app-friends>
+          <app-my-albums-container></app-my-albums-container>
         </div>
 
-        <hr>
-        <div class="block_btn" >
-          <input  type="file" name="file" id="file" class="inputfile"  (change)="onFileChange($event)" />
-          <label  *ngIf="accountChecker() && isAuth && !preview" for="file">Загрузить</label>
-          <button *ngIf="preview"  (click)="uploadAvatar()">Сохранить</button>
-          <button  (click)="openModal()">Отмена</button>
-        </div>
-      </div>
-<!--// ========================== modal end ==============================//-->
-      <div class="secondColumnAccount">
-        <span *ngIf="userPerson.online" class="online">Online</span>
-        <div class="user-info">
+        <div>
+          <div class="container secondColumnAccount">
+          <span *ngIf="userPerson.online" class="online">Online</span>
+            <h2 >{{userPerson.name | titlecase}} {{userPerson.surname | titlecase}}</h2>
+          <div class="user-info">
 
-            <div>День Рождения:</div>
-            <div>{{userPerson.birthday | date: 'dd.MM.yyyy'}}</div>
-            <div>Email:</div>
-            <div>{{userPerson.email | lowercase}}</div>
-            <div *ngIf="userPerson.number">Номер:</div>
-            <div> {{userPerson.number}}</div>
+              <div>День Рождения:</div>
+              <div>{{userPerson.birthday | date: 'dd.MM.yyyy'}}</div>
+              <div>Email:</div>
+              <div>{{userPerson.email | lowercase}}</div>
+              <div *ngIf="userPerson.number">Номер:</div>
+              <div> {{userPerson.number}}</div>
 
-          <div class="pet-info" *ngIf="userPerson.pets.length>0">
-            <div>Питомцы:</div>
-            <div>
-              <a class="btn_show" (click)="show = !show">{{!show ? "Показать" : "Скрыть"}}</a>
-            </div>
-            <div *ngIf="show">
-                <div class="pets" *ngFor="let pet of userPerson.pets">
-                  <strong> {{pet.species | titlecase}}</strong>
-                  {{pet.name | titlecase}}
-                  <a *ngIf="accountChecker()" class="btns btn_margin" (click)="deletePet(pet)">&#10006;</a>
-                </div>
+            <div class="pet-info" *ngIf="userPerson.pets.length>0">
+              <div>Питомцы:</div>
+              <div>
+                <a class="btn_show" (click)="show = !show">{{!show ? "Показать" : "Скрыть"}}</a>
+              </div>
+              <div *ngIf="show">
+                  <div class="pets" *ngFor="let pet of userPerson.pets">
+                    <strong> {{pet.species | titlecase}}</strong>
+                    {{pet.name | titlecase}}
+                    <a *ngIf="accountChecker()" class="btns btn_margin" (click)="deletePet(pet)">&#10006;</a>
+                  </div>
+              </div>
             </div>
           </div>
+
         </div>
-        <app-friends></app-friends>
+          <app-user-photos-container></app-user-photos-container>
+        </div>
       </div>
+
     </div>
   </div>
   <app-add-user *ngIf="accountChecker()" [userPerson]="userPerson"
@@ -92,5 +78,28 @@
                 (state)="changeState($event)" (getUpdUser)="this.getThisUser.emit()"></app-add-user>
 <!--  <app-wall></app-wall>-->
 </div>
+
+<!--// ========================== modal start ==============================//-->
+<div *ngIf="showModal" class="avatar_modal_overlay" (click)="openModal()"></div>
+<div class="avatar_modal" *ngIf="showModal">
+  <button class="close_modal" (click)="openModal()">&#x2716;</button>
+  <h1>Загрузка аватара</h1>
+  <hr>
+  <div   class="block_avatar" >
+    <img *ngIf="preview || userPerson.avatar.url ; else noAvatar" class="preview" src="{{preview || 'http://localhost:8000/' + userPerson.avatar.url}}" alt="{{userPerson.name}} {{userPerson.surname}}">
+    <ng-template #noAvatar>
+      <div class="noAvatar"></div>
+    </ng-template>
+  </div>
+
+  <hr>
+  <div class="block_btn" >
+    <input  type="file" name="file" id="file" class="inputfile"  (change)="onFileChange($event)" />
+    <label  *ngIf="accountChecker() && isAuth && !preview" for="file">Загрузить</label>
+    <button *ngIf="preview"  (click)="uploadAvatar()">Сохранить</button>
+    <button  (click)="openModal()">Отмена</button>
+  </div>
+</div>
+<!--// ========================== modal end ==============================//-->
 
 

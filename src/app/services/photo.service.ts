@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {Album} from '../interfaces/album';
 import {Photo} from '../interfaces/photo';
 import {Router} from '@angular/router';
 import {map} from 'rxjs/operators';

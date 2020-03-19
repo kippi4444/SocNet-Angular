@@ -9,9 +9,9 @@ import {Friend} from '../../interfaces/friend';
 import {DialogService} from '../../services/dialog.service';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../store/state/app.state';
-import {addDialog, selectedDialog, stateAuth} from '../../store/selectors/user.selector';
+import {addDialog,  stateAuth} from '../../store/selectors/user.selector';
 import {Observable} from 'rxjs';
-import {AddDialog, AddPet, DeletedPet, SetAvatar, UpdatedUser} from '../../store/actions/user.actions';
+import {AddDialog, DeletedPet, SetAvatar, UpdatedUser} from '../../store/actions/user.actions';
 import {GetSelectedUser} from '../../store/actions/extraForUser.actions';
 import {selectedUser} from '../../store/selectors/extraForUser.selector';
 
@@ -104,11 +104,13 @@ export class AccountContainerComponent implements OnDestroy {
         this.id
       ]
     };
+
     this.store.dispatch(new AddDialog(body));
     this.sub.push(this.store.select(addDialog).subscribe( value => {
       if (value) {
+        console.log(value);
         this.router
-          .navigate([`/dialogs/${value._id}`], { queryParams: {to: user.login}});
+          .navigate([`/dialogs/${value._id}`]);
         }
     }));
   }

@@ -7,14 +7,26 @@ import {Album} from '../../interfaces/album';
 import {AppState} from '../../store/state/app.state';
 import {Store} from '@ngrx/store';
 import {allAlbums, allPhotos,  selectedAlbumPhoto} from '../../store/selectors/photo.selector';
-import {ChangePhotoAlbum, DelPhoto} from '../../store/actions/photo.actions';
+import {AddComment, ChangePhotoAlbum, DelComment, DelPhoto, LikeDislikePhoto} from '../../store/actions/photo.actions';
 import {ChangeAvatar} from '../../store/actions/user.actions';
+import {transition, trigger, useAnimation} from '@angular/animations';
+import {enterAnimation, outAnimation} from '../../animations/fadeOut';
+import {authentificatedUser} from '../../store/selectors/user.selector';
 
 
 @Component({
   selector: 'app-photo-viewer',
   templateUrl: './photo-viewer.component.html',
-  styleUrls: ['./photo-viewer.component.scss']
+  styleUrls: ['./photo-viewer.component.scss'],
+  animations: [
+    trigger('viewerAnim', [
+      transition(':enter', [
+        useAnimation(enterAnimation)
+      ]),
+      transition(':leave', [
+        useAnimation(outAnimation)
+      ]),
+    ])]
 })
 export class PhotoViewerComponent implements OnInit, OnDestroy {
   myId: Observable<string> = this.store.select(state => state.users.authUser._id);
@@ -29,7 +41,9 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
   userAlbums$: Observable<Album[]>;
   serv: Subscription;
   routing: Subscription;
+  idSub: Subscription;
   edit = false;
+  text: string;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -85,11 +99,6 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    this.serv.unsubscribe();
-  }
-
-
   movePhoto(albumId: string, photoId: string) {
     this.move = !this.move;
     this.show = false;
@@ -112,5 +121,34 @@ export class PhotoViewerComponent implements OnInit, OnDestroy {
 
   changeAvatar(targetPhoto: Photo) {
     this.store.dispatch(new ChangeAvatar(targetPhoto.url));
+  }
+
+  addLike(photo) {
+    this.store.select(authentificatedUser).subscribe(value => {
+        this.store.dispatch(new LikeDislikePhoto({photo, like: value}));
+    });
+
+  }
+
+  sendComment(photo: Photo) {
+    this.idSub = this.myId.subscribe(id => {
+      const comment = {
+        text: this.text,
+        user: id,
+        photo: photo._id,
+        };
+      this.store.dispatch(new AddComment(comment));
+      this.text = '';
+    });
+
+  }
+
+  ngOnDestroy(): void {
+    this.serv.unsubscribe();
+    // this.idSub.unsubscribe();
+  }
+
+  deleteComment(id: string) {
+    this.store.dispatch(new DelComment(id));
   }
 }

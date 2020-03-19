@@ -6,7 +6,7 @@ import {AppState} from '../state/app.state';
 import {of} from 'rxjs';
 import {
   AddAlbum, AddAlbumFailure,
-  AddAlbumSuccess,
+  AddAlbumSuccess, AddComment, AddCommentSuccess,
   AddPhoto, AddPhotoFailure,
   AddPhotoSuccess,
   AddPhotoWall, AddPhotoWallFailure,
@@ -20,15 +20,22 @@ import {
   GetAllPhotos, GetAllPhotosFailure,
   GetAllPhotosSuccess,
   GetSelectedAlbum, GetSelectedAlbumFailure,
-  GetSelectedAlbumSuccess,
+  GetSelectedAlbumSuccess, LikeDislikePhoto, LikeDislikePhotoFailure, LikeDislikePhotoSuccess,
   UpdAlbum, UpdAlbumFailure,
   UpdAlbumSuccess,
-  UserPhotosActions
+  UserPhotosActions,
+  AddCommentFailure, DelComment, DelCommentSuccess, DelCommentFailure
 } from '../actions/photo.actions';
 import {AlbumService} from '../../services/album.service';
 import {PhotoService} from '../../services/photo.service';
 import {Album} from '../../interfaces/album';
 import {Photo} from '../../interfaces/photo';
+import {WebsocketService} from '../../services/websocket.service';
+import {Dialog} from '../../interfaces/dialog';
+import {GetLoginUserDialogsSuccess} from '../actions/user.actions';
+import {DialogConnectSocket, DialogConnectSocketFailure} from '../actions/message.actions';
+import {CommentService} from '../../services/comment.service';
+import {Comments} from '../../interfaces/comments';
 
 
 
@@ -117,8 +124,33 @@ export class UserPhotos {
     catchError((err) => of(new ChangePhotoAlbumFailure(err)))
   );
 
+  @Effect({dispatch: false})
+  setLikeDislikePhoto$ = this.actions$.pipe(
+    ofType<LikeDislikePhoto>(UserPhotosActions.LIKE_DISLIKE),
+    map((action: LikeDislikePhoto ) => this.websocketService.setLikeDislike(action.payload)),
+    catchError(err => of(new LikeDislikePhotoFailure()))
+  );
+
+  @Effect()
+  setAddComment$ = this.actions$.pipe(
+    ofType<AddComment>(UserPhotosActions.ADD_COMMENT),
+    switchMap((action: AddComment ) => this.commentService.addComment(action.payload)),
+    map((comment: Comments) => new AddCommentSuccess(comment)),
+    catchError(err => of(new AddCommentFailure()))
+  );
+
+  @Effect()
+  deleteComment$ = this.actions$.pipe(
+    ofType<DelComment>(UserPhotosActions.DEL_COMMENT),
+    switchMap((action: DelComment ) => this.commentService.delComment(action.payload)),
+    map((comment: Comments) => new DelCommentSuccess(comment)),
+    catchError(err => of(new DelCommentFailure()))
+  );
+
   constructor(private actions$: Actions,
               private albumService: AlbumService,
               private photoService: PhotoService,
+              private websocketService: WebsocketService,
+              private commentService: CommentService,
               private store: Store<AppState>) {}
 }

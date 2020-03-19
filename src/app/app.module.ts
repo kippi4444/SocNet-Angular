@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FriendsComponent } from './pages/friends/friends.component';
@@ -45,7 +45,13 @@ import {UserPhotos} from './store/effects/photo.effects';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import {MessageEffects} from './store/effects/message.effects';
 import {MessagesContainerComponent} from './components/messages/messages.container';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { FooterComponent } from './components/footer/footer.component';
+import { registerLocaleData } from '@angular/common';
+import localeRu from '@angular/common/locales/ru';
+import { CreateDialogComponent } from './components/create-dialog/create-dialog.component';
 
+registerLocaleData(localeRu, 'ru');
 
 @NgModule({
   declarations: [
@@ -75,7 +81,9 @@ import {MessagesContainerComponent} from './components/messages/messages.contain
     DialogsComponent,
     DialogsContainerComponent,
     PaginationComponent,
-    MessagesContainerComponent
+    MessagesContainerComponent,
+    FooterComponent,
+    CreateDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -83,6 +91,7 @@ import {MessagesContainerComponent} from './components/messages/messages.contain
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    BrowserAnimationsModule,
     NgxFileDropModule,
     StoreModule.forRoot(appReducers),
     EffectsModule.forRoot([UserEffects, ExtraForUserEffects, FriendshipEffects, UserPhotos, MessageEffects]),
@@ -94,6 +103,7 @@ import {MessagesContainerComponent} from './components/messages/messages.contain
     useClass: AuthInterceptor,
     multi: true
   },
+    { provide: LOCALE_ID, useValue: 'ru' },
     AddUserGuard,
   LoginGuard,
   WebsocketService],

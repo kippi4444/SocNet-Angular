@@ -3,21 +3,31 @@ import {Store} from '@ngrx/store';
 import {AppState} from '../../store/state/app.state';
 import {authentificatedUser, stateAuth} from '../../store/selectors/user.selector';
 import {GetLogoutUser} from '../../store/actions/user.actions';
-import {Msg} from '../../interfaces/msg';
 import {GetNotification, MainConnectSocket, MainDisconnect} from '../../store/actions/message.actions';
 import {getNotification} from '../../store/selectors/message.selector';
+import {transition, trigger, useAnimation} from '@angular/animations';
+import {fadeInUp} from 'ng-animate';
+
+
 
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss']
+  styleUrls: ['./menu.component.scss'],
+  animations: [
+    trigger('getNotification', [
+      transition(':enter', [
+        useAnimation(fadeInUp)
+      ]),
+    ])]
+
 })
 export class MenuComponent implements OnInit, OnDestroy {
   isAuth: boolean;
   login: string;
   sub = [];
-  mes: Msg;
+  notif: any ;
 
   constructor(private store: Store<AppState>) { }
 
@@ -46,30 +56,11 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.store.dispatch(new GetNotification());
     this.store.select(getNotification).subscribe(notif => {
       if (notif !== null) {
-        switch (notif.event) {
-          case 'addFriend':
-            this.mes = notif.mes;
-            this.mes.text = 'У Вас новая завяка в друзья';
-            return this.mes;
-          case 'delFriend':
-            this.mes = notif.mes;
-            this.mes.text = 'Вас удалили из друзей';
-            return this.mes;
-          case 'newFriend':
-            this.mes = notif.mes;
-            this.mes.text = 'Вас добавили в друзья!';
-            return this.mes;
-          case 'newMes':
-            this.mes = notif.mes;
-            console.log(this.mes);
-            return this.mes;
-        }
-        function timer() {
-          setTimeout(() => {
-            this.mes = null;
-          },  5000);
-        }
-        timer();
+        this.notif = notif;
+        setTimeout(() => {
+          this.notif = null;
+        },  5000);
+
       }
     });
   }
@@ -84,6 +75,6 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   close() {
-    this.mes = null;
+    this.notif = null;
   }
 }

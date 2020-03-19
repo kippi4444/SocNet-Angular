@@ -1,13 +1,30 @@
+$large-text-size:       16px;
+$medium-text-size:       14px;
+$small-text-size:       12px;
+$font:           'Roboto', sans-serif;
+$main_blue:           rgba(0, 86, 132, 0.8);
+$hover_main_blue:     rgba(0, 86, 132, 1);
+
+
+
 *{
   box-sizing: border-box;
 }
+html,
 body {
+  height: 100%;
   outline: 0 !important;
-  font-family: 'Roboto', sans-serif;
+  font-family: $font;
+  font-size: $large-text-size;
   margin: 0;
   padding: 0;
-  background-color: rgba(97, 102, 92, 0.14);
+  background-color: rgb(240, 245, 233);
   button:focus { outline: none; }
+}
+
+
+strong {
+  color: #2e2e2e;
 }
 
 a {
@@ -23,15 +40,15 @@ a {
 h1 {
   color: rgb(72, 72, 72);
   font-size: 1.2em;
-  //font-family: 'Yanone Kaffeesatz', sans-serif;
   font-weight: 500;
   margin-bottom: 0;
 }
+
 h2 {
   color: #444;
   font-weight: lighter;
   font-size: 2em;
-  margin-top: 0px;
+  margin-top: 0;
 
 }
 
@@ -42,10 +59,6 @@ h3 {
 
 }
 
-strong {
-  color: #2e2e2e;
-}
-
 h4 {
   color: #2e2e2e;
   font-weight: lighter;
@@ -54,10 +67,20 @@ h4 {
 }
 
 h5 {
-  color: rgba(46, 46, 46, 0.43);
+  color: rgba(46, 46, 46, 0.69);
   font-weight: lighter;
   font-size: 1em;
   margin: 0 0 5px 5px;
+}
+
+h6{
+  position: absolute;
+  z-index: 1;
+  right: 20px;
+  top: 30px;
+  margin: 3px;
+  color: rgba(0, 0, 0, 0.3);
+  font-weight: 400;
 }
 
 svg {
@@ -69,18 +92,19 @@ svg {
 
 //Buttons
 button {
-  background-color: rgba(0, 86, 132, 0.8);
-  font-family: 'Roboto', sans-serif;
+  background-color: $main_blue;
+  font-family: $font;
   border: none;
   top: 5px;
   padding: 7px 20px;
   color: #fff;
   border-radius: 5px;
   transition: .2s ease-in-out;
-
+  box-shadow: 0 1px 1px rgba(31, 31, 31, 0.45);
   &:hover {
-    background-color: rgba(0, 86, 132, 1);
+    background-color: $hover_main_blue;
     color: #fff;
+    box-shadow: none;
   }
 
   &:disabled{
@@ -134,6 +158,34 @@ input{
   outline: none;
 }
 
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+
+}
+
+.inputfile + label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  background-color: $main_blue;
+  top: 5px;
+  padding: 7px 20px;
+  margin-left: 5px;
+  color: #fff;
+  border-radius: 5px;
+  transition: .2s ease-in-out;
+
+  &:hover {
+    background-color: $hover_main_blue;
+    color: #fff;
+  }
+}
+
 hr{
   width: 99%;
   margin-left: 0;
@@ -141,18 +193,83 @@ hr{
   height: 1px;
   background-color: rgba(104, 137, 171, 0.38);
 }
+
+//avatar
+.no-select {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .avatar{
-  max-width: 120px;
-  max-height: 120px;
+  max-width: 200px;
+  max-height: 250px;
 }
 
 .smallAvatar{
   max-width: 80px;
-  max-height: 120px;
+  max-height: 110px;
+}
+
+.noAvatar{
+  width: 120px;
+  height: 120px;
+  background: url("app/placeholders/NoAvatar.jpg");
+  background-size: cover;
+}
+
+//extra
+.online {
+  color: green;
+  font-size: 10px;
+}
+
+.close_modal{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  right: -20px;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  font-size: 16px;
+  color: #ffffff;
+  transition: .4s ease-in-out;
+  opacity: 0;
+}
+
+.title_add{
+  display: flex;
+  justify-content: space-between;
+  h1 {
+    margin: 0;
+  }
+}
+
+.loading{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+//blocks
+.main_module{
+  margin: 0.5em;
+  justify-content: center;
+  flex-flow: column;
+  width: auto;
+
+  h1 {
+    margin: 0;
+  }
 }
 
 .container{
-  margin-top: 1em;
+  margin-top: 0.5em;
   background-color: rgb(255, 255, 255);
   border-radius: 5px;
   padding: 10px;
@@ -174,77 +291,60 @@ hr{
   flex-flow: row;
 }
 
-.no-select {
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+@media (max-width: 899px) {
+  .close_modal{
+    width: 50px;
+    height: 30px;
+    font-size: $medium-text-size;
+  }
 
-.online {
-  color: green;
-  font-size: 10px;
-}
+  body{
+    font-size: $medium-text-size;
+  }
 
-.close_modal{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0;
-  right: -20px;
-  width: 50px;
-  height: 50px;
-  position: absolute;
-  font-size: 16px;
-  color: #ffffff;
-  transition: .4s ease-in-out;
-  opacity: 0;
-}
+  button{
+    padding: 6px 16px;
+  }
 
-.inputfile {
-  width: 0.1px;
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  z-index: -1;
+  input{
+    padding: 8px 12px;
+    font-size: $medium-text-size;
+  }
+  .avatar{
+    max-width: 110px;
+    max-height: 110px;
+  }
 
 }
 
+@media (max-width: 777px) {
 
-.inputfile + label {
-  font-family: 'Roboto', sans-serif;
-  font-size: 13px;
-  cursor: pointer;
-  background-color: rgba(0, 70, 131, 0.77);
-  top: 5px;
-  padding: 7px 20px;
-  margin-left: 5px;
-  color: #fff;
-  border-radius: 5px;
-  transition: .2s ease-in-out;
+  body{
+    font-size: $small-text-size;
+  }
 
-  &:hover {
-    background-color: rgb(2, 78, 132);
-    color: #fff;
+  button{
+    padding: 5px 15px;
+  }
+  .avatar{
+    max-width: 100px;
+    max-height: 100px;
+  }
+  .smallAvatar{
+    max-width: 60px;
+    max-height: 100px;
   }
 }
 
-.title_add{
+//footer
+.wrapper {
   display: flex;
-  justify-content: space-between;
-}
-
-.noAvatar{
-  width: 120px;
-  height: 120px;
-  background: url("../src/app/img/NoAvatar.jpg");
-  background-size: cover;
-}
-.loading{
-  display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
-  width: 100%;
+  min-height: 100%;
+}
+.content_block {
+  flex: 1 0 auto;
+}
+footer {
+  flex: 0 0 auto;
 }

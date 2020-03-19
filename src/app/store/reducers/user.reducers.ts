@@ -1,4 +1,4 @@
-import {initialExtraForUser, initialUserState, UserState} from '../state/user.state';
+import {initialUserState, UserState} from '../state/user.state';
 import {UserActions} from '../actions/user.actions';
 
 export const userReducers = (
@@ -58,7 +58,8 @@ export const userReducers = (
     case UserActions.GET_AUTH_USER_FAILURE: {
       return {
         ...state,
-        authUser: null
+        authUser: null,
+        state: false
       };
     }
 
@@ -129,24 +130,74 @@ export const userReducers = (
       };
     }
 
-    case UserActions.GET_SELECTED_DIALOG: {
+    case UserActions.MESSAGE_READ_SUCCESS: {
+      if (action.payload.user._id !== action.payload.mes.user._id) {
+        setTimeout(() => {
+        return {
+          ...state,
+          dialogMes:  state.dialogMes.filter(mes => {
+              if (mes.isReading.length) {
+                mes.isReading = [];
+              }
+              return mes;
+            })};
+        }, 500);
+      }
+      const dialogs = state.allDialogs.filter( dialog => dialog._id === action.payload.mes.dialog );
+      dialogs[0].mes = [action.payload.mes];
       return {
         ...state,
-        selectedDialog: null,
+        allDialogs: dialogs.concat(state.allDialogs.filter( dialog => dialog._id !== action.payload.mes.dialog))
       };
     }
+
+    case UserActions.MESSAGE_READ_FAILURE: {
+      return {
+        ...state,
+      };
+    }
+
     case UserActions.GET_SELECTED_DIALOG_SUCCESS: {
+      if (action.payload.event === 'isRead') {
+        return {
+          ...state,
+          dialogMes:  state.dialogMes.filter(mes => {
+              if (mes.isReading.length) {
+                mes.isReading = [];
+              }
+              return mes;
+            })
+        };
+      } else {
+        return {
+          ...state,
+          selectedDialog: action.payload.dialog,
+          dialogMes: action.payload.mes,
+        };
+      }
+    }
+
+    case UserActions.SCROLL_MES_SUCCESS: {
       return {
         ...state,
-        selectedDialog: action.payload,
+        selectedDialog: action.payload.dialog,
+        dialogMes: action.payload.mes.concat(state.dialogMes),
       };
     }
+
+    case UserActions.SCROLL_MES_FAILURE: {
+      return {
+        ...state,
+      };
+    }
+
     case UserActions.GET_SELECTED_DIALOG_FAILURE: {
+
       return {
         ...state,
-        selectedDialog: null,
       };
     }
+
     case UserActions.ADD_DIALOG: {
       return {
         ...state,
@@ -156,7 +207,8 @@ export const userReducers = (
     case UserActions.ADD_DIALOG_SUCCESS: {
       return {
         ...state,
-        lastDialog: action.payload,
+        lastDialog: action.payload[0],
+        allDialogs: action.payload.concat(state.allDialogs.filter(dialog => dialog._id !== action.payload[0]._id))
       };
     }
     case UserActions.ADD_DIALOG_FAILURE: {
@@ -199,6 +251,21 @@ export const userReducers = (
       };
     }
     case UserActions.DEL_DIALOG_FAILURE: {
+      return {
+        ...state,
+      };
+    }
+
+    case UserActions.UP_DIALOG_SUCCESS: {
+      const upper = state.allDialogs.filter(dialog => dialog._id === action.payload.mes.dialog);
+      upper[0].mes = [action.payload.mes];
+      return {
+        ...state,
+        allDialogs: upper.concat(state.allDialogs.filter(dialog => dialog._id !== action.payload.mes.dialog)),
+
+      };
+    }
+    case UserActions.UP_DIALOG_FAILURE: {
       return {
         ...state,
       };

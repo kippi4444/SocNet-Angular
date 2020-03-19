@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
-import {catchError, map, switchMap, withLatestFrom} from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import {Store} from '@ngrx/store';
 import {AppState} from '../state/app.state';
 import {of} from 'rxjs';

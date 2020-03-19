@@ -28,7 +28,7 @@ import {
   GetLoginUserSuccess,
   GetLogoutUser,
   GetLogoutUserFailure,
-  GetLogoutUserSuccess,
+  GetLogoutUserSuccess, GetScrollMes, GetScrollMesFailure, GetScrollMesSuccess,
   GetSelectedDialog,
   GetSelectedDialogFailure,
   GetSelectedDialogSuccess,
@@ -58,6 +58,7 @@ import {dialogMes, DialogService} from '../../services/dialog.service';
 import {AddPhoto, AddPhotoSuccess} from '../actions/photo.actions';
 import {Photo} from '../../interfaces/photo';
 import {SelectedAuthUserChangeAvatar, SelectedAuthUserChangeAvatarSuccess} from '../actions/extraForUser.actions';
+import {WebsocketService} from '../../services/websocket.service';
 
 @Injectable()
 export class UserEffects {
@@ -141,7 +142,12 @@ export class UserEffects {
       this.router.navigate(['/users/' + user.user.login]);
       return new GetLoginUserSuccess(user.user);
     }),
-    catchError((err) => of(new GetLoginUserFailure(err)))
+    catchError((err) => {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
+      localStorage.removeItem('login');
+      this.router.navigate(['/login']);
+      return of(new GetLoginUserFailure(err))})
   );
 
   @Effect()
@@ -171,9 +177,17 @@ export class UserEffects {
   @Effect()
   getSelectedDialog$ = this.actions$.pipe(
     ofType<GetSelectedDialog>(UserActions.GET_SELECTED_DIALOG),
-    switchMap((action: GetSelectedDialog) => this.dialogService.getMessages(action.payload)),
-    map((dialog: dialogMes) => new GetSelectedDialogSuccess(dialog)),
+    switchMap((action: GetSelectedDialog) => this.socketService.getAllMes(action.payload)),
+    switchMap((dialog: dialogMes) => of(new GetSelectedDialogSuccess(dialog))),
     catchError((err) => of(new GetSelectedDialogFailure(err)))
+  );
+
+  @Effect()
+  getScrollMes$ = this.actions$.pipe(
+    ofType<GetScrollMes>(UserActions.SCROLL_MES),
+    switchMap((action: GetScrollMes) => this.socketService.getScrollMes(action.payload)),
+    switchMap((dialog: dialogMes) => of(new GetScrollMesSuccess(dialog))),
+    catchError((err) => of(new GetScrollMesFailure(err)))
   );
 
   @Effect()
@@ -215,6 +229,7 @@ export class UserEffects {
               private petService: PetService,
               private dialogService: DialogService,
               private searchService: SearchService,
+              private socketService: WebsocketService,
               private actions$: Actions,
               private router: Router,
               private store: Store<AppState>) {}

@@ -1,5 +1,5 @@
 
-<div  class="dashboard content">
+<div  class="container content">
   <h2>Все пользователи</h2>
   <input [(ngModel)]="query.search" id="searching" type="text" placeholder="Поиск..." >
   <div class="filtration">
@@ -25,7 +25,7 @@
   </div>
   <hr>
 
-  <div *ngIf="!!users.length; else loading">
+  <div *ngIf="users.length; else loading">
     <div  class="module" *ngFor="let user of users ">
       <div class="column-block">
         <a class="module-avatar" routerLink="/users/{{user.login}}">
@@ -43,14 +43,17 @@
         <a *ngIf="myId !== user._id && isAuth && itFriend(user.friends)" class="btn_show" (click)="delFriend(user._id)">Убрать из друзей</a>
       </div>
     </div>
-    <app-pagination
-      [count]="users[0].totalCount"
-      (first)="go($event)"
-      (last)="go($event)"
-      (prev)="go($event)"
-      (next)="go($event)"
-      (goPage)="go($event)"
-      ></app-pagination>
+    <div class="wrapper_pagination"></div>
+    <div class="pagination">
+      <app-pagination
+        [count]="users[0].totalCount"
+        (first)="go($event)"
+        (last)="go($event)"
+        (prev)="go($event)"
+        (next)="go($event)"
+        (goPage)="go($event)"
+        ></app-pagination>
+    </div>
   </div>
 
 <!--//============================ preloaders ===============================//-->

@@ -1,6 +1,6 @@
 
-<div [ngClass]="{ grid: routeMyFriends && login === userLogin,
-                  content: routeMyFriends, friends: routeMyFriends}">
+<div class="container " [ngClass]="{ grid: routeMyFriends && login === userLogin,
+                  content: routeMyFriends, first_column_height: routeMyFriends, friends_width: !routeMyFriends }">
   <div class="first-column" >
     <h1 ><a routerLink="/friends/{{login}}">Друзья</a></h1>
     <hr>
@@ -8,15 +8,17 @@
       <div class="module " [ngClass]="{border_bottom: routeMyFriends}" *ngFor="let user of friends">
         <div  [ngClass]="{column_block: routeMyFriends}">
           <a routerLink="/users/{{user.friend.login}}"
-             [ngClass]="{module_avatar: routeMyFriends, module_smallAvatar: !routeMyFriends}">
+             [ngClass]="{
+             wrapper_avatar: routeMyFriends,
+             module_avatar: routeMyFriends,
+             module_smallAvatar: !routeMyFriends}">
 
             <img src="http://localhost:8000/{{user.friend.avatar.url}}"
                  [ngClass]="{smallAvatar: routeMyFriends, smallerAvatar: !routeMyFriends}">
-
-            <h5 *ngIf="!routeMyFriends">
-              {{user.friend.name | titlecase}}
-            </h5>
           </a>
+          <h5 *ngIf="!routeMyFriends">
+            {{user.friend.name | titlecase}}
+          </h5>
         </div>
         <div class="column_block" *ngIf="routeMyFriends">
           <a routerLink="/users/{{user.friend.login}}">
@@ -36,7 +38,7 @@
         <a routerLink="/users/{{req.friend.login}}">
           <h4>{{req.friend.name | titlecase}} {{req.friend.surname | titlecase}} </h4>
         </a>
-        <a  routerLink="/users/{{req.friend.login}}">
+        <a class="wrapper_avatar"  routerLink="/users/{{req.friend.login}}">
           <img class="smallAvatar" src="http://localhost:8000/{{req.friend.avatar.url}}" alt="">
         </a>
       </div>

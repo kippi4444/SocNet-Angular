@@ -23,6 +23,11 @@ export const selectedDialog = createSelector(
   selectUser,
   (state: UserState) => state.selectedDialog
 );
+
+export const msgForDialog = createSelector(
+  selectUser,
+  (state: UserState) => state.dialogMes
+);
 export const addDialog = createSelector(
   selectUser,
   (state: UserState) => state.lastDialog

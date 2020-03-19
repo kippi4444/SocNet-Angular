@@ -1,31 +1,62 @@
-<div class="content friends" >
-  <div class="first-column" >
-    <h1>Диалоги</h1>
+<div class="content container" >
+  <div class="dialog-column" >
+    <div class="title_add">
+      <h1>Диалоги</h1>
+      <button [ngStyle]="{marginRight: '10px'}" (click)="showFriendList = !showFriendList">Создать беседу</button>
+    </div>
+    <div *ngIf="showFriendList">
+      <app-create-dialog [friendList] = friendList (createNewDialog)="createNewDialog($event)" ></app-create-dialog>
+    </div>
     <hr>
     <div  *ngFor="let dialog of dialogs " >
-
-      <div class="dialog_block" [ngClass]="{active: dialog._id == activeDialog}" >
-        <div class="module " (click)="goToDialog(dialog)" >
-          <div class="column-block " >
-            <a  routerLink="/users/{{dialog.persons.login}}">
+      <div *ngIf="dialog.persons.length < 2" class="dialog_block" [ngClass]="{active: dialog._id == activeDialog}">
+        <div class="module " *ngFor="let person of dialog.persons" (click)="goToDialog(dialog)" >
+          <div class="column-block "  >
+            <a  routerLink="/users/{{person.login}}">
               <div class="module-avatar">
-                <img class="dialog_avatar" src="http://localhost:8000/{{dialog.persons.avatar.url}}" alt="">
+                <img class="dialog_avatar" src="http://localhost:8000/{{person.avatar.url}}" alt="">
               </div>
             </a>
           </div>
-          <a  [ngClass]="{active: dialog._id == activeDialog}">
-            <div class="column-block">
-              <h4>{{dialog.persons.name | titlecase}} {{dialog.persons.surname | titlecase}} </h4>
-              <span class="online" *ngIf="dialog.persons.online">Online</span>
+          <div class="column-block">
+            <div class="names">
+              <h4>{{person.name | titlecase}} {{person.surname | titlecase}} </h4>
             </div>
-          </a>
-
+            <span *ngIf="dialog.mes.length">
+              {{dialog.mes[0].name | titlecase}}:  {{dialog.mes[0].text}} <small>{{dialog.mes[0].created_at | date: 'dd MMMM'}}</small>
+            </span>
+          </div>
+        </div>
+        <button  class="delete_dialog" (click)="delDialog(dialog._id)" >&#x2716;</button>
+        </div>
+      <div *ngIf="dialog.persons.length > 1" class="dialog_block" [ngClass]="{active: dialog._id == activeDialog}" >
+        <div class="module" (click)="goToDialog(dialog)">
+          <div class="column_block">
+            <div class="conf_block_avatar " [ngClass]="{conf_block_avatar_after: dialog.persons.length > 2}">
+              <img *ngFor="let person of dialog.persons.slice(0,4)" routerLink="/users/{{person.login}}"
+                   class="conf_avatar" src="http://localhost:8000/{{person.avatar.url}}"
+                   [ngStyle]="{ height: dialog.persons.length === 2? '100%' : '50%'}">
+            </div>
+          </div>
+          <div class="column_block">
+            <div class="names">
+              <h4 *ngFor="let person of dialog.persons">
+                {{person.name | titlecase}}
+              </h4>
+            </div>
+            <span *ngIf="dialog.mes.length">
+              {{dialog.mes[0].name | titlecase}}:  {{dialog.mes[0].text}} <small>{{dialog.mes[0].created_at | date: 'dd MMMM'}}</small>
+            </span>
+          </div>
         </div>
         <button  class="delete_dialog" (click)="delDialog(dialog._id)" >&#x2716;</button>
       </div>
     </div>
+
+
   </div>
-  <div class="mes-column">
+  <div class="mes-column" >
+    <div class="change_dialog" *ngIf="!activeDialog"></div>
     <router-outlet></router-outlet>
   </div>
 </div>

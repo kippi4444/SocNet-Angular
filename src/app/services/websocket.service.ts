@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import {scrollSettings} from '../interfaces/scroll';
+import {Photo} from '../interfaces/photo';
 
 
 @Injectable({
@@ -10,12 +12,16 @@ import { environment } from '../../environments/environment';
 export class WebsocketService {
 
   private socket;
-
+  private mesListener;
+  private allMes;
   constructor() { }
 
   getMes(): Observable<any> {
-    return new Observable(observer => {
+    return this.mesListener = new Observable(observer => {
       this.socket.on('chat message', (data) => {
+        if (this.socket.id !== data.user._id) {
+          setTimeout(() => this.socket.emit('read', data.user._id),500);
+        }
         observer.next(data);
       });
     });
@@ -31,14 +37,32 @@ export class WebsocketService {
 
   notification(): Observable<any> {
     return new Observable(observer => {
-      this.socket.on('message', (data) => {
+      this.socket.on('message', (data) =>{
+        observer.next(data);
+      });
+    });
+  }
+
+  getAllMes(dialog: scrollSettings): Observable<any> {
+    this.socket.emit('getAllMes', (dialog));
+    return this.allMes = new Observable(observer => {
+      this.socket.on('allMes', (data) => {
+        observer.next(data);
+      });
+    });
+  }
+
+  getScrollMes(dialog: scrollSettings): Observable<any> {
+    this.socket.emit('getScrollMes', (dialog));
+    return this.allMes = new Observable(observer => {
+      this.socket.on('scrollMes', (data) => {
         observer.next(data);
       });
     });
   }
 
   mainConnect(session) {
-    this.socket = io(environment.ws_url + 'main',  {
+    this.socket = io(environment.ws_url,  {
       query: session,
       reconnection: true,
       reconnectionDelay: 1000,
@@ -46,8 +70,8 @@ export class WebsocketService {
       reconnectionAttempts: 10
     });
     this.socket.on('connection');
+    this.socket.on('connect_error', (error) => error);
   }
-
 
   dialogConnect(session) {
     this.socket.emit('goRoom', session);
@@ -63,5 +87,7 @@ export class WebsocketService {
     }
   }
 
-
+  setLikeDislike(PhotoLike) {
+    this.socket.emit('addLike', PhotoLike);
+  }
 }

@@ -1,22 +1,32 @@
-.albums{
-  margin: 1em;
+.albums_block_center{
   justify-content: center;
-  flex-flow: column;
-  width: auto;
-  min-width: 50%;
 }
+.main_module {
+  width: 100%;
+  margin-right: 0.5em;
+  margin-left: 0;
+}
+
+.main_module_width{
+  width: auto;
+  margin-left: 0.5em;
+}
+
 .albums_block{
   display: flex;
   flex-flow: wrap;
-  justify-content: flex-start;
 
+  .large_album_photo{
+    width: 250px;
+    height: 170px;
+  }
+  .small_album_photo{
+    width: 170px;
+    height: 120px;
+  }
   .album {
-    width: 130px;
-    height: 100px;
-
     display: flex;
     flex-direction: column;
-    text-align: center;
     align-items: center;
     color: #1f1f1f;
     opacity: 0.9;
@@ -24,31 +34,41 @@
     &:hover{
       opacity: 1;
     }
-    h1 {
-      margin: 0;
-    }
 
     .main-photo {
       position: relative;
-      background-color: rgba(0, 0, 0, 0.09);
-      width: 95%;
-      height: 95%;
+      background: url("../../placeholders/album.jpg") no-repeat center ;
+      background-size: cover;
+      width: 97%;
+      height: 97%;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       overflow: hidden;
 
-      img{
-        min-width: 100%;
+      img {
+        max-width: none;
+        min-width: auto;
+        min-height: auto;
+        height: 100%;
+        top: 50%;
+        left: 50%;
       }
 
     }
+
+    .title_large{
+      max-width: 250px;
+    }
+    .title_small{
+      max-width: 160px;
+    }
     .title{
       color: #fffffa;
-      text-shadow: 0 0px 1px black;
+      text-shadow: 0 0 1px black;
       position: absolute;
-      bottom: 0;
-      max-width: 100px;
+      left: 5px;
+      bottom: 5px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -58,6 +78,14 @@
 }
 
 
+@media (max-width: 777px) {
+  .albums_block {
+    .small_album_photo {
+      width: 120px;
+      height: 90px;
+    }
 
+  }
+}
 
 

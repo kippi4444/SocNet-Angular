@@ -16,7 +16,6 @@ import {allAlbums, createAlbum} from '../../store/selectors/photo.selector';
                      [myId]="id"
                      [myLogin]="Login"
                      [isAuth]="isAuth$ | async"
-                     (rldComponent)="getUsersAlbums($event)"
                      (uploadNewAlbum)="createAlbum($event)"></app-my-albums>`,
   styleUrls: ['./my-albums.component.scss']
 })

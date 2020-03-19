@@ -14,15 +14,15 @@ import {MessagesContainerComponent} from './components/messages/messages.contain
 
 
 const routes: Routes = [
-  { path: 'friends/:id', component: FriendsComponent, canActivate: [AddUserGuard]},
-  { path: 'dashboard', component: DashboardContainerComponent },
-  { path: 'dialogs', component: DialogsContainerComponent, canActivate: [AddUserGuard], children: [
+  { path: 'friends/:id', component: FriendsComponent, canActivate: [AddUserGuard], data: {state: 'Friends'}},
+  { path: 'dashboard', component: DashboardContainerComponent, data: {state: 'Dashboard'} },
+  { path: 'dialogs', component: DialogsContainerComponent, canActivate: [AddUserGuard], data: {state: 'Dialogs'}, children: [
       { path: ':id', component: MessagesContainerComponent, canActivate: [AddUserGuard]  }
     ] },
-  { path: 'users/:id', component: AccountContainerComponent, canActivate: [AddUserGuard]},
-  { path: 'users/:id/albums', component: MyAlbumsContainerComponent, canActivate: [AddUserGuard]},
-  { path: 'album/:id', component: AlbumContainerComponent, canActivate: [AddUserGuard]},
-  { path: 'login', component: LoginContainerComponent, canActivate: [LoginGuard]},
+  { path: 'users/:id', component: AccountContainerComponent, canActivate: [AddUserGuard], data: {state: 'Account'}},
+  { path: 'users/:id/albums', component: MyAlbumsContainerComponent, canActivate: [AddUserGuard], data: {state: 'Albums'}},
+  { path: 'album/:id', component: AlbumContainerComponent, canActivate: [AddUserGuard], data: {state: 'Album'}},
+  { path: 'login', component: LoginContainerComponent, canActivate: [LoginGuard], data: {state: 'Login'}},
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
 ];

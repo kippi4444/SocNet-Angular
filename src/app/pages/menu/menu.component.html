@@ -1,3 +1,4 @@
+
 <nav>
   <a *ngIf="!isAuth" routerLink="/login" routerLinkActive="active">Войти</a>
   <a *ngIf="isAuth" routerLink="/users/{{login}}" routerLinkActive="active"
@@ -8,11 +9,44 @@
      [routerLinkActiveOptions]="{exact:true}">Друзья</a>
   <a *ngIf="isAuth" (click)="LogoutUser()" routerLinkActive="active">Выйти</a>
 </nav>
-<div *ngIf="mes" class="notification">
-    <a class="close" (click)="close()" >x</a>
-    <div *ngIf="mes.user" routerLink="/dialogs/{{mes.dialog}}">
-      {{mes.user.name | titlecase}} {{mes.user.surname | titlecase}}:
+<div [@getNotification]="notif" *ngIf="notif" class="notification">
+Уведомление:
+  <div [ngSwitch]="notif.event">
+    <div *ngSwitchCase="'newLike'" >
+      <div *ngIf="notif.mes.like; else dislike">
+        <a class="close" (click)="close()" >x</a>
+        <div class="text"><a routerLink="/users/{{notif.mes.who.login}}" >{{notif.mes.who.name | titlecase}}</a> оценил Ваше
+          <a routerLink="/users/{{notif.mes.photo.owner.login}}" [queryParams]="{photo: notif.mes.photo._id}">фото</a>!:)
+        </div>
+      </div>
+      <ng-template #dislike>
+        <a class="close" (click)="close()" >x</a>
+        <div class="text"><a routerLink="/users/{{notif.mes.who.login}}" >{{notif.mes.who.name | titlecase}}</a> убрал лайк с
+          <a routerLink="/users/{{notif.mes.photo.owner.login}}" [queryParams]="{photo: notif.mes.photo._id}">фото</a>... :(
+        </div>
+      </ng-template>
     </div>
-    <div class="text">{{mes.text}}</div>
+    <div *ngSwitchCase="'addFriend'">
+      <a class="close" (click)="close()" >x</a>
+      <div class="text">У Вас новая завяка в друзья! ;)</div>
+    </div>
+    <div *ngSwitchCase="'delFriend'">
+      <a class="close" (click)="close()" >x</a>
+      <div class="text">Вас удалили из друзей :(</div>
+    </div>
+    <div *ngSwitchCase="'newFriend'">
+      <a class="close" (click)="close()" >x</a>
+      <div class="text">Вас Добавили в друзья!:)</div>
+    </div>
+    <div *ngSwitchCase="'newMes'">
+      <a class="close" (click)="close()" >x</a>
+      <a routerLink="/dialogs/{{notif.mes.dialog}}">
+        {{notif.mes.user.name | titlecase}} {{notif.mes.user.surname | titlecase}}:
+      </a>
+      <div class="text">{{notif.mes.text | titlecase}}</div>
+    </div>
+  </div>
+
 
 </div>
+<div class="wrapper_menu"></div>
