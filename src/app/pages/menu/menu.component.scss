@@ -4,7 +4,6 @@ nav {
   margin: 0;
   padding: 0 10%;
   box-shadow: 0 0 2px rgba(46, 46, 46, 0.39);
-  position: fixed;
   width: 100%;
   z-index: 1;
 }
@@ -70,7 +69,46 @@ a{
 }
 .logo{
   width: 168px;
-  height: 45px;
   background: url("../../placeholders/logo11.png") no-repeat;
   background-size: contain;
+}
+
+@media (max-width: 865px) {
+  .logo{
+    width: 148px;
+  }
+
+}
+
+@media (max-width: 775px) {
+  nav a {
+    padding: 13px 12px;
+  }
+
+  .logo{
+    width: 120px;
+  }
+}
+
+@media (max-width: 680px) {
+  nav a {
+    padding: 13px 6px;
+  }
+  .logo{
+    width: 100px;
+  }
+}
+
+@media (max-width: 580px) {
+  .logo{
+    width: 100px;
+  }
+
+  nav {  padding: 0;}
+  nav a {
+    float: none;
+    display: block;
+    text-align: left;
+    border: none;
+  }
 }

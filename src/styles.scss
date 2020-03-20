@@ -1,6 +1,7 @@
 $large-text-size:       16px;
 $medium-text-size:       14px;
 $small-text-size:       12px;
+$smaller-text-size:       11px;
 $font:           'Roboto', sans-serif;
 $main_blue:           rgba(0, 86, 132, 0.8);
 $hover_main_blue:     rgba(0, 86, 132, 1);
@@ -290,8 +291,20 @@ hr{
   display: flex;
   flex-flow: row;
 }
+//footer
+footer {
+  flex: 0 0 auto;
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+.content_block {
+  flex: 1 0 auto;
+}
 
-@media (max-width: 899px) {
+@media (max-width: 940px) {
   .close_modal{
     width: 50px;
     height: 30px;
@@ -311,13 +324,13 @@ hr{
     font-size: $medium-text-size;
   }
   .avatar{
-    max-width: 110px;
-    max-height: 110px;
+    max-width: 170px;
+    max-height: 170px;
   }
 
 }
 
-@media (max-width: 777px) {
+@media (max-width: 865px) {
 
   body{
     font-size: $small-text-size;
@@ -325,10 +338,11 @@ hr{
 
   button{
     padding: 5px 15px;
+    font-size: $small-text-size;
   }
   .avatar{
-    max-width: 100px;
-    max-height: 100px;
+    max-width: 150px;
+    max-height: 150px;
   }
   .smallAvatar{
     max-width: 60px;
@@ -336,15 +350,28 @@ hr{
   }
 }
 
-//footer
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
+@media (max-width: 768px) {
+  body{
+    font-size: $smaller-text-size;
+  }
+  button{
+    font-size: $smaller-text-size;
+  }
 }
-.content_block {
-  flex: 1 0 auto;
-}
-footer {
-  flex: 0 0 auto;
+
+@media (max-width: 580px) {
+
+  button{
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  input{
+    padding: 8px 12px;
+    font-size: $medium-text-size;
+  }
+  .avatar{
+    max-width: 100px;
+    max-height: 100px;
+  }
 }

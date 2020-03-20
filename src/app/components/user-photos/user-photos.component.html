@@ -10,7 +10,7 @@
       <div class="photo" [ngClass]="{large_photo: !limit, small_photo: limit }">
         <div class="main-photo" >
           <span *ngIf="authUser._id === photo.owner._id || authUser === photo.owner" (click)="delPhoto(i)" >&#x2716;</span>
-          <img *ngIf="photo"   src="http://localhost:8000/{{photo.url}}" [routerLink]="" [queryParams]="{ photo: photo._id }">
+          <img *ngIf="photo"  src="http://localhost:8000/{{photo.url}}" [routerLink]="" [queryParams]="{ photo: photo._id }">
         </div>
       </div>
     </div>

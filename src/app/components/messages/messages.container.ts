@@ -1,11 +1,10 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable, Subscription} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {dialogMes} from '../../services/dialog.service';
 import {User} from '../../interfaces/user';
 import {AppState} from '../../store/state/app.state';
 import {Store} from '@ngrx/store';
-import {authentificatedUser, msgForDialog, selectedDialog} from '../../store/selectors/user.selector';
+import {authentificatedUser, countMes, msgForDialog, selectedDialog} from '../../store/selectors/user.selector';
 import {GetSelectedDialog} from '../../store/actions/user.actions';
 import {
   DialogConnectSocket,
@@ -22,7 +21,8 @@ import {Dialog} from '../../interfaces/dialog';
           [msgs] = 'msgs$ | async'
           [user] = 'user$ | async'
           [dialog] = 'dialog$ | async'
-  ></app-messages>`,
+          [count] = 'count$ | async'
+   ></app-messages>`,
   styleUrls: ['./messages.component.scss']
 })
 export class MessagesContainerComponent implements OnInit, OnDestroy {
@@ -30,6 +30,7 @@ export class MessagesContainerComponent implements OnInit, OnDestroy {
   routing: Subscription;
   text: string;
   dialogId: string;
+  count$: Observable<object[]> = this.store.select(countMes);
   user$: Observable<User> = this.store.select(authentificatedUser);
   msgs$: Observable<Msg[]> = this.store.select(msgForDialog);
   dialog$: Observable<Dialog> = this.store.select(selectedDialog);

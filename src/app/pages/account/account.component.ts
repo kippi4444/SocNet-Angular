@@ -127,4 +127,8 @@ export class AccountComponent implements OnInit, OnDestroy, AfterContentChecked 
   goToDialog(user: User) {
     this.goDialog.emit(user);
   }
+
+  clearPreview() {
+    this.preview = '';
+  }
 }

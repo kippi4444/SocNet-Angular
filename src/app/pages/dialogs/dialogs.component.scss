@@ -1,9 +1,16 @@
 $names_dialog_block_width: 220px;
+$names_dialog_block_width_medium: 150px;
+$large-text-size:       12px;
+$medium-text-size:       10px;
+$small-text-size:       8px;
 
 span{
-  font-size: 12px;
+  font-size: $large-text-size;
   margin: 5px;
   color: #919191;
+  width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   small{
     position: absolute;
@@ -158,6 +165,13 @@ span{
      max-height: 100%;
    }
 
+  .avatar_block{
+    width: 75px;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+  }
+
   .column-block{
     display: flex;
     flex-flow: column;
@@ -212,7 +226,7 @@ span{
 
 
 
-@media (max-width: 899px) {
+@media (max-width: 940px) {
   .module {
     height: 65px;
     font-size: 10px;
@@ -221,8 +235,25 @@ span{
       width: 50px;
       height: 50px;
     }
+    .avatar_block{
+      width: 55px;
+    }
+    .names {
+      width: $names_dialog_block_width_medium;
+    }
 
+    h4{
+      font-size: $large-text-size;
+    }
   }
+  span{
+    font-size: $medium-text-size;
+    small{
+      font-size: $medium-text-size ;
+    }
+  }
+
+
   .dialog_block {
     .delete_dialog {
       right: -45px;
@@ -231,7 +262,10 @@ span{
       height: 60px;
     }
   }
-
+  .conf_block_avatar{
+    width: 50px;
+    height: 50px;
+  }
 }
 
 @media (max-width: 777px) {
@@ -256,4 +290,26 @@ span{
 
 }
 
-@media (max-width: 640px) {}
+
+@media (max-width: 580px) {
+  .module {
+    .module-avatar {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  .avatar_block{
+    width: 30px;
+  }
+  .conf_block_avatar {
+    width: 40px;
+    height: 40px;
+  }
+  .container{
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 35% 65%;
+  }
+
+}
+

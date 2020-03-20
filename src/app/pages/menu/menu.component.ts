@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../store/state/app.state';
 import {authentificatedUser, stateAuth} from '../../store/selectors/user.selector';
@@ -28,9 +28,14 @@ export class MenuComponent implements OnInit, OnDestroy {
   login: string;
   sub = [];
   notif: any ;
+  innerWidth: number;
+  show = false;
 
   constructor(private store: Store<AppState>) { }
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.innerWidth = window.innerWidth;
+  }
   ngOnInit() {
     this.sub.push(this.store.select(stateAuth).subscribe(state => this.isAuth = state));
     this.sub.push(this.store.select(authentificatedUser).subscribe(state =>  {
@@ -77,4 +82,6 @@ export class MenuComponent implements OnInit, OnDestroy {
   close() {
     this.notif = null;
   }
+
+
 }

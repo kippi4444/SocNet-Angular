@@ -1,4 +1,3 @@
-$avatar_block_width: 230px;
 
 hr{
   margin-top: 20px;
@@ -51,12 +50,12 @@ hr{
   transform: scale(1);
   border-radius: 5px;
   min-width: 150px;
-  max-width: 300px;
+  max-width: 450px;
   max-height: 300px;
 }
 
 .extra_info{
-  width: $avatar_block_width;
+  width: 230px;
   margin-right: 0.5em;
 }
 
@@ -74,7 +73,6 @@ hr{
   align-items: center;
   padding-right: 10px;
   width: auto;
-  //border-right: 1px solid  rgba(75, 218, 40, 0.21);
 }
 
 .secondColumnAccount{
@@ -92,7 +90,6 @@ hr{
     right: 10px;
     top: 10px;
   }
-
 }
 
 .user-info{
@@ -100,9 +97,7 @@ hr{
   display: grid;
   grid-template-columns: auto auto ;
   grid-gap: 5px;
-
 }
-
 
 .underAvatar{
   display: flex;
@@ -120,6 +115,7 @@ hr{
 }
 
 .block_avatar{
+  height: 300px;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -159,3 +155,73 @@ hr{
   }
 }
 
+@media (max-width: 940px) {
+  .user_info_block{
+    width: 800px;
+  }
+  .secondColumnAccount{
+    width: 450px;
+  }
+  .block_avatar{
+    width: 200px;
+  }
+  .extra_info{
+    width: 200px;
+  }
+}
+
+@media (max-width: 865px) {
+  .user_info_block{
+    width: 700px;
+  }
+  .secondColumnAccount{
+    width: 400px;
+  }
+  .block_avatar{
+    width: 150px;
+  }
+}
+
+@media (max-width: 715px) {
+  .user_info_block{
+    width: 680px;
+  }
+  .secondColumnAccount{
+    width: 300px;
+  }
+  .block_avatar{
+    width: 80px;
+  }
+  .extra_info{
+    width: 170px;
+  }
+}
+
+@media (max-width: 580px) {
+
+  .block_avatar{
+    width: auto;
+  }
+  .extra_info{
+    width: auto;
+  }
+  .secondColumnAccount{
+    width: auto;
+  }
+  .main{
+    margin: 0;
+  }
+  .preview{
+    min-width: 80px;
+    max-width: 150px;
+    max-height: 150px;
+  }
+}
+
+@media (max-width: 360px) {
+
+  .account{
+    flex-direction: column;
+  }
+
+}

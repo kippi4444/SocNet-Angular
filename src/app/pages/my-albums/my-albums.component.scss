@@ -77,14 +77,30 @@
   }
 }
 
+@media (max-width: 865px) {
+  .albums_block {
+    .small_album_photo {
+      width: 170px;
+      height: 100px;
+    }
+    .large_album_photo{
+      width: 250px;
+      height: 150px;
+    }
+  }
+}
 
-@media (max-width: 777px) {
+
+@media (max-width: 715px) {
   .albums_block {
     .small_album_photo {
       width: 120px;
       height: 90px;
     }
-
+    .large_album_photo{
+      width: 200px;
+      height: 100px;
+    }
   }
 }
 

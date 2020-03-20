@@ -31,6 +31,7 @@ export class MessagesComponent implements OnInit, OnDestroy,  AfterViewChecked {
   @Input() msgs: Msg[];
   @Input() dialog: Dialog;
   @Input() user: User;
+  @Input() count: object;
   disableScrollDown: boolean;
 
   @ViewChild('scrollBar', {static: false})
@@ -59,7 +60,8 @@ export class MessagesComponent implements OnInit, OnDestroy,  AfterViewChecked {
   }
 
   private onScroll(event) {
-    if (Number.isInteger(this.msgs.length / 10) && event.target.scrollTop < 15) {
+    if(!this.count[0]){return;}
+    if (this.msgs.length < this.count[0].count && event.target.scrollTop < 15) {
       this.store.dispatch(new GetScrollMes({dialog: this.dialog._id, skip: this.msgs.length}));
     }
     const element = this.scrollBar.nativeElement;
@@ -78,30 +80,19 @@ export class MessagesComponent implements OnInit, OnDestroy,  AfterViewChecked {
   }
 
 
-
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   console.log(changes);
-  //   if (!changes.dialog.previousValue && changes.dialog.currentValue){
-  //
-  //     setTimeout(()=>{
-  //       console.log(this.scrollBar.nativeElement.scrollHeight);
-  //       this.scrollBar.nativeElement.scrollTop = this.scrollBar.nativeElement.scrollHeight;
-  //     },1000);
-  //
-  //   }
-  // }
-
   sendMes(msg) {
-      const message = {
-        name: this.user.name,
-        user: this.user._id,
-        dialog: this.dialog,
-        isReading: this.dialog.person.filter(person => person !== this.user._id),
-        text: msg,
-      };
-      this.store.dispatch(new SendMes(message));
-      this.text = '';
-      this.scrollBar.nativeElement.scrollTop = this.scrollBar.nativeElement.scrollHeight;
+    msg = msg.replace(/^\s+|\s+$/gm, '');
+    if (!msg) { return; }
+    const message = {
+      name: this.user.name,
+      user: this.user._id,
+      dialog: this.dialog,
+      isReading: this.dialog.person.filter(person => person !== this.user._id),
+      text: msg,
+    };
+    this.store.dispatch(new SendMes(message));
+    this.text = '';
+    this.scrollBar.nativeElement.scrollTop = this.scrollBar.nativeElement.scrollHeight;
   }
 
 
@@ -113,5 +104,10 @@ export class MessagesComponent implements OnInit, OnDestroy,  AfterViewChecked {
   }
 
 
-
+  keyToSend(event: KeyboardEvent) {
+      if (event.shiftKey && event.key === 'Enter') {
+      } else if (event.key === 'Enter') {
+        this.sendMes(this.text);
+      }
+  }
 }

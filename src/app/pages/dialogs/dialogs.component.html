@@ -11,12 +11,10 @@
     <div  *ngFor="let dialog of dialogs " >
       <div *ngIf="dialog.persons.length < 2" class="dialog_block" [ngClass]="{active: dialog._id == activeDialog}">
         <div class="module " *ngFor="let person of dialog.persons" (click)="goToDialog(dialog)" >
-          <div class="column-block "  >
-            <a  routerLink="/users/{{person.login}}">
-              <div class="module-avatar">
-                <img class="dialog_avatar" src="http://localhost:8000/{{person.avatar.url}}" alt="">
-              </div>
-            </a>
+          <div class="avatar_block "  >
+            <div class="module-avatar">
+              <img routerLink="/users/{{person.login}}" class="dialog_avatar" src="http://localhost:8000/{{person.avatar.url}}" alt="">
+            </div>
           </div>
           <div class="column-block">
             <div class="names">

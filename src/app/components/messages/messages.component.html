@@ -14,6 +14,7 @@
   <div>
 
     <div class="message" #scrollBar (scroll)="onScroll($event)">
+      <small class="no_messages" *ngIf="msgs.length<1">Сообщений пока нет... :(</small>
       <div >
         <div class="mes_block"  *ngFor="let mes of msgs " [ngClass]="{myMes: mes.isReading.length}">
           <div class="info_mes">
@@ -31,13 +32,12 @@
       </div>
     </div>
   </div>
-  <form (ngSubmit)="sendMes(text)">
-
     <div class="message_text">
-      <textarea placeholder=" Текст сообщения" [(ngModel)]="text"  name="comment[text]" id="comment_text"  class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true"></textarea>
-      <button class="send_sms" type="submit" >Отправить</button>
+        <textarea placeholder=" Текст сообщения" [(ngModel)]="text"  name="comment[text]" id="comment_text"
+                  class="ui-autocomplete-input"
+                  (keydown)="keyToSend($event)"></textarea>
+        <button class="send_sms" type="submit" (click)="sendMes(text)" >Отправить</button>
     </div>
-  </form>
 </div>
 <ng-template #Loading>
   <div class="loading">

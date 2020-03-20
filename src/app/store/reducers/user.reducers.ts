@@ -174,6 +174,7 @@ export const userReducers = (
           ...state,
           selectedDialog: action.payload.dialog,
           dialogMes: action.payload.mes,
+          dialogMesCount: action.payload.count
         };
       }
     }
@@ -183,6 +184,7 @@ export const userReducers = (
         ...state,
         selectedDialog: action.payload.dialog,
         dialogMes: action.payload.mes.concat(state.dialogMes),
+        dialogMesCount: action.payload.count
       };
     }
 
@@ -209,7 +211,7 @@ export const userReducers = (
       return {
         ...state,
         lastDialog: action.payload[0],
-        allDialogs: action.payload.concat(state.allDialogs.filter(dialog => dialog._id !== action.payload[0]._id))
+        allDialogs: action.payload.concat(state.allDialogs.filter(dialog => dialog._id !== action.payload[0]._id)),
       };
     }
     case UserActions.ADD_DIALOG_FAILURE: {

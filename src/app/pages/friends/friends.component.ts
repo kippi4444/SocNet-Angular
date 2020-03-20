@@ -1,8 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FriendService} from '../../services/friend.service';
 import {Friend} from '../../interfaces/friend';
 import {User} from '../../interfaces/user';
-import {DialogService} from '../../services/dialog.service';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {AppState} from '../../store/state/app.state';
 import {Store} from '@ngrx/store';

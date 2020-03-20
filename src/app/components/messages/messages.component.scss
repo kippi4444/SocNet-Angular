@@ -1,8 +1,11 @@
 .message{
+  position: relative;
   width: 100%;
   height: 500px;
   overflow: scroll;
   overflow-x:hidden;
+  background: url("../../placeholders/chat.png") no-repeat;
+  background-size: cover;
   &::-webkit-scrollbar {
     width: 5px;
   }
@@ -16,12 +19,21 @@
   border-radius: 5px;
 }
 
+.no_messages{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #b5b5b5;
+}
 
 .mes_block{
   margin: 5px;
   color: #1c1c1c;
   font-size: 14px;
   padding: 2px 10px;
+  white-space: pre-wrap;
+  word-break: break-word;
 
   small{
     font-size: 12px;
@@ -102,9 +114,13 @@ textarea {
 }
 .send_sms{
   width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 50px;
 }
-@media (max-width: 899px) {
+
+@media (max-width: 940px) {
   .dialog-avatar{
     width: 30px;
     height: 30px;
@@ -116,6 +132,17 @@ textarea {
       font-size: 10px;
     }
   }
-
+  textarea {
+    height: 40px;
+  }
+  .send_sms{
+    height: 40px;
+  }
 }
 
+@media (max-width: 580px) {
+  .message {
+    height: 300px;
+  }
+
+}

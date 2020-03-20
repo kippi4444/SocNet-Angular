@@ -70,10 +70,11 @@ export const userPhotosReducers = (
     }
 
     case UserPhotosActions.ADD_PHOTO_ALBUM_SUCCESS: {
+      const photo = JSON.parse(JSON.stringify(action.payload));
       return {
         ...state,
         albumPhotos: state.albumPhotos.concat(action.payload),
-        allPhotos: state.allPhotos.concat(action.payload),
+        allPhotos: state.allPhotos.concat(photo),
       };
     }
     case UserPhotosActions.ADD_PHOTO_ALBUM_FAILURE: {
@@ -83,10 +84,11 @@ export const userPhotosReducers = (
     }
 
     case UserPhotosActions.ADD_PHOTO_WALL_SUCCESS: {
+      const photo = JSON.parse(JSON.stringify(action.payload));
       return {
         ...state,
         albumPhotos: state.albumPhotos.concat(action.payload),
-        allPhotos: action.payload.concat(state.allPhotos),
+        allPhotos: photo.concat(state.allPhotos),
       };
     }
     case UserPhotosActions.ADD_PHOTO_WALL_FAILURE: {
@@ -156,19 +158,19 @@ export const userPhotosReducers = (
 
     case UserPhotosActions.LIKE_DISLIKE_SUCCESS: {
       function check(arr: Photo[], payload) {
+
         return arr.filter(value => {
           if (value._id === payload.mes.photo._id) {
             if (value.likes.includes(payload.mes.who._id)) {
               value.likes = value.likes.filter(id => id !== payload.mes.who._id);
             } else {
-              value.likes.push(payload.mes.who._id);
+              value.likes = value.likes.concat(payload.mes.who._id);
             }
             return value;
           }
           return value;
         });
       }
-
       return {
         ...state,
         allPhotos: check(state.allPhotos, action.payload),

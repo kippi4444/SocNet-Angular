@@ -97,7 +97,7 @@
     <input  type="file" name="file" id="file" class="inputfile"  (change)="onFileChange($event)" />
     <label  *ngIf="accountChecker() && isAuth && !preview" for="file">Загрузить</label>
     <button *ngIf="preview"  (click)="uploadAvatar()">Сохранить</button>
-    <button  (click)="openModal()">Отмена</button>
+    <button  (click)="clearPreview()">Отмена</button>
   </div>
 </div>
 <!--// ========================== modal end ==============================//-->

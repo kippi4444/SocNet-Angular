@@ -1,5 +1,5 @@
 
-<nav>
+<nav #nav>
   <a routerLink="/dashboard" class="logo"> </a>
   <a *ngIf="!isAuth" routerLink="/login" routerLinkActive="active">Войти</a>
   <a *ngIf="isAuth" routerLink="/users/{{login}}" routerLinkActive="active"
@@ -50,4 +50,4 @@
 
 
 </div>
-<div class="wrapper_menu"></div>
+<!--<div class="wrapper_menu"></div>-->

@@ -32,4 +32,7 @@ export const addDialog = createSelector(
   selectUser,
   (state: UserState) => state.lastDialog
 );
-
+export const countMes = createSelector(
+  selectUser,
+  (state: UserState) => state.dialogMesCount
+);
