@@ -11,9 +11,7 @@ import {Data} from './user.service';
 })
 export class PetService {
   private petsUrl = 'http://localhost:8000/pets/';
-  constructor(
-    private http: HttpClient,
-    private router: Router) { }
+  constructor(private http: HttpClient) { }
 
   addPet(petData: Pet) {
     return this.http.post<Pet>(this.petsUrl, petData).pipe(map(value => value));
@@ -24,14 +22,4 @@ export class PetService {
       .pipe(map(value => value));
   }
 
-  updPet(petData: Pet) {
-    console.log(petData);
-    this.http.put<Data>(this.petsUrl, petData)
-      .pipe(
-        catchError(err => {
-          console.log(err.error.error);
-          return throwError(err.error.error);
-        })
-      ).subscribe();
-  }
 }

@@ -1,14 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Observable, of, Subscription, throwError} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import { User } from '../interfaces/user';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
-import {Router} from '@angular/router';
-import {Store} from '@ngrx/store';
-import {AppState} from '../store/state/app.state';
 import {Photo} from '../interfaces/photo';
-
-
 
 export class Data {
   user?: User;
@@ -26,10 +21,7 @@ export class UserService {
   id: string;
   private usersUrl = 'http://localhost:8000/users/';
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private store: Store<AppState>) { }
+  constructor(private http: HttpClient) { }
 
   getAuthUser(): Observable<User> {
     return this.http.get<User>(this.usersUrl + 'me')
@@ -57,7 +49,7 @@ export class UserService {
   }
 
   add(user: User) {
-    return this.http.post<Data>(this.usersUrl, user,{observe: 'response'}).pipe(map(value => value));
+    return this.http.post<Data>(this.usersUrl, user, {observe: 'response'}).pipe(map(value => value));
   }
 
   login(loginData: User) {
@@ -81,13 +73,8 @@ export class UserService {
     return this.http.put<Photo>('http://localhost:8000/photos/' + 'avatar', img, {observe: 'response'}).pipe(map(value => value));
   }
 
-
-  // updateOther(user: User) {
-  //   this.http.put<Data>(this.usersUrl + 'update/' + user.login, user).subscribe();
-  // }
-
   changeAvatar(url: string) {
     return this.http.put<Photo>('http://localhost:8000/photos/' + 'change', {url}).pipe(map(value => value));
-
   }
+
 }

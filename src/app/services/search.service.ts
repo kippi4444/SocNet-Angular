@@ -15,6 +15,7 @@ export class SearchService {
     private http: HttpClient) { }
 
   search(query?: QuerySearch)  {
+    // @ts-ignore
     return this.http.get<User[]>(this.usersUrl, {
       params:  query}).pipe(map(users => users));
   }

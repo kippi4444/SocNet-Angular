@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {catchError, map} from 'rxjs/operators';
-import {Observable, throwError} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 import {Friend} from '../interfaces/friend';
 
 @Injectable({
@@ -33,7 +33,6 @@ export class FriendService {
        map(value => value)
      );
   }
-
 
  getAllFriends(id: string): Observable<Friend[]> {
    return this.http.get<Friend[]>(this.friendsUrl + id)

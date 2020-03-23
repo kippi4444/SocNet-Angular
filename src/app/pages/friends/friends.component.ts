@@ -8,7 +8,6 @@ import {AddFriend, DelFriend, DelRequest, GetAllFriends, GetAllRequests} from '.
 import {allFriends, allRequests} from '../../store/selectors/friendship.selector';
 import {AddDialog} from '../../store/actions/user.actions';
 import {addDialog} from '../../store/selectors/user.selector';
-import {SendNotification} from '../../store/actions/message.actions';
 
 
 @Component({
@@ -56,7 +55,6 @@ export class FriendsComponent implements OnInit, OnDestroy {
   }
 
   addFriend(id: string) {
-    this.store.dispatch(new SendNotification({event: 'newFriend', mes: {id: id}}));
     this.store.dispatch(new AddFriend({friend: this.id , owner: id}));
   }
 
@@ -65,7 +63,6 @@ export class FriendsComponent implements OnInit, OnDestroy {
   }
 
   delFriend(id: string) {
-    this.store.dispatch(new SendNotification({event: 'delFriend', mes: {id: id}}));
     this.store.dispatch(new DelFriend(id));
   }
 

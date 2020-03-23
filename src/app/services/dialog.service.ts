@@ -4,7 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {Dialog} from '../interfaces/dialog';
 import {Msg} from '../interfaces/msg';
 
-export class dialogMes {
+export class DialogMes {
   dialog: Dialog;
   mes: Msg[];
 }
@@ -26,14 +26,6 @@ export class DialogService {
 
   addDialog(body: object) {
     return this.http.post<Dialog>(this.dialogsUrl, body).pipe(map(value => value));
-  }
-
-  getDialog(id: string) {
-    return this.http.get<Dialog>(this.dialogsUrl + id).pipe(map(value => value));
-  }
-
-  getMessages(dialogId: string) {
-    return this.http.get<dialogMes>(this.dialogsUrl + 'mes/' + dialogId);
   }
 
   delDialog(dialogId: string) {

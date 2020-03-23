@@ -24,6 +24,7 @@ export class PaginationComponent implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    // @ts-ignore
     this.route.queryParamMap.pipe(map(value => value.params)).subscribe(
       query => {
           this.query = JSON.parse(JSON.stringify(query));

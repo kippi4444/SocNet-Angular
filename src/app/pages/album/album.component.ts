@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import {Album} from '../../interfaces/album';
 import {Router} from '@angular/router';
 import {Photo} from '../../interfaces/photo';

@@ -8,7 +8,7 @@ export interface UserState {
   lastDialog: Dialog;
   selectedDialog: Dialog;
   dialogMes: Msg[];
-  dialogMesCount: number;
+  dialogMesCount: object[];
   state: boolean;
 }
 
@@ -17,7 +17,7 @@ export  const initialUserState: UserState = {
   allDialogs: [],
   lastDialog: null,
   selectedDialog: null,
-  dialogMesCount: null,
+  dialogMesCount: [],
   dialogMes: [],
   state: false,
 };

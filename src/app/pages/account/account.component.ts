@@ -105,7 +105,7 @@ export class AccountComponent implements OnInit, OnDestroy, AfterContentChecked 
     return state;
   }
 
-  ngAfterContentChecked() : void {
+  ngAfterContentChecked(): void {
     this.changeDetector.detectChanges();
   }
 

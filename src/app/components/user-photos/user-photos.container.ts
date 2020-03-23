@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component,  OnDestroy, OnInit} from '@angular/core';
 import {Photo} from '../../interfaces/photo';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Observable, Subscription} from 'rxjs';

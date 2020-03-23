@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 import {User} from '../../interfaces/user';
 import {Pet} from '../../interfaces/pet';
 import {Dialog} from '../../interfaces/dialog';
-import {dialogMes} from '../../services/dialog.service';
+import {DialogMes} from '../../services/dialog.service';
 import {Photo} from '../../interfaces/photo';
 import {Msg} from '../../interfaces/msg';
 import {scrollSettings} from '../../interfaces/scroll';
@@ -241,7 +241,7 @@ export  class GetSelectedDialog implements  Action {
 
 export  class GetSelectedDialogSuccess implements  Action {
   public readonly type = UserActions.GET_SELECTED_DIALOG_SUCCESS;
-  constructor(public payload: dialogMes | {event: string, mes: Msg}) {}
+  constructor(public payload: DialogMes | {event: string, mes: Msg}) {}
 }
 
 export  class GetSelectedDialogFailure implements  Action {
@@ -343,7 +343,7 @@ export  class GetScrollMes implements  Action {
 
 export  class GetScrollMesSuccess implements  Action {
   public readonly type = UserActions.SCROLL_MES_SUCCESS;
-  constructor(public payload: dialogMes | {event: string, msg: Msg}) {}
+  constructor(public payload: DialogMes | {event: string, msg: Msg}) {}
 }
 
 export  class GetScrollMesFailure implements  Action {

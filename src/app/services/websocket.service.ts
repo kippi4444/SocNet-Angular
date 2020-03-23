@@ -3,7 +3,6 @@ import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import {scrollSettings} from '../interfaces/scroll';
-import {Photo} from '../interfaces/photo';
 
 
 @Injectable({

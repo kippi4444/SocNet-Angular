@@ -27,11 +27,10 @@ import { UserPhotosComponent } from './components/user-photos/user-photos.compon
 import {UserPhotosContainerComponent} from './components/user-photos/user-photos.container';
 import { HtmlSafePipe } from './html-safe.pipe';
 import { PhotoViewerComponent } from './components/photo-viewer/photo-viewer.component';
-import { WallComponent } from './components/wall/wall.component';
 import { MessagesComponent } from './components/messages/messages.component';
 import {WebsocketService} from './services/websocket.service';
 import { DialogsComponent } from './pages/dialogs/dialogs.component';
-import {StoreModule} from '@ngrx/store';
+import { MetaReducer, StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {UserEffects} from './store/effects/user.effects';
 import {appReducers} from './store/reducers/app.reducers';
@@ -50,8 +49,12 @@ import { FooterComponent } from './components/footer/footer.component';
 import { registerLocaleData } from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
 import { CreateDialogComponent } from './components/create-dialog/create-dialog.component';
+import {clearState} from './store/reducers/clearState.reducer';
 
 registerLocaleData(localeRu, 'ru');
+
+export const metaReducers: MetaReducer<any>[] = [clearState];
+
 
 @NgModule({
   declarations: [
@@ -76,7 +79,6 @@ registerLocaleData(localeRu, 'ru');
     UserPhotosContainerComponent,
     HtmlSafePipe,
     PhotoViewerComponent,
-    WallComponent,
     MessagesComponent,
     DialogsComponent,
     DialogsContainerComponent,
@@ -93,10 +95,9 @@ registerLocaleData(localeRu, 'ru');
     HttpClientModule,
     BrowserAnimationsModule,
     NgxFileDropModule,
-    StoreModule.forRoot(appReducers),
+    StoreModule.forRoot(appReducers, { metaReducers }),
     EffectsModule.forRoot([UserEffects, ExtraForUserEffects, FriendshipEffects, UserPhotos, MessageEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-
   ],
   providers: [     {
     provide: HTTP_INTERCEPTORS,
@@ -109,4 +110,6 @@ registerLocaleData(localeRu, 'ru');
   WebsocketService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
+
+

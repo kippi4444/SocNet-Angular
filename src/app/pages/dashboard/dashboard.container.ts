@@ -14,8 +14,6 @@ import {SearchingUsers} from '../../store/actions/extraForUser.actions';
 import {allUsers} from '../../store/selectors/extraForUser.selector';
 import {AddFriend, DelFriend, DelRequest} from '../../store/actions/friendship.actions';
 import {QuerySearch} from '../../interfaces/querySearch';
-import {SendNotification} from '../../store/actions/message.actions';
-
 
 
 
@@ -54,6 +52,7 @@ export class DashboardContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // @ts-ignore
     this.route.queryParamMap.pipe(map(value => value.params)).subscribe( query => {
       this.query = JSON.parse(JSON.stringify(query));
       this.searchDispatch();
@@ -86,12 +85,10 @@ export class DashboardContainerComponent implements OnInit, OnDestroy {
   }
 
   addFriend(obj) {
-    this.store.dispatch(new SendNotification({event: 'addFriend', mes: {id: obj.friend}}));
     this.store.dispatch(new AddFriend({friend: obj.id , owner: obj.friend}));
   }
 
   delFriend(exFriend) {
-    this.store.dispatch(new SendNotification({event: 'delFriend', mes: {id: exFriend}}));
     this.store.dispatch(new DelFriend(exFriend));
   }
 

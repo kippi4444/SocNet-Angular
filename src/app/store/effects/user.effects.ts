@@ -52,7 +52,7 @@ import {Router} from '@angular/router';
 import {Pet} from '../../interfaces/pet';
 import {PetService} from '../../services/pet.service';
 import {Dialog} from '../../interfaces/dialog';
-import {dialogMes, DialogService} from '../../services/dialog.service';
+import {DialogMes, DialogService} from '../../services/dialog.service';
 import { AddPhotoSuccess} from '../actions/photo.actions';
 import {Photo} from '../../interfaces/photo';
 import {SelectedAuthUserChangeAvatarSuccess} from '../actions/extraForUser.actions';
@@ -198,7 +198,7 @@ export class UserEffects {
     ofType<GetSelectedDialog>(UserActions.GET_SELECTED_DIALOG),
     switchMap((action: GetSelectedDialog) => this.socketService.getAllMes(action.payload)
       .pipe(
-        switchMap((dialog: dialogMes) => of(new GetSelectedDialogSuccess(dialog))),
+        switchMap((dialog: DialogMes) => of(new GetSelectedDialogSuccess(dialog))),
         catchError((err) => [new GetSelectedDialogFailure(err), new GetError(err)])
       )
     ),
@@ -209,7 +209,7 @@ export class UserEffects {
     ofType<GetScrollMes>(UserActions.SCROLL_MES),
     switchMap((action: GetScrollMes) => this.socketService.getScrollMes(action.payload)
       .pipe(
-        switchMap((dialog: dialogMes) => of(new GetScrollMesSuccess(dialog))),
+        switchMap((dialog: DialogMes) => of(new GetScrollMesSuccess(dialog))),
         catchError((err) => [new GetScrollMesFailure(err), new GetError(err)])
       )
     )

@@ -6,7 +6,7 @@ import {Photo} from '../../interfaces/photo';
 import {AppState} from '../../store/state/app.state';
 import {Store} from '@ngrx/store';
 import {stateAuth} from '../../store/selectors/user.selector';
-import {AddPhoto, DelAlbum, DelPhoto, GetSelectedAlbum, UpdAlbum, UpdAlbumSuccess} from '../../store/actions/photo.actions';
+import {AddPhoto, DelAlbum, DelPhoto, GetSelectedAlbum, UpdAlbum} from '../../store/actions/photo.actions';
 import {selectedAlbum, selectedAlbumPhoto} from '../../store/selectors/photo.selector';
 
 

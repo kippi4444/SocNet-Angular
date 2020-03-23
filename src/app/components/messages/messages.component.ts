@@ -31,9 +31,9 @@ export class MessagesComponent implements OnInit, OnDestroy,  AfterViewChecked {
   @Input() msgs: Msg[];
   @Input() dialog: Dialog;
   @Input() user: User;
-  @Input() count: object;
+  @Input() count: object[];
   disableScrollDown: boolean;
-
+  check: boolean;
   @ViewChild('scrollBar', {static: false})
   scrollBar: ElementRef;
   showPersons = false;
@@ -60,10 +60,14 @@ export class MessagesComponent implements OnInit, OnDestroy,  AfterViewChecked {
   }
 
   private onScroll(event) {
-    if(!this.count[0]){return;}
-    if (this.msgs.length < this.count[0].count && event.target.scrollTop < 15) {
+    if (!this.count[0]) {return;}
+
+    if (this.msgs.length < this.count[0].count && event.target.scrollTop === 0 && !this.check) {
       this.store.dispatch(new GetScrollMes({dialog: this.dialog._id, skip: this.msgs.length}));
+      this.check = true;
+      event.target.scrollTop = 50;
     }
+    this.check = false;
     const element = this.scrollBar.nativeElement;
     const atBottom = element.scrollHeight - element.scrollTop <= element.clientHeight;
     this.disableScrollDown = !(this.disableScrollDown && atBottom);

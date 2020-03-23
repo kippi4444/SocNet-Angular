@@ -27,17 +27,13 @@
         </div>
       </ng-template>
     </div>
-    <div *ngSwitchCase="'addFriend'">
-      <a class="close" (click)="close()" >x</a>
-      <div class="text">У Вас новая завяка в друзья! ;)</div>
-    </div>
     <div *ngSwitchCase="'delFriend'">
       <a class="close" (click)="close()" >x</a>
       <div class="text">Вас удалили из друзей :(</div>
     </div>
     <div *ngSwitchCase="'newFriend'">
       <a class="close" (click)="close()" >x</a>
-      <div class="text">Вас Добавили в друзья!:)</div>
+      <div class="text">Вас добавили в друзья!:)</div>
     </div>
     <div *ngSwitchCase="'newMes'">
       <a class="close" (click)="close()" >x</a>
@@ -45,6 +41,10 @@
         {{notif.mes.user.name | titlecase}} {{notif.mes.user.surname | titlecase}}:
       </a>
       <div class="text">{{notif.mes.text | titlecase}}</div>
+    </div>
+    <div *ngSwitchCase="'newReq'">
+      <a class="close" (click)="close()" >x</a>
+      <div class="text">У Вас новая завяка в друзья! ;)</div>
     </div>
   </div>
 
