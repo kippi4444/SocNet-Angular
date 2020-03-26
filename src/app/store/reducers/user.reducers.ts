@@ -1,10 +1,10 @@
 import {initialUserState, UserState} from '../state/user.state';
 import {UserActions} from '../actions/user.actions';
 
-export const userReducers = (
+export function userReducers(
   state = initialUserState,
   action: UserActions
-): UserState => {
+): UserState {
   switch (action.type) {
     case UserActions.NEW_USER_SUCCESS: {
       return {

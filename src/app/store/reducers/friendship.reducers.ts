@@ -3,10 +3,10 @@ import {FriendshipUserActions} from '../actions/friendship.actions';
 import {initialUserFriendship, UserFriendship} from '../state/friendship.state';
 
 
-export const friendsReducers = (
+export function friendsReducers(
   state = initialUserFriendship,
   action: FriendshipUserActions,
-): UserFriendship => {
+): UserFriendship {
   switch (action.type) {
     case FriendshipUserActions.ADD_FRIEND_SUCCESS: {
       return {

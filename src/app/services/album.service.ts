@@ -1,13 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Album} from '../interfaces/album';
-import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
-
-interface Interface {
-
-}
 
 @Injectable({
   providedIn: 'root'

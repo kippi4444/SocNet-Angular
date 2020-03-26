@@ -15,7 +15,7 @@ import {GetLoginUser, NewUser} from '../../store/actions/user.actions';
                          (regEvent)="register($event)"></app-login>`
 })
 export class LoginContainerComponent implements OnInit{
-  private user$ = this.store.pipe(select(authentificatedUser));
+  user$ = this.store.pipe(select(authentificatedUser));
 
   constructor(private userService: UserService,
               private store: Store<AppState>) {}

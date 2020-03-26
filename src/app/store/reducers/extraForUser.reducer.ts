@@ -3,10 +3,10 @@ import {ExtraForUserActions} from '../actions/extraForUser.actions';
 
 
 
-export const extraForUserReducers = (
+export function extraForUserReducers(
   state = initialExtraForUser,
   action: ExtraForUserActions
-): ExtraForUser => {
+): ExtraForUser {
   switch (action.type) {
 
     case ExtraForUserActions.GET_USERS_SUCCESS: {

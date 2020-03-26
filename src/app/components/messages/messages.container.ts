@@ -30,7 +30,7 @@ export class MessagesContainerComponent implements OnInit, OnDestroy {
   routing: Subscription;
   text: string;
   dialogId: string;
-  count$: Observable<object[]> = this.store.select(countMes);
+  count$: Observable<{count: number}[]> = this.store.select(countMes);
   user$: Observable<User> = this.store.select(authentificatedUser);
   msgs$: Observable<Msg[]> = this.store.select(msgForDialog);
   dialog$: Observable<Dialog> = this.store.select(selectedDialog);

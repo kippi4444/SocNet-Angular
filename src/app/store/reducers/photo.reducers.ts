@@ -1,12 +1,11 @@
 import {initialUserPhotos, UserPhotos} from '../state/photo.state';
 import {UserPhotosActions} from '../actions/photo.actions';
-import {selectedAlbumPhoto} from '../selectors/photo.selector';
 import {Photo} from '../../interfaces/photo';
 
-export const userPhotosReducers = (
+export function userPhotosReducers(
   state = initialUserPhotos,
   action: UserPhotosActions
-): UserPhotos => {
+): UserPhotos {
   switch (action.type) {
     case UserPhotosActions.GET_ALL_USER_ALBUMS_SUCCESS: {
       return {

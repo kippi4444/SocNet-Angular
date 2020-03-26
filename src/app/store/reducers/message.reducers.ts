@@ -2,10 +2,10 @@
 import {initialMesState, MessageState} from '../state/message.state';
 import {MessageActions} from '../actions/message.actions';
 
-export const mesReducers = (
+export function mesReducers(
   state = initialMesState,
   action: MessageActions
-): MessageState => {
+): MessageState {
   switch (action.type) {
     case MessageActions.SEND_MES_SUCCESS: {
       return {

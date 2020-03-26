@@ -31,7 +31,7 @@ export class MessagesComponent implements OnInit, OnDestroy,  AfterViewChecked {
   @Input() msgs: Msg[];
   @Input() dialog: Dialog;
   @Input() user: User;
-  @Input() count: object[];
+  @Input() count: {count: number}[];
   disableScrollDown: boolean;
   check: boolean;
   @ViewChild('scrollBar', {static: false})

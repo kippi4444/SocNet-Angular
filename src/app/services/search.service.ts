@@ -15,8 +15,15 @@ export class SearchService {
     private http: HttpClient) { }
 
   search(query?: QuerySearch)  {
-    // @ts-ignore
+    // {
+    //   limit: query.limit.toString(),
+    //     page: query.page.toString(),
+    //   sort: query.sort,
+    //   start: query.start.toString(),
+    //   search: query.search
+    // }
     return this.http.get<User[]>(this.usersUrl, {
-      params:  query}).pipe(map(users => users));
+      params: query
+    }).pipe(map(users => users));
   }
 }

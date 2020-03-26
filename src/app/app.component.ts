@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Msg} from './interfaces/msg';
 import {Store} from '@ngrx/store';
 import {AppState} from './store/state/app.state';
 import {GetAuthUser} from './store/actions/user.actions';
@@ -28,12 +27,11 @@ export class AppComponent implements OnInit {
 
   handlingErrors() {
     this.store.select(searchErrors).subscribe(error => {
-      console.log(error);
-     if ( error) {
+      if ( error) {
       this.error = error;
-      setTimeout(() => {this.error = ''} , 5000);
+      setTimeout(() => {this.error = ''; } , 5000);
      }
-    })
+    });
   }
 
 }

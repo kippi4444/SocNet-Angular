@@ -8,7 +8,7 @@ export interface UserState {
   lastDialog: Dialog;
   selectedDialog: Dialog;
   dialogMes: Msg[];
-  dialogMesCount: object[];
+  dialogMesCount: {count: number}[];
   state: boolean;
 }
 

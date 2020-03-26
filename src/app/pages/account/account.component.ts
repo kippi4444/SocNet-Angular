@@ -30,9 +30,9 @@ export class AccountComponent implements OnInit, OnDestroy, AfterContentChecked 
   sub = [];
   edit: boolean;
 
-  private newAvatar: string | ArrayBuffer;
-  private preview: string | ArrayBuffer;
-  private showModal = false;
+  newAvatar: string | ArrayBuffer;
+  preview: string | ArrayBuffer;
+  showModal = false;
   constructor(private changeDetector: ChangeDetectorRef)  {}
 
   ngOnInit() {

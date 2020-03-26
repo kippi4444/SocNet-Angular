@@ -24,6 +24,7 @@ export class AlbumComponent implements OnDestroy {
   sub = [];
   preview: string | ArrayBuffer;
   editMode = false;
+
   constructor(private router: Router) { }
 
 

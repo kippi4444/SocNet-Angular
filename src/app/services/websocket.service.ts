@@ -61,7 +61,7 @@ export class WebsocketService {
   }
 
   mainConnect(session) {
-    this.socket = io(environment.ws_url,  {
+    this.socket = io('http://localhost:8080/',  {
       query: session,
       reconnection: true,
       reconnectionDelay: 1000,
